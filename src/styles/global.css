@@ -1,41 +1,41 @@
-/* ───────────────────────── Maison — pink/purple monochrome ───────────────────────── */
+/* ───────────────────────── Maison — deep aubergine / dark luxe ───────────────────────── */
 :root {
-  /* Surfaces — blush/mauve paper instead of pure white */
-  --paper:       #f7eef1;
-  --paper-warm:  #f1e3e9;
-  --paper-deep:  #e8d3dd;
-  --vellum:      #fcf6f8;
+  /* Surfaces — deep wine/aubergine. "Paper" is now the night sky. */
+  --paper:       #1d0e25;
+  --paper-warm:  #261334;
+  --paper-deep:  #321a40;
+  --vellum:      #150818;
 
-  /* Ink — deep aubergine standing in for "black" */
-  --ink:              #2a1432;
-  --ink-soft:         #3a1f3d;
-  --aubergine:        #2a1432;
-  --aubergine-deep:   #160a1c;
-  --aubergine-soft:   #3a1f3d;
-  --plum-ink:         #2a1432;
+  /* Ink — warm blush, the new "text" color on dark */
+  --ink:              #f4e1e7;
+  --ink-soft:         #eccfd8;
+  --aubergine:        #1d0e25; /* kept as legacy alias for dark sections */
+  --aubergine-deep:   #100617;
+  --aubergine-soft:   #2a1432;
+  --plum-ink:         #f4e1e7;
 
-  /* Warm purple-grey ramp */
-  --grey-900:    #2a1432;
-  --grey-700:    #4a3050;
-  --grey-500:    #7a6582;
-  --grey-400:    #a58faa;
-  --grey-300:    #c9b8cc;
-  --grey-200:    #ddccd6;
-  --grey-100:    #ecdee3;
+  /* Light-on-dark ramp, warm purple-pink leaning */
+  --grey-900:    #f4e1e7;
+  --grey-700:    #d6b9c4;
+  --grey-500:    #a8889a;
+  --grey-400:    #876b7c;
+  --grey-300:    #5c4661;
+  --grey-200:    #3d2748;
+  --grey-100:    #2a1736;
 
   --muted:       var(--grey-500);
 
   /* Pink/purple accents */
-  --rose:        #d49bb1;
-  --rose-soft:   #ecc8d2;
-  --rose-light:  #f6e1e7;
-  --mauve:       #b08bb4;
-  --mauve-deep:  #6e4f7a;
-  --gold:        #c9a7b4; /* rose-gold */
+  --rose:        #e8b1c3;
+  --rose-soft:   #f1c8d3;
+  --rose-light:  #f9e1e8;
+  --mauve:       #c89cca;
+  --mauve-deep:  #9c75a3;
+  --gold:        #d6a98b; /* warm rose-gold */
 
-  --line:        #e0d2dc;
-  --line-soft:   #ecdee3;
-  --line-strong: #c2adb9;
+  --line:        #3a2548;
+  --line-soft:   #2e1a3c;
+  --line-strong: #553b65;
 
   /* Semantic tokens */
   --bg:           var(--paper);
@@ -45,12 +45,15 @@
   --accent:       var(--mauve-deep);
   --accent-deep:  var(--mauve-deep);
   --accent-soft:  var(--rose-soft);
-  --text-dark:    var(--ink);
-  --text-light:   var(--paper);
+  /* "dark" / "light" refer to the visual tone, not the role.
+     In dark mode: text-dark is the deep aubergine (rarely used on body);
+     text-light is the soft blush (the default readable color). */
+  --text-dark:    var(--paper);
+  --text-light:   var(--ink);
   --muted-dark:   var(--grey-500);
   --muted-light:  var(--rose-soft);
   --border-light: var(--line);
-  --border-dark:  rgba(247,238,241,0.18);
+  --border-dark:  rgba(244,225,231,0.18);
 
   /* Legacy aliases (kept so existing components don't break) */
   --champagne: var(--rose);
@@ -232,8 +235,8 @@ h1 em, h2 em, h3 em, em, .accent {
 .dark::before, .dark-section::before { display: none; }
 .dark h1, .dark h2, .dark h3, .dark h4,
 .dark-section h1, .dark-section h2, .dark-section h3 { color: var(--paper); }
-.dark .eyebrow, .dark-section .eyebrow { color: var(--paper); }
-.dark em, .dark .accent, .dark-section em, .dark-section .accent { color: var(--paper); }
+.dark .eyebrow, .dark-section .eyebrow { color: var(--mauve-deep); }
+.dark em, .dark .accent, .dark-section em, .dark-section .accent { color: var(--mauve-deep); }
 .dark .lead, .dark-section .lead { color: var(--grey-300); }
 
 /* ───────────────────────── Buttons (text-link maison style) ───────────────────────── */
@@ -354,18 +357,18 @@ h1 em, h2 em, h3 em, em, .accent {
 .gilt { color: var(--ink); font-weight: 600; }
 
 .nav-scrim {
-  background: rgba(247,238,241,.86);
+  background: rgba(29,14,37,.86);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-bottom: 1px solid var(--line);
 }
 
 .hero-overlay {
-  background: linear-gradient(180deg, rgba(247,238,241,0) 0%, rgba(247,238,241,0.85) 100%);
+  background: linear-gradient(180deg, rgba(29,14,37,0) 0%, rgba(29,14,37,0.85) 100%);
 }
 
 /* ───────────────────────── Scrollbar ───────────────────────── */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--paper-warm); }
-::-webkit-scrollbar-thumb { background: var(--grey-400); border-radius: 0; }
-::-webkit-scrollbar-thumb:hover { background: var(--ink); }
+::-webkit-scrollbar-track { background: var(--paper-deep); }
+::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--rose); }

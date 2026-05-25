@@ -109,10 +109,10 @@ const items = [
   @keyframes spOpen { from { transform: translateY(8px); opacity: 0; } }
 
   .sp-inner { display: flex; flex-direction: column; }
-  .sp-input-wrap { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border-light); color: var(--mauve); }
-  .sp-input-wrap input { flex: 1; border: 0; outline: 0; font: 400 16px/1.4 var(--font-body); background: transparent; color: var(--aubergine); }
-  .sp-input-wrap input::placeholder { color: var(--muted); }
-  .sp-close { font: 500 10px/1 ui-monospace, monospace; padding: 4px 8px; background: var(--paper-warm); border: 1px solid var(--border-light); color: var(--muted); border-radius: 5px; cursor: pointer; }
+  .sp-input-wrap { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--line); color: var(--mauve); }
+  .sp-input-wrap input { flex: 1; border: 0; outline: 0; font: 400 16px/1.4 var(--font-body); background: transparent; color: var(--ink); }
+  .sp-input-wrap input::placeholder { color: var(--grey-500); }
+  .sp-close { font: 500 10px/1 ui-monospace, monospace; padding: 4px 8px; background: transparent; border: 1px solid var(--line); color: var(--grey-500); border-radius: 0; cursor: pointer; }
 
   .sp-list { list-style: none; padding: 8px; margin: 0; max-height: 360px; overflow-y: auto; }
   .sp-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 0; cursor: pointer; color: var(--ink); font-size: 0.92rem; }
@@ -121,6 +121,6 @@ const items = [
   .sp-list .empty { padding: 24px 14px; color: var(--muted); text-align: center; cursor: default; justify-content: center; }
   .sp-list .empty:hover { background: transparent; }
 
-  .sp-foot { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--border-light); color: var(--muted); font-size: 11px; font-family: var(--font-display); }
-  .sp-foot kbd { margin-right: 4px; background: var(--paper-warm); border: 1px solid var(--border-light); padding: 2px 6px; border-radius: 4px; font: 500 10px/1 ui-monospace, monospace; color: var(--muted); }
+  .sp-foot { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--line); color: var(--grey-500); font-size: 11px; font-family: var(--font-body); }
+  .sp-foot kbd { margin-right: 4px; background: transparent; border: 1px solid var(--line); padding: 2px 6px; border-radius: 0; font: 500 10px/1 ui-monospace, monospace; color: var(--grey-500); }
 </style>

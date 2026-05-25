@@ -38,11 +38,11 @@ import { SITE } from '../consts';
 </header>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(247,238,241,0.86); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transition: background 0.3s var(--ease), border-color 0.3s var(--ease); }
-  .site-header.scrolled { background: rgba(247,238,241,0.96); border-bottom-color: var(--line-strong); }
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(29,14,37,0.86); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transition: background 0.3s var(--ease), border-color 0.3s var(--ease); }
+  .site-header.scrolled { background: rgba(29,14,37,0.96); border-bottom-color: var(--line-strong); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
   .brand { display: flex; align-items: center; }
-  .brand-logo { height: 44px; width: auto; filter: grayscale(1) brightness(0); }
+  .brand-logo { height: 44px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
   .nav-links { display: flex; gap: 40px; }
   .nav-links a { font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink); font-weight: 500; transition: opacity 0.3s var(--ease); position: relative; }
   .nav-links a:hover { opacity: 0.55; }
