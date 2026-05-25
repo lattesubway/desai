@@ -43,21 +43,32 @@ import { SITE } from '../consts';
 </footer>
 
 <style>
-  .site-footer { padding: clamp(64px, 8vw, 96px) 0 32px; background: var(--aubergine-deep); color: var(--ink); border-top: 1px solid var(--line); position: relative; }
-  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid var(--border-dark); }
+  .site-footer {
+    --footer-fg: #f4e1e7;
+    --footer-fg-muted: #a8889a;
+    --footer-line: rgba(244,225,231,0.16);
+    padding: clamp(64px, 8vw, 96px) 0 32px;
+    background: var(--aubergine-deep);
+    color: var(--footer-fg);
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid var(--footer-line); }
   .footer-logo { height: 64px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
-  .muted-on-dark { color: var(--grey-500); margin-top: 12px; font-size: 0.95rem; }
+  .muted-on-dark { color: var(--footer-fg-muted); margin-top: 12px; font-size: 0.95rem; }
   .social-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; }
-  .social-links a { padding: 6px 0; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-light); font-weight: 500; transition: opacity 0.3s var(--ease); }
+  .social-links a { padding: 6px 0; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--footer-fg); font-weight: 500; transition: opacity 0.3s var(--ease); }
   .social-links a:hover { opacity: 0.55; }
-  h4 { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink); margin-bottom: 24px; font-weight: 500; }
+  h4 { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--footer-fg); margin-bottom: 24px; font-weight: 500; }
   ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  ul a, address a { color: var(--ink); transition: opacity 0.3s var(--ease); }
+  ul a, address a { color: var(--footer-fg); transition: opacity 0.3s var(--ease); }
   ul a:hover, address a:hover { opacity: 0.6; }
   ul a, address a { font-size: 0.9rem; letter-spacing: -0.005em; }
-  address { font-style: normal; line-height: 1.7; color: var(--ink); margin-bottom: 12px; }
-  .fax { color: var(--grey-500); font-size: 0.9rem; margin-top: 4px; }
-  .footer-base { display: flex; justify-content: space-between; padding-top: 32px; color: var(--grey-500); flex-wrap: wrap; gap: 12px; }
+  address { font-style: normal; line-height: 1.7; color: var(--footer-fg); margin-bottom: 12px; }
+  .fax { color: var(--footer-fg-muted); font-size: 0.9rem; margin-top: 4px; }
+  .footer-base { display: flex; justify-content: space-between; padding-top: 32px; color: var(--footer-fg-muted); flex-wrap: wrap; gap: 12px; }
+  .site-footer .btn { color: var(--footer-fg); }
+  .site-footer .btn::after { background: var(--footer-fg); }
   @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; gap: 36px; } }
 </style>

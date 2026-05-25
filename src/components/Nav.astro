@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 <header class="site-header">
   <div class="container nav-inner">
@@ -16,9 +17,10 @@ import { SITE } from '../consts';
     </nav>
     <div class="nav-cta">
       <button type="button" class="search-trigger" data-search-trigger aria-label="Open search (⌘K)">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <kbd>⌘K</kbd>
       </button>
+      <ThemeToggle />
       <a href={`tel:${SITE.phoneRaw}`} class="nav-phone">{SITE.phone}</a>
       <a href="/consultation" class="btn btn-primary nav-btn">Consultation</a>
     </div>
@@ -38,11 +40,22 @@ import { SITE } from '../consts';
 </header>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(29,14,37,0.86); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transition: background 0.3s var(--ease), border-color 0.3s var(--ease); }
-  .site-header.scrolled { background: rgba(29,14,37,0.96); border-bottom-color: var(--line-strong); }
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklab, var(--paper) 86%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+  .site-header.scrolled {
+    background: color-mix(in oklab, var(--paper) 96%, transparent);
+    border-bottom-color: var(--line-strong);
+  }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
   .brand { display: flex; align-items: center; }
-  .brand-logo { height: 44px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
+  .brand-logo { height: 44px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); transition: filter 0.3s var(--ease); }
+  :global(:root[data-theme="light"]) .brand-logo { filter: grayscale(1) brightness(0); }
   .nav-links { display: flex; gap: 40px; }
   .nav-links a { font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink); font-weight: 500; transition: opacity 0.3s var(--ease); position: relative; }
   .nav-links a:hover { opacity: 0.55; }

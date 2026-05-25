@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d0e25"/>
+      <stop offset="0.55" stop-color="#2a1432"/>
+      <stop offset="1" stop-color="#3a1f3d"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0" stop-color="#d6a98b" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#d6a98b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rose" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e8b1c3"/>
+      <stop offset="1" stop-color="#d6a98b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+  <g transform="translate(80, 105)">
+    <text fill="#a8889a" font-family="Inter, ui-sans-serif, system-ui, sans-serif"
+          font-size="20" font-weight="500" letter-spacing="6">
+      BEVERLY HILLS · EST. EXCELLENCE
+    </text>
+    <text fill="#f4e1e7" font-family="Fraunces, ui-serif, Georgia, serif"
+          font-size="118" font-weight="320" letter-spacing="-3" x="0" y="160">
+      A quieter
+    </text>
+    <text fill="#f4e1e7" font-family="Fraunces, ui-serif, Georgia, serif"
+          font-size="118" font-weight="320" letter-spacing="-3" font-style="italic" x="0" y="290">
+      kind of
+    </text>
+    <text fill="#f4e1e7" font-family="Fraunces, ui-serif, Georgia, serif"
+          font-size="118" font-weight="320" letter-spacing="-3" x="0" y="420">
+      beautiful.
+    </text>
+    <line x1="0" y1="455" x2="160" y2="455" stroke="url(#rose)" stroke-width="2"/>
+    <text fill="#d6b9c4" font-family="Inter, ui-sans-serif, system-ui, sans-serif"
+          font-size="22" font-weight="400" x="0" y="492">
+      Dr. Urmen Desai, MD, MPH, FACS
+    </text>
+    <text fill="#a8889a" font-family="Inter, ui-sans-serif, system-ui, sans-serif"
+          font-size="16" font-weight="500" letter-spacing="3" x="0" y="478">
+    </text>
+  </g>
+  <g transform="translate(80, 540)" fill="#a8889a" font-family="Inter, ui-sans-serif, system-ui, sans-serif"
+     font-size="14" font-weight="500" letter-spacing="3">
+    <text>DESAIPLASTICSURGERY.COM</text>
+  </g>
+</svg>

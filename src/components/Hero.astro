@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE } from '../consts';
+import drDesaiPortrait from '../assets/dr-desai-portrait.png';
 ---
 <section class="hero">
   <div class="container hero-grid">
@@ -20,7 +22,20 @@ import { SITE } from '../consts';
     </div>
     <div class="hero-art reveal">
       <div class="art-portrait">
-        <img src="/assets/dr-desai-portrait.png" alt="Dr. Urmen Desai, MD, MPH, FACS" class="hero-photo" width="440" height="550" />
+        <Image
+          src={drDesaiPortrait}
+          alt="Dr. Urmen Desai, MD, MPH, FACS"
+          class="hero-photo"
+          width={460}
+          height={576}
+          widths={[320, 460, 640, 920]}
+          sizes="(max-width: 900px) 280px, 460px"
+          format="avif"
+          fallbackFormat="webp"
+          quality={82}
+          loading="eager"
+          fetchpriority="high"
+        />
       </div>
     </div>
   </div>

@@ -1,0 +1,43 @@
+---
+---
+<button class="theme-toggle" data-theme-toggle aria-label="Toggle light / dark theme" type="button">
+  <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+  <svg class="i-sun"  viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+
+<script is:inline>
+  (function () {
+    const apply = (mode) => {
+      document.documentElement.dataset.theme = mode;
+      try { localStorage.setItem('theme', mode); } catch (e) {}
+      // Theme color meta sync
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', mode === 'light' ? '#f7eef1' : '#1d0e25');
+    };
+    const init = () => {
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+          apply(next);
+        });
+      });
+    };
+    init();
+    document.addEventListener('astro:after-swap', init);
+  })();
+</script>
+
+<style is:global>
+  .theme-toggle {
+    display: inline-grid; place-items: center; width: 34px; height: 34px;
+    padding: 0; border: 1px solid transparent; background: transparent;
+    color: var(--ink); cursor: pointer; transition: opacity .35s var(--ease);
+    border-radius: 999px;
+  }
+  .theme-toggle:hover { opacity: 0.55; }
+  .theme-toggle .i-sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .i-sun  { display: block; }
+  :root[data-theme="light"] .theme-toggle .i-moon { display: none; }
+</style>

@@ -1,0 +1,16 @@
+{
+  "name": "Desai Plastic Surgery",
+  "short_name": "Desai",
+  "description": "Dr. Urmen Desai, MD, MPH, FACS — Beverly Hills plastic surgery.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1d0e25",
+  "theme_color": "#1d0e25",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/assets/logo.png", "sizes": "200x48", "type": "image/png" }
+  ],
+  "categories": ["medical", "lifestyle", "health"],
+  "lang": "en-US"
+}

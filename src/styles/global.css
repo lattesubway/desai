@@ -37,6 +37,9 @@
   --line-soft:   #2e1a3c;
   --line-strong: #553b65;
 
+  /* Inverse helpers — for accents that appear on .dark-section (which inverts) */
+  --accent-on-inverse:  #6e4f7a; /* dark mauve, readable on the light-blush inversion */
+
   /* Semantic tokens */
   --bg:           var(--paper);
   --bg-warm:      var(--paper-warm);
@@ -68,9 +71,9 @@
   --ivory-deep: var(--paper-deep);
   --blush: var(--rose-light);
 
-  /* Typography — sharp Bodoni-leaning Fraunces + Inter for utility */
-  --font-display: 'Fraunces', 'Bodoni Moda', 'Didot', 'Times New Roman', ui-serif, serif;
-  --font-body:    'Inter', 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  /* Typography — Fraunces (display) + Inter (utility) with metrics-matched fallbacks */
+  --font-display: 'Fraunces', 'Fraunces Fallback', 'Bodoni Moda', 'Didot', 'Times New Roman', ui-serif, serif;
+  --font-body:    'Inter', 'Inter Fallback', 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-mono:    ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
 
   /* Layout */
@@ -85,6 +88,61 @@
 
   font-feature-settings: 'kern', 'liga', 'calt', 'ss01', 'cv11';
   font-variant-ligatures: common-ligatures contextual;
+}
+
+/* ───────────────────────── Light theme (opt-in via data-theme="light") ───────────────────────── */
+:root[data-theme="light"] {
+  --paper:       #f7eef1;
+  --paper-warm:  #f1e3e9;
+  --paper-deep:  #e8d3dd;
+  --vellum:      #fcf6f8;
+  --ink:              #2a1432;
+  --ink-soft:         #3a1f3d;
+  --aubergine:        #2a1432;
+  --aubergine-deep:   #160a1c;
+  --aubergine-soft:   #3a1f3d;
+  --plum-ink:         #2a1432;
+  --grey-900:    #2a1432;
+  --grey-700:    #4a3050;
+  --grey-500:    #7a6582;
+  --grey-400:    #a58faa;
+  --grey-300:    #c9b8cc;
+  --grey-200:    #ddccd6;
+  --grey-100:    #ecdee3;
+  --rose:        #d49bb1;
+  --rose-soft:   #ecc8d2;
+  --mauve:       #b08bb4;
+  --mauve-deep:  #6e4f7a;
+  --line:        #e0d2dc;
+  --line-soft:   #ecdee3;
+  --line-strong: #c2adb9;
+  --text-dark:    var(--ink);
+  --text-light:   var(--paper);
+  --muted-light:  var(--rose-soft);
+  --border-dark:  rgba(42,20,50,0.18);
+  --accent-on-inverse:  #ecc8d2; /* light rose, readable on the dark-aubergine inversion */
+  color-scheme: light;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* ───────────────────────── CLS-safe fallback fonts ───────────────────────── */
+/* Approximate Fraunces metrics on a Georgia fallback to minimize layout shift
+   when the webfont loads. Numbers tuned via the size-adjust tool conventions. */
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Georgia');
+  size-adjust: 102%;
+  ascent-override: 88%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
 }
 
 /* ───────────────────────── Reset & base ───────────────────────── */
@@ -235,8 +293,8 @@ h1 em, h2 em, h3 em, em, .accent {
 .dark::before, .dark-section::before { display: none; }
 .dark h1, .dark h2, .dark h3, .dark h4,
 .dark-section h1, .dark-section h2, .dark-section h3 { color: var(--paper); }
-.dark .eyebrow, .dark-section .eyebrow { color: var(--mauve-deep); }
-.dark em, .dark .accent, .dark-section em, .dark-section .accent { color: var(--mauve-deep); }
+.dark .eyebrow, .dark-section .eyebrow { color: var(--accent-on-inverse); }
+.dark em, .dark .accent, .dark-section em, .dark-section .accent { color: var(--accent-on-inverse); }
 .dark .lead, .dark-section .lead { color: var(--grey-300); }
 
 /* ───────────────────────── Buttons (text-link maison style) ───────────────────────── */

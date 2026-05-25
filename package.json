@@ -10,6 +10,8 @@
     "preview": "astro preview --host"
   },
   "dependencies": {
-    "astro": "^4.16.0"
+    "@playform/inline": "^0.1.4",
+    "astro": "^4.16.0",
+    "astro-compress": "^2.4.1"
   }
 }
