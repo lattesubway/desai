@@ -1,0 +1,39 @@
+---
+import { SITE } from '../consts';
+interface Crumb { label: string; href?: string; }
+interface Props { items: Crumb[]; }
+const { items } = Astro.props;
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    ...(c.href ? { item: new URL(c.href, SITE.url).toString() } : {}),
+  })),
+};
+---
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol>
+    {items.map((c, i) => (
+      <li>
+        {c.href && i < items.length - 1
+          ? <a href={c.href}>{c.label}</a>
+          : <span aria-current="page">{c.label}</span>}
+        {i < items.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+<style>
+  .crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .crumbs li { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-dark); font-family: var(--font-body); font-weight: 500; }
+  .crumbs a { color: var(--muted-dark); border-bottom: 1px solid transparent; transition: color 0.3s var(--ease), border-color 0.3s var(--ease); }
+  .crumbs a:hover { color: var(--aubergine); border-bottom-color: var(--rose); }
+  .crumbs [aria-current="page"] { color: var(--aubergine); }
+  .sep { opacity: 0.4; }
+</style>

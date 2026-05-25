@@ -1,0 +1,75 @@
+---
+---
+<section class="ba-section section">
+  <div class="container">
+    <div class="ba-head reveal">
+      <p class="eyebrow">Real Results</p>
+      <h2>Before & after.</h2>
+      <p class="lead">Drag the handle to compare. A small selection from our private gallery.</p>
+    </div>
+    <div class="ba-wrap reveal">
+      <div class="ba-slider" id="ba-slider">
+        <div class="ba-after" aria-label="After"></div>
+        <div class="ba-before" id="ba-before" aria-label="Before"></div>
+        <div class="ba-handle" id="ba-handle" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after comparison slider" tabindex="0">
+          <div class="ba-handle-bar"></div>
+          <div class="ba-handle-knob"><span></span><span></span></div>
+        </div>
+        <span class="ba-label ba-label-before">Before</span>
+        <span class="ba-label ba-label-after">After</span>
+      </div>
+      <p class="ba-caption">Rhinoplasty · Dr. Urmen Desai. Models pictured may not be actual patients.</p>
+      <a href="/gallery" class="btn btn-ghost">View Full Gallery <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ba-head { text-align: center; max-width: 600px; margin: 0 auto clamp(40px, 6vw, 64px); }
+  .ba-head h2 { margin: 16px 0 16px; }
+  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .ba-slider { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16/10; overflow: hidden; background: var(--bg-deep); user-select: none; cursor: ew-resize; }
+  .ba-after, .ba-before { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .ba-after { background-image: url('/assets/after-nose.png'); }
+  .ba-before { background-image: url('/assets/before-nose.jpg'); clip-path: inset(0 50% 0 0); }
+  .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--bg); transform: translateX(-50%); cursor: ew-resize; }
+  .ba-handle-knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
+  .ba-handle-knob span { width: 8px; height: 8px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); display: inline-block; }
+  .ba-handle-knob span:first-child { transform: rotate(-135deg); margin-right: 4px; }
+  .ba-handle-knob span:last-child { transform: rotate(45deg); margin-left: 4px; }
+  .ba-handle-knob { display: flex; gap: 6px; }
+  .ba-label { position: absolute; top: 16px; padding: 6px 14px; background: rgba(15,15,15,0.6); color: var(--text-light); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; backdrop-filter: blur(8px); }
+  .ba-label-before { left: 16px; }
+  .ba-label-after { right: 16px; }
+  .ba-caption { font-size: 0.85rem; color: var(--muted-dark); letter-spacing: 0.05em; }
+</style>
+
+<script>
+  const slider = document.getElementById('ba-slider');
+  const before = document.getElementById('ba-before');
+  const handle = document.getElementById('ba-handle');
+  if (slider && before && handle) {
+    const set = (x) => {
+      const rect = slider.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+      before.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      handle.style.left = pct + '%';
+      handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+    };
+    let dragging = false;
+    const onDown = (e) => { dragging = true; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
+    const onMove = (e) => { if (!dragging) return; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
+    const onUp = () => { dragging = false; };
+    slider.addEventListener('mousedown', onDown);
+    slider.addEventListener('touchstart', onDown, { passive: true });
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchend', onUp);
+    handle.addEventListener('keydown', (e) => {
+      const cur = parseFloat(handle.style.left || '50');
+      if (e.key === 'ArrowLeft') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur - 2) / 100)); }
+      if (e.key === 'ArrowRight') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur + 2) / 100)); }
+    });
+  }
+</script>

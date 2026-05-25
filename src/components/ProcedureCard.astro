@@ -1,0 +1,34 @@
+---
+import type { Procedure } from '../data/procedures';
+interface Props { procedure: Procedure; index?: number; }
+const { procedure, index = 0 } = Astro.props;
+---
+<a href={`/procedures/${procedure.slug}`} class="p-card reveal" style={`transition-delay:${(index%6)*60}ms`}>
+  <div class="p-card-top">
+    <span class="p-num">{String(index+1).padStart(2,'0')}</span>
+    <span class="p-cat">{procedure.category}</span>
+  </div>
+  <h3>{procedure.title}</h3>
+  <p>{procedure.blurb}</p>
+  <span class="p-link">Learn More <span class="arrow">→</span></span>
+</a>
+
+<style>
+  .p-card { display: flex; flex-direction: column; gap: 16px; padding: 40px 36px; background: var(--paper); border: 1px solid var(--line); transition: background .55s var(--ease), color .55s var(--ease), border-color .55s var(--ease); min-height: 300px; opacity: 1; }
+  .p-card:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: none; opacity: 1; }
+  .p-card-top { display: flex; justify-content: space-between; align-items: center; }
+  .p-num { font-family: var(--font-display); font-style: italic; color: var(--ink); font-size: 1.2rem; font-variation-settings: 'opsz' 144, 'SOFT' 0; font-weight: 380; }
+  .p-card:hover .p-num { color: var(--paper); }
+  .p-cat { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-500); font-weight: 500; }
+  .p-card:hover .p-cat { color: var(--grey-300); }
+  .p-card h3 { font-size: 1.75rem; font-weight: 360; letter-spacing: -0.02em; font-variation-settings: 'opsz' 144, 'SOFT' 0; }
+  .p-card:hover h3 { color: var(--paper); }
+  .p-card p { color: var(--grey-700); font-size: 0.92rem; flex-grow: 1; line-height: 1.6; }
+  .p-card:hover p { color: var(--grey-300); }
+  .p-link { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink); font-weight: 500; display: inline-flex; gap: 10px; align-items: center; margin-top: auto; padding-bottom: 4px; position: relative; }
+  .p-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform-origin: left; transition: transform .5s var(--ease-out); }
+  .p-card:hover .p-link { color: var(--paper); }
+  .p-card:hover .p-link::after { transform: scaleX(0.5); }
+  .p-card:hover .arrow { transform: translateX(6px); }
+  .arrow { transition: transform 0.5s var(--ease-out); }
+</style>

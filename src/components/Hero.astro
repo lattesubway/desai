@@ -1,0 +1,62 @@
+---
+import { SITE } from '../consts';
+---
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow reveal">Beverly Hills — Est. Excellence</p>
+      <h1 class="reveal">A quieter <em>kind&nbsp;of</em><br/>beautiful.</h1>
+      <p class="lead reveal">{SITE.doctor} is a Harvard-educated, double-board-certified, double-fellowship-trained plastic surgeon offering refined facial, breast, and body surgery in the heart of Beverly Hills.</p>
+      <div class="hero-actions reveal">
+        <a href="/consultation" class="btn btn-primary">Schedule a Consultation <span class="arrow">→</span></a>
+        <a href="/about" class="btn btn-ghost">Meet Dr. Desai <span class="arrow">→</span></a>
+      </div>
+      <div class="hero-marks reveal">
+        <span>Harvard MPH</span>
+        <span>Tufts MD</span>
+        <span>FACS</span>
+        <span>Double-Board Certified</span>
+      </div>
+    </div>
+    <div class="hero-art reveal">
+      <div class="art-portrait">
+        <img src="/assets/dr-desai-portrait.png" alt="Dr. Urmen Desai, MD, MPH, FACS" class="hero-photo" width="440" height="550" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding: clamp(96px, 14vw, 180px) 0 clamp(80px, 12vw, 140px); background: var(--paper); position: relative; }
+  .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ink); opacity: 1; }
+  .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(48px, 6vw, 120px); align-items: center; }
+  .hero-copy h1 {
+    margin: 28px 0 36px;
+    max-width: 14ch;
+    font-size: clamp(3.4rem, 8.5vw, 7.5rem);
+    font-weight: 310;
+    letter-spacing: -0.04em;
+    line-height: 0.94;
+  }
+  .hero-copy h1 em { font-style: italic; font-variation-settings: 'opsz' 144, 'SOFT' 0; font-weight: 320; color: var(--ink); }
+  .hero-copy .lead { max-width: 50ch; font-size: clamp(0.98rem, 1.1vw, 1.08rem); color: var(--grey-700); line-height: 1.7; }
+  .hero-actions { display: flex; gap: 48px; margin-top: 48px; flex-wrap: wrap; }
+  .hero-marks {
+    display: flex; flex-wrap: wrap; gap: 12px 32px;
+    margin-top: 80px; padding-top: 36px;
+    border-top: 1px solid var(--line);
+    color: var(--grey-700);
+    font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .hero-art { display: grid; place-items: end center; }
+  .art-portrait {
+    position: relative; width: 100%; max-width: 460px;
+    isolation: isolate;
+  }
+  .hero-photo { position: relative; z-index: 1; width: 100%; height: auto; object-fit: contain; filter: none; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { order: -1; max-width: 280px; margin: 0 auto; }
+  }
+</style>

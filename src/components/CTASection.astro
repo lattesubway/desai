@@ -1,0 +1,21 @@
+---
+import { SITE } from '../consts';
+---
+<section class="cta section">
+  <div class="container cta-inner reveal">
+    <p class="eyebrow">Complimentary Consultation</p>
+    <h2>Begin the conversation.</h2>
+    <p class="lead">Schedule a virtual or in-person consultation with Dr. Desai. We answer every inquiry personally.</p>
+    <div class="cta-actions">
+      <a href="/consultation" class="btn btn-primary">Schedule Online <span class="arrow">→</span></a>
+      <a href={`tel:${SITE.phoneRaw}`} class="btn btn-ghost">Call {SITE.phone}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { background: var(--bg-warm); border-top: 1px solid var(--border-light); }
+  .cta-inner { text-align: center; max-width: 720px; margin: 0 auto; }
+  .cta-inner h2 { margin: 16px 0 20px; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+</style>

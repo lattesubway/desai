@@ -1,0 +1,126 @@
+---
+import { procedures } from '../data/procedures';
+const items = [
+  { label: 'Home', href: '/', kind: 'Page' },
+  { label: 'About Dr. Desai', href: '/about/', kind: 'Page' },
+  { label: 'All Procedures', href: '/procedures/', kind: 'Page' },
+  { label: 'Before & After Gallery', href: '/gallery/', kind: 'Page' },
+  { label: 'Media & Press', href: '/media/', kind: 'Page' },
+  { label: 'Patient Reviews', href: '/reviews/', kind: 'Page' },
+  { label: 'Contact', href: '/contact/', kind: 'Page' },
+  { label: 'Schedule a Consultation', href: '/consultation/', kind: 'Action' },
+  ...procedures.map((p) => ({
+    label: p.title, href: `/procedures/${p.slug}/`, kind: p.category,
+  })),
+];
+---
+<dialog class="sp" id="sp-dialog" aria-label="Search the site">
+  <div class="sp-inner">
+    <div class="sp-input-wrap">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="sp-input" type="search" placeholder="Search procedures, pages…" autocomplete="off" />
+      <button type="button" class="sp-close" id="sp-close" aria-label="Close">Esc</button>
+    </div>
+    <ul class="sp-list" id="sp-list" role="listbox" aria-label="Search results"></ul>
+    <footer class="sp-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> select</span>
+      <span><kbd>esc</kbd> close</span>
+    </footer>
+  </div>
+</dialog>
+
+<script is:inline define:vars={{ items }}>
+  (() => {
+    const init = () => {
+      const dialog = document.getElementById('sp-dialog');
+      const input = document.getElementById('sp-input');
+      const list = document.getElementById('sp-list');
+      const close = document.getElementById('sp-close');
+      if (!dialog || !input || !list || !close) return;
+      if (dialog.dataset.bound) return; // idempotent across view-transitions
+      dialog.dataset.bound = '1';
+
+      let active = 0;
+      let current = items;
+
+      const render = (q = '') => {
+        const t = q.trim().toLowerCase();
+        current = !t ? items : items.filter((i) =>
+          i.label.toLowerCase().includes(t) || i.kind.toLowerCase().includes(t)
+        );
+        if (active >= current.length) active = 0;
+        list.innerHTML = current.length
+          ? current.map((i, idx) => `
+            <li role="option" data-idx="${idx}" aria-selected="${idx === active}">
+              <span class="lbl">${i.label}</span>
+              <span class="kind">${i.kind}</span>
+            </li>`).join('')
+          : '<li class="empty">No matches.</li>';
+      };
+
+      const open = () => {
+        if (dialog.open) return;
+        active = 0; input.value = ''; render();
+        dialog.showModal();
+        setTimeout(() => input.focus(), 10);
+      };
+      const shut = () => { if (dialog.open) dialog.close(); };
+
+      document.querySelectorAll('[data-search-trigger]').forEach((el) => {
+        if (el.dataset.bound) return;
+        el.dataset.bound = '1';
+        el.addEventListener('click', open);
+      });
+      close.addEventListener('click', shut);
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) shut(); });
+      input.addEventListener('input', () => { active = 0; render(input.value); });
+      list.addEventListener('click', (e) => {
+        const li = e.target.closest('li[data-idx]');
+        if (!li) return;
+        const item = current[+li.dataset.idx];
+        if (item) { shut(); location.href = item.href; }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, current.length - 1); render(input.value); list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); render(input.value); list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' }); }
+        else if (e.key === 'Enter') { e.preventDefault(); const item = current[active]; if (item) { shut(); location.href = item.href; } }
+      });
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dialog.open ? shut() : open(); }
+        else if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { e.preventDefault(); open(); }
+        else if (e.key === 'Escape' && dialog.open) shut();
+      });
+    };
+    init();
+    document.addEventListener('astro:after-swap', init);
+  })();
+</script>
+
+<style is:global>
+  .search-trigger { display: inline-flex; align-items: center; gap: 10px; height: 32px; padding: 0; border: 0; background: transparent; color: var(--ink); border-radius: 0; cursor: pointer; transition: opacity 0.3s var(--ease); font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500; }
+  .search-trigger:hover { opacity: 0.55; color: var(--ink); }
+  .search-trigger kbd { font: 500 10px/1 ui-monospace, monospace; background: transparent; border: 1px solid var(--line-strong); color: var(--grey-500); padding: 2px 5px; border-radius: 0; letter-spacing: 0.04em; }
+  @media (max-width: 980px) { .search-trigger kbd { display: none; } }
+
+  .sp { border: 1px solid var(--ink); border-radius: 0; padding: 0; max-width: 640px; width: calc(100% - 32px); background: var(--paper); color: var(--ink); margin: 12vh auto auto; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.3); }
+  .sp::backdrop { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(6px); }
+  .sp[open] { animation: spOpen 0.18s var(--ease); }
+  @keyframes spOpen { from { transform: translateY(8px); opacity: 0; } }
+
+  .sp-inner { display: flex; flex-direction: column; }
+  .sp-input-wrap { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--line); color: var(--mauve); }
+  .sp-input-wrap input { flex: 1; border: 0; outline: 0; font: 400 16px/1.4 var(--font-body); background: transparent; color: var(--ink); }
+  .sp-input-wrap input::placeholder { color: var(--grey-500); }
+  .sp-close { font: 500 10px/1 ui-monospace, monospace; padding: 4px 8px; background: transparent; border: 1px solid var(--line); color: var(--grey-500); border-radius: 0; cursor: pointer; }
+
+  .sp-list { list-style: none; padding: 8px; margin: 0; max-height: 360px; overflow-y: auto; }
+  .sp-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 0; cursor: pointer; color: var(--ink); font-size: 0.92rem; }
+  .sp-list li[aria-selected="true"] { background: var(--paper-deep); }
+  .sp-list .kind { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-family: var(--font-display); }
+  .sp-list .empty { padding: 24px 14px; color: var(--muted); text-align: center; cursor: default; justify-content: center; }
+  .sp-list .empty:hover { background: transparent; }
+
+  .sp-foot { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--line); color: var(--grey-500); font-size: 11px; font-family: var(--font-body); }
+  .sp-foot kbd { margin-right: 4px; background: transparent; border: 1px solid var(--line); padding: 2px 6px; border-radius: 0; font: 500 10px/1 ui-monospace, monospace; color: var(--grey-500); }
+</style>

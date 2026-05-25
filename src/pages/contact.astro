@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+<BaseLayout title="Contact" description="Visit Dr. Urmen Desai's Beverly Hills office. Address, phone, and contact form.">
+  <section class="x-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Visit · Call · Write</p>
+      <h1 class="reveal">We answer every inquiry personally.</h1>
+    </div>
+  </section>
+
+  <section class="x-grid section">
+    <div class="container grid">
+      <div class="x-info reveal">
+        <div class="info-block">
+          <p class="eyebrow">Office</p>
+          <address>
+            {SITE.address.street}<br/>
+            {SITE.address.city}, {SITE.address.state} {SITE.address.zip}
+          </address>
+        </div>
+        <div class="info-block">
+          <p class="eyebrow">Call or Text</p>
+          <a href={`tel:${SITE.phoneRaw}`} class="big-link">{SITE.phone}</a>
+          <p class="fax">Fax {SITE.fax}</p>
+        </div>
+        <div class="info-block">
+          <p class="eyebrow">Hours</p>
+          <ul class="hours">
+            <li><span>Monday – Friday</span><span>9:00 AM – 5:00 PM</span></li>
+            <li><span>Saturday</span><span>By appointment</span></li>
+            <li><span>Sunday</span><span>Closed</span></li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <p class="eyebrow">Follow</p>
+          <div class="social-btns">
+            <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+            <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+            <a href={SITE.social.youtube} target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+            <a href={SITE.social.snapchat} target="_blank" rel="noopener noreferrer" class="social-btn">Snapchat</a>
+            <a href={SITE.social.linkedin} target="_blank" rel="noopener noreferrer" class="social-btn">LinkedIn</a>
+            <a href={SITE.social.google} target="_blank" rel="noopener noreferrer" class="social-btn">Google</a>
+          </div>
+        </div>
+        <div class="info-block">
+          <p class="eyebrow">Begin</p>
+          <a href="/consultation" class="btn btn-primary">Schedule Online <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <div class="x-form reveal">
+        <h2>Send a message</h2>
+        <p class="lead">For all other inquiries, including media requests, please use the form below.</p>
+        <form action="https://formspree.io/f/your-form-id" method="POST" class="form-stack" id="contactForm">
+          <div class="field"><label for="ct_name">Full Name *</label><input type="text" name="name" id="ct_name" required /></div>
+          <div class="field"><label for="ct_email">Email *</label><input type="email" name="email" id="ct_email" required /></div>
+          <div class="field"><label for="ct_phone">Phone</label><input type="tel" name="phone" id="ct_phone" /></div>
+          <div class="field">
+            <label for="ct_subject">Subject</label>
+            <select name="subject" id="ct_subject">
+              <option>General Inquiry</option>
+              <option>Consultation Request</option>
+              <option>Press / Media</option>
+              <option>Patient Follow-up</option>
+            </select>
+          </div>
+          <div class="field"><label for="ct_message">Message *</label><textarea name="message" id="ct_message" rows="6" required></textarea></div>
+          <div class="form-status" id="formStatus" hidden></div>
+          <button type="submit" class="btn btn-primary">Send Message <span class="arrow">→</span></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <div class="container">
+      <div class="map-frame reveal">
+        <iframe
+          title="Desai Plastic Surgery — Beverly Hills"
+          src="https://www.google.com/maps?q=433+North+Camden+Drive+Beverly+Hills+CA+90210&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .x-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 64px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .x-hero h1 { margin-top: 16px; max-width: 18ch; }
+  .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .info-block { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--border-light); }
+  .info-block:last-child { border-bottom: none; }
+  .info-block .eyebrow { margin-bottom: 14px; }
+  address { font-style: normal; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.5; color: var(--ink); }
+  .big-link { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.4rem); color: var(--ink); display: inline-block; border-bottom: 1px solid var(--accent); }
+  .fax { color: var(--muted-dark); margin-top: 8px; font-size: 0.95rem; }
+  .hours { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .hours li { display: flex; justify-content: space-between; color: var(--muted-dark); }
+  .hours li span:first-child { color: var(--ink); }
+  .social-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .social-btn { display: inline-flex; align-items: center; padding: 10px 16px; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--border-light); color: var(--ink); border-radius: 999px; transition: all 0.3s var(--ease); font-weight: 500; }
+  .social-btn:hover { background: var(--ink); color: var(--text-light); border-color: var(--ink); }
+  .x-form { background: var(--bg-warm); padding: clamp(40px, 5vw, 56px); border: 1px solid var(--border-light); }
+  .x-form h2 { margin-bottom: 16px; }
+  .x-form .lead { margin-bottom: 32px; }
+  .form-stack { display: flex; flex-direction: column; gap: 28px; }
+  .form-stack .btn { align-self: flex-start; margin-top: 8px; }
+  .map-section { padding-bottom: clamp(72px, 10vw, 120px); }
+  .map-frame { aspect-ratio: 21/9; overflow: hidden; }
+  .map-frame iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.3) contrast(1.05); }
+  .form-status { padding: 16px 20px; font-size: 0.9rem; border-radius: var(--radius); }
+  .form-status.success { background: var(--rose-soft); color: var(--aubergine); }
+  .form-status.error { background: var(--rose); color: var(--aubergine-deep); }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    status.hidden = true;
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+      if (res.ok) {
+        status.className = 'form-status success';
+        status.textContent = 'Message sent — we\u2019ll be in touch within one business day.';
+        status.hidden = false;
+        form.reset();
+      } else {
+        throw new Error('Server error');
+      }
+    } catch {
+      status.className = 'form-status error';
+      status.textContent = 'Something went wrong. Please call (310) 271-3333 or try again.';
+      status.hidden = false;
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Send Message <span class="arrow">\u2192</span>';
+    }
+  });
+</script>

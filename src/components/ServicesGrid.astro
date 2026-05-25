@@ -1,0 +1,52 @@
+---
+const services = [
+  { title: 'Face', desc: 'Facelift, Eyelid Surgery, Brow Lift, Neck Lift, Stem Cell Facelift', href: '/procedures#face', img: '/assets/facial-surgery.png' },
+  { title: 'Nose', desc: 'Rhinoplasty, Revision Rhinoplasty, Ethnic Rhinoplasty', href: '/procedures#nose', img: '/assets/nose-surgery.png' },
+  { title: 'Breast', desc: 'Augmentation, Lift, Reduction, Revision', href: '/procedures#breast', img: '/assets/breast-surgery.png' },
+  { title: 'Body', desc: 'Liposuction, Tummy Tuck, Mommy Makeover, BBL', href: '/procedures#body', img: '/assets/body-surgery.png' },
+];
+---
+<section class="services section">
+  <div class="container">
+    <div class="services-head reveal">
+      <p class="eyebrow">Signature Procedures</p>
+      <h2>An education in proportion.</h2>
+      <p class="lead">Dr. Desai's surgical philosophy is one of restraint — preserving identity while refining what already exists. Explore the procedures most requested at our Beverly Hills practice.</p>
+    </div>
+    <div class="services-grid">
+      {services.map((s, i) => (
+        <a href={s.href} class="service-card reveal" style={`transition-delay:${i*80}ms`}>
+          <div class="service-img">
+            <img src={s.img} alt={s.title} width="280" height="280" loading="lazy" />
+          </div>
+          <div class="service-num">0{i+1}</div>
+          <h3>{s.title}</h3>
+          <p>{s.desc}</p>
+          <span class="service-arrow">Explore <span class="arrow">→</span></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-head { max-width: 720px; margin: 0 auto clamp(48px, 6vw, 72px); text-align: center; }
+  .services-head h2 { margin: 16px 0 20px; }
+  .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); }
+  .service-card { background: var(--bg); padding: 48px 32px; display: flex; flex-direction: column; gap: 12px; transition: background 0.5s var(--ease), color 0.5s var(--ease); position: relative; min-height: 320px; overflow: hidden; }
+  .service-card:hover { background: var(--ink); color: var(--text-light); }
+  .service-card:hover h3 { color: var(--text-light); }
+  .service-img { width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--bg); border-radius: 4px; margin-bottom: 8px; }
+  .service-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+  .service-card:hover .service-img img { transform: scale(1.05); }
+  .service-num { font-family: var(--font-display); font-style: italic; color: var(--accent); font-size: 1.1rem; }
+  .service-card h3 { margin-bottom: 8px; transition: color 0.4s var(--ease); }
+  .service-card p { color: var(--muted-dark); font-size: 0.95rem; }
+  .service-card:hover p { color: var(--muted-light); }
+  .service-arrow { margin-top: auto; padding-top: 24px; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); display: inline-flex; align-items: center; gap: 8px; }
+  .service-card:hover .service-arrow { color: var(--accent-soft); }
+  .service-card:hover .arrow { transform: translateX(4px); }
+  .arrow { transition: transform 0.4s var(--ease); }
+  @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .services-grid { grid-template-columns: 1fr; } }
+</style>
