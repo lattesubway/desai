@@ -45,12 +45,12 @@ const ld = {
   .faq-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border-light); }
   .faq-item { border-bottom: 1px solid var(--border-light); }
   .faq-item details { padding: 22px 4px; }
-  .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; list-style: none; font-family: var(--font-display); font-size: 1.05rem; color: var(--aubergine); font-weight: 500; }
+  .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; list-style: none; font-family: var(--font-display); font-size: 1.18rem; color: var(--aubergine); font-weight: 380; font-variation-settings: 'opsz' 96, 'SOFT' 60; letter-spacing: -0.012em; }
   .faq-item summary::-webkit-details-marker { display: none; }
   .faq-item .q { letter-spacing: -0.005em; }
-  .faq-item .ico { display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--border-light); border-radius: 999px; color: var(--mauve); transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease); flex-shrink: 0; }
-  .faq-item details[open] .ico { transform: rotate(180deg); color: var(--aubergine); border-color: var(--mauve); }
-  .faq-item .a { padding: 12px 60px 8px 0; color: var(--muted); font-size: 0.98rem; line-height: 1.7; max-width: 70ch; }
-  .faq-item details[open] summary .q { color: var(--mauve); }
+  .faq-item .ico { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 0; color: var(--ink); transition: transform 0.4s var(--ease); flex-shrink: 0; }
+  .faq-item details[open] .ico { transform: rotate(180deg); color: var(--ink); }
+  .faq-item .a { padding: 12px 60px 8px 0; color: var(--grey-700); font-size: 0.95rem; line-height: 1.75; max-width: 72ch; }
+  .faq-item details[open] summary .q { color: var(--ink); }
   @media (max-width: 860px) { .faq-wrap { grid-template-columns: 1fr; } .faq-item .a { padding-right: 0; } }
 </style>

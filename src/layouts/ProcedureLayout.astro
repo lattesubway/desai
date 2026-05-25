@@ -97,18 +97,18 @@ const medicalLd = {
 <script type="application/ld+json" set:html={JSON.stringify(medicalLd)} />
 
 <style>
-  .procedure-hero { padding: clamp(48px, 6vw, 64px) 0 clamp(72px, 10vw, 120px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
-  .procedure-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
-  .procedure-hero .lead { max-width: 60ch; }
-  .procedure-hero .crumbs { margin-bottom: 48px; }
-  .meta { display: flex; gap: 48px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light); }
-  .meta div { display: flex; flex-direction: column; gap: 6px; }
-  .meta-label { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-dark); }
-  .meta-value { font-family: var(--font-display); font-size: 1.4rem; }
-  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 8vw, 96px); align-items: start; }
-  .content-list { display: flex; flex-direction: column; gap: 36px; }
-  .content-list h3 { color: var(--accent-soft); margin-bottom: 8px; }
-  .content-list p { color: var(--muted-light); }
+  .procedure-hero { padding: clamp(56px, 7vw, 80px) 0 clamp(80px, 12vw, 140px); background: var(--paper); }
+  .procedure-hero h1 { margin: 18px 0 28px; max-width: 18ch; font-size: clamp(3rem, 7.5vw, 6.25rem); font-weight: 320; letter-spacing: -0.035em; line-height: 0.96; }
+  .procedure-hero .lead { max-width: 58ch; }
+  .procedure-hero .crumbs { margin-bottom: 56px; }
+  .meta { display: flex; gap: 64px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--line); }
+  .meta div { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-500); font-weight: 600; }
+  .meta-value { font-family: var(--font-display); font-size: 1.55rem; font-variation-settings: 'opsz' 144, 'SOFT' 0; font-weight: 360; color: var(--ink); letter-spacing: -0.02em; }
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 8vw, 112px); align-items: start; }
+  .content-list { display: flex; flex-direction: column; gap: 40px; }
+  .content-list h3 { color: var(--paper); margin-bottom: 10px; font-size: 1.25rem; font-weight: 380; letter-spacing: -0.012em; }
+  .content-list p { color: var(--grey-300); }
   @media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } }
 
   /* ── Print styles ──────────────────────────────────────────── */

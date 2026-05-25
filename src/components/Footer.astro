@@ -45,15 +45,16 @@ import { SITE } from '../consts';
 <style>
   .site-footer { padding: clamp(64px, 8vw, 96px) 0 32px; }
   .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid var(--border-dark); }
-  .footer-logo { height: 80px; width: auto; filter: brightness(0) invert(1); }
+  .footer-logo { height: 64px; width: auto; filter: brightness(0) invert(1); }
   .muted-on-dark { color: var(--muted-light); margin-top: 12px; font-size: 0.95rem; }
-  .social-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-  .social-links a { display: inline-flex; align-items: center; padding: 8px 14px; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--border-dark); color: var(--text-light); border-radius: 999px; transition: all 0.3s var(--ease); }
-  .social-links a:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
-  h4 { font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-soft); margin-bottom: 20px; font-weight: 500; }
+  .social-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; }
+  .social-links a { padding: 6px 0; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-light); font-weight: 500; transition: opacity 0.3s var(--ease); }
+  .social-links a:hover { opacity: 0.55; }
+  h4 { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--paper); margin-bottom: 24px; font-weight: 500; }
   ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   ul a, address a { color: var(--text-light); transition: color 0.3s ease; }
-  ul a:hover, address a:hover { color: var(--accent-soft); }
+  ul a:hover, address a:hover { color: var(--grey-300); opacity: 1; }
+  ul a, address a { font-size: 0.9rem; letter-spacing: -0.005em; }
   address { font-style: normal; line-height: 1.7; color: var(--text-light); margin-bottom: 12px; }
   .fax { color: var(--muted-light); font-size: 0.9rem; margin-top: 4px; }
   .footer-base { display: flex; justify-content: space-between; padding-top: 32px; color: var(--muted-light); flex-wrap: wrap; gap: 12px; }

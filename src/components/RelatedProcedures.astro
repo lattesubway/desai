@@ -32,22 +32,23 @@ const heading = allSameCategory
 )}
 
 <style>
-  .related { background: var(--bg-warm); padding-top: clamp(64px, 8vw, 96px); padding-bottom: clamp(64px, 8vw, 96px); }
+  .related { background: var(--paper); padding-top: clamp(80px, 10vw, 120px); padding-bottom: clamp(80px, 10vw, 120px); border-top: 1px solid var(--line); }
   .rel-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
   .rel-h h2 { margin-top: 14px; max-width: 18ch; }
-  .rel-all { font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--aubergine); border-bottom: 1px solid var(--rose); padding-bottom: 4px; transition: color 0.3s var(--ease), border-color 0.3s var(--ease); }
+  .rel-all { font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; color: var(--aubergine); border-bottom: 1px solid var(--rose); padding-bottom: 4px; transition: color 0.3s var(--ease), border-color 0.3s var(--ease); }
   .rel-all:hover { color: var(--mauve); border-bottom-color: var(--mauve); }
   .rel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-  .rel-card { display: flex; flex-direction: column; gap: 12px; padding: 28px; background: var(--paper); border: 1px solid var(--border-light); transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), background 0.4s var(--ease), color 0.4s var(--ease); min-height: 240px; }
-  .rel-card:hover { transform: translateY(-3px); background: var(--aubergine); border-color: var(--aubergine); color: var(--paper); }
-  .rel-cat { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mauve); font-family: var(--font-display); font-weight: 500; }
-  .rel-card:hover .rel-cat { color: var(--rose); }
-  .rel-card h3 { font-size: 1.4rem; }
+  .rel-card { display: flex; flex-direction: column; gap: 14px; padding: 36px 32px; background: var(--paper); border: 1px solid var(--line); transition: background .55s var(--ease), color .55s var(--ease), border-color .55s var(--ease); min-height: 260px; }
+  .rel-card:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); transform: none; }
+  .rel-cat { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-500); font-family: var(--font-body); font-weight: 500; }
+  .rel-card:hover .rel-cat { color: var(--grey-300); }
+  .rel-card h3 { font-size: 1.55rem; font-weight: 360; letter-spacing: -0.022em; }
   .rel-card:hover h3 { color: var(--paper); }
-  .rel-card p { color: var(--muted); font-size: 0.92rem; flex-grow: 1; }
-  .rel-card:hover p { color: var(--rose-soft); }
-  .rel-link { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--aubergine); display: inline-flex; gap: 8px; align-items: center; margin-top: auto; }
-  .rel-card:hover .rel-link { color: var(--rose); }
+  .rel-card p { color: var(--grey-700); font-size: 0.92rem; flex-grow: 1; line-height: 1.6; }
+  .rel-card:hover p { color: var(--grey-300); }
+  .rel-link { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink); font-weight: 500; display: inline-flex; gap: 10px; align-items: center; margin-top: auto; padding-bottom: 4px; position: relative; }
+  .rel-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; }
+  .rel-card:hover .rel-link { color: var(--paper); }
   .arrow { transition: transform 0.4s var(--ease); display: inline-block; }
   .rel-card:hover .arrow { transform: translateX(4px); }
   @media (max-width: 860px) { .rel-grid { grid-template-columns: 1fr; } }

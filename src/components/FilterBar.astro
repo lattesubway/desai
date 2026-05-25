@@ -13,8 +13,10 @@ const { categories, attribute = 'data-cat', label = 'Filter items' } = Astro.pro
 </div>
 
 <style>
-  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 24px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
-  .filter-btn { padding: 10px 22px; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; color: var(--muted-dark); transition: all 0.3s ease; border-radius: 999px; }
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .filter-btn { padding: 8px 0; font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; color: var(--grey-500); font-weight: 500; transition: color 0.3s var(--ease); border-radius: 0; position: relative; }
+  .filter-btn::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ink); transform: scaleX(0); transition: transform 0.5s var(--ease-out); transform-origin: left; }
   .filter-btn:hover { color: var(--ink); }
-  .filter-btn.active { background: var(--ink); color: var(--text-light); }
+  .filter-btn:hover::after, .filter-btn.active::after { transform: scaleX(1); }
+  .filter-btn.active { background: transparent; color: var(--ink); }
 </style>

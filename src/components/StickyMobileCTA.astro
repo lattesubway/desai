@@ -12,12 +12,12 @@ import { SITE } from '../consts';
 <style>
   .sticky-cta { display: none; }
   @media (max-width: 860px) {
-    .sticky-cta { display: flex; gap: 8px; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; padding: 8px; background: rgba(38,20,40,0.95); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 20px 50px -20px rgba(38,20,40,0.6); }
-    .sc-call, .sc-book { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; border-radius: 999px; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
-    .sc-call { background: transparent; color: var(--paper); border: 1px solid rgba(246,243,238,0.3); }
-    .sc-call:hover { background: rgba(246,243,238,0.1); color: var(--paper); }
-    .sc-book { flex: 1; background: var(--rose); color: var(--aubergine); }
-    .sc-book:hover { background: var(--paper); color: var(--aubergine); }
+    .sticky-cta { display: flex; gap: 0; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 0; background: var(--ink); border-top: 1px solid var(--ink); }
+    .sc-call, .sc-book { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 18px 16px; font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; border-radius: 0; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
+    .sc-call { background: transparent; color: var(--paper); border-right: 1px solid rgba(255,255,255,0.18); flex: 1; }
+    .sc-call:hover { background: rgba(255,255,255,0.08); color: var(--paper); }
+    .sc-book { flex: 1.4; background: var(--paper); color: var(--ink); }
+    .sc-book:hover { background: var(--grey-200); color: var(--ink); }
     main { padding-bottom: 84px; }
   }
   @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
