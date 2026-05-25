@@ -15,6 +15,10 @@ import { SITE } from '../consts';
       <a href="/contact">Contact</a>
     </nav>
     <div class="nav-cta">
+      <button type="button" class="search-trigger" data-search-trigger aria-label="Open search (⌘K)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <kbd>⌘K</kbd>
+      </button>
       <a href={`tel:${SITE.phoneRaw}`} class="nav-phone">{SITE.phone}</a>
       <a href="/consultation" class="btn btn-primary nav-btn">Consultation</a>
     </div>

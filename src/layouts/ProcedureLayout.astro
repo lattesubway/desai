@@ -1,13 +1,50 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
-import type { Procedure } from '../data/procedures';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Faq from '../components/Faq.astro';
+import RelatedProcedures from '../components/RelatedProcedures.astro';
+import { relatedProcedures, type Procedure } from '../data/procedures';
+import { SITE } from '../consts';
 interface Props { procedure: Procedure; }
 const { procedure } = Astro.props;
+const related = relatedProcedures(procedure.slug, 3);
+
+const medicalLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalProcedure',
+  name: procedure.title,
+  alternateName: procedure.title.replace(/\s*\([^)]+\)\s*/g, '').trim(),
+  description: procedure.overview || procedure.blurb,
+  procedureType: 'http://schema.org/SurgicalProcedure',
+  ...(procedure.bodyLocation ? { bodyLocation: procedure.bodyLocation } : {}),
+  url: new URL(`/procedures/${procedure.slug}/`, SITE.url).toString(),
+  performer: {
+    '@type': 'Physician',
+    name: SITE.doctor,
+    url: SITE.url,
+    telephone: SITE.phone,
+    medicalSpecialty: 'Plastic Surgery',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      addressRegion: SITE.address.state,
+      postalCode: SITE.address.zip,
+      addressCountry: 'US',
+    },
+  },
+  ...(procedure.recovery ? { followup: `Typical recovery: ${procedure.recovery}` } : {}),
+};
 ---
 <BaseLayout title={procedure.title} description={procedure.blurb}>
   <section class="procedure-hero">
     <div class="container">
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Procedures', href: '/procedures/' },
+        { label: procedure.title },
+      ]} />
       <p class="eyebrow reveal">{procedure.category}</p>
       <h1 class="reveal">{procedure.title}</h1>
       <p class="lead reveal">{procedure.blurb}</p>
@@ -48,13 +85,22 @@ const { procedure } = Astro.props;
     </div>
   </section>
 
+  {procedure.faqs && procedure.faqs.length > 0 && (
+    <Faq items={procedure.faqs} heading={`${procedure.title} — questions patients ask.`} />
+  )}
+
+  <RelatedProcedures items={related} category={procedure.category} />
+
   <CTASection />
 </BaseLayout>
 
+<script type="application/ld+json" set:html={JSON.stringify(medicalLd)} />
+
 <style>
-  .procedure-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(72px, 10vw, 120px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .procedure-hero { padding: clamp(48px, 6vw, 64px) 0 clamp(72px, 10vw, 120px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
   .procedure-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
   .procedure-hero .lead { max-width: 60ch; }
+  .procedure-hero .crumbs { margin-bottom: 48px; }
   .meta { display: flex; gap: 48px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light); }
   .meta div { display: flex; flex-direction: column; gap: 6px; }
   .meta-label { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-dark); }
@@ -64,4 +110,20 @@ const { procedure } = Astro.props;
   .content-list h3 { color: var(--accent-soft); margin-bottom: 8px; }
   .content-list p { color: var(--muted-light); }
   @media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } }
+
+  /* ── Print styles ──────────────────────────────────────────── */
+  @media print {
+    :global(.site-header), :global(.sticky-cta), :global(.search-trigger),
+    :global(.btn), :global(.cta-section), :global(.related), :global(footer.footer),
+    :global(.crumbs .sep + li), :global(nav.crumbs) { display: none !important; }
+    :global(body) { background: white; color: #111; }
+    :global(.dark-section) { background: white !important; color: #111 !important; }
+    :global(.dark-section h1), :global(.dark-section h2), :global(.dark-section h3),
+    :global(.dark-section p), :global(.dark-section .lead) { color: #111 !important; }
+    :global(.faq-item details) { padding: 8px 0; }
+    :global(.faq-item details[open] .ico), :global(.faq-item .ico) { display: none; }
+    :global(.faq-item details) summary { font-weight: 600; }
+    :global(.reveal) { opacity: 1 !important; transform: none !important; }
+    .procedure-hero { padding-top: 0; }
+  }
 </style>

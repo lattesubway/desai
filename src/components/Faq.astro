@@ -1,0 +1,56 @@
+---
+import type { FAQ } from '../data/procedures';
+interface Props { items: FAQ[]; heading?: string; }
+const { items, heading = 'Frequently asked questions.' } = Astro.props;
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<section class="faq section">
+  <div class="container faq-wrap">
+    <header class="reveal">
+      <p class="eyebrow">Common questions</p>
+      <h2>{heading}</h2>
+    </header>
+    <ul class="faq-list">
+      {items.map((f, i) => (
+        <li class="faq-item reveal" style={`transition-delay:${(i%6)*50}ms`}>
+          <details>
+            <summary>
+              <span class="q">{f.q}</span>
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </summary>
+            <div class="a"><p>{f.a}</p></div>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+<style>
+  .faq { background: var(--paper); padding-top: clamp(64px, 8vw, 96px); padding-bottom: clamp(64px, 8vw, 96px); }
+  .faq-wrap { display: grid; grid-template-columns: 360px 1fr; gap: clamp(40px, 6vw, 80px); align-items: start; }
+  .faq h2 { margin-top: 18px; max-width: 14ch; }
+  .faq-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border-light); }
+  .faq-item { border-bottom: 1px solid var(--border-light); }
+  .faq-item details { padding: 22px 4px; }
+  .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; list-style: none; font-family: var(--font-display); font-size: 1.05rem; color: var(--aubergine); font-weight: 500; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item .q { letter-spacing: -0.005em; }
+  .faq-item .ico { display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--border-light); border-radius: 999px; color: var(--mauve); transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease); flex-shrink: 0; }
+  .faq-item details[open] .ico { transform: rotate(180deg); color: var(--aubergine); border-color: var(--mauve); }
+  .faq-item .a { padding: 12px 60px 8px 0; color: var(--muted); font-size: 0.98rem; line-height: 1.7; max-width: 70ch; }
+  .faq-item details[open] summary .q { color: var(--mauve); }
+  @media (max-width: 860px) { .faq-wrap { grid-template-columns: 1fr; } .faq-item .a { padding-right: 0; } }
+</style>

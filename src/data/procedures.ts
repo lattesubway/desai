@@ -1,3 +1,5 @@
+export type FAQ = { q: string; a: string };
+
 export type Procedure = {
   slug: string;
   title: string;
@@ -10,6 +12,8 @@ export type Procedure = {
   technique?: string;
   recoveryDetail?: string;
   results?: string;
+  faqs?: FAQ[];
+  bodyLocation?: string;
 };
 
 export const procedures: Procedure[] = [
@@ -124,3 +128,70 @@ export const procedures: Procedure[] = [
 ];
 
 export const categories = ['Face', 'Nose', 'Breast', 'Body', 'Non-Surgical'] as const;
+
+// ── FAQs ─────────────────────────────────────────────────────
+// Patient-facing questions per procedure. Drives the FAQ accordion
+// and FAQPage JSON-LD schema on each procedure page.
+const faqs: Record<string, FAQ[]> = {
+  rhinoplasty: [
+    { q: 'Will my rhinoplasty results look natural?', a: 'Yes. Dr. Desai\'s approach prioritizes balance over a "done" look. The goal is a nose that complements your other features — not one that announces itself.' },
+    { q: 'How long until I can return to work?', a: 'Most patients return to a desk job after 7–10 days, once the splint is removed. Visible swelling continues to subside for several weeks.' },
+    { q: 'Can rhinoplasty improve my breathing?', a: 'Often, yes. Functional correction of the septum or turbinates can be performed alongside the cosmetic procedure to improve airflow.' },
+    { q: 'What is the difference between open and closed rhinoplasty?', a: 'Open rhinoplasty uses a small incision at the columella for direct visibility and is preferred for complex changes. Closed rhinoplasty hides all incisions inside the nose and is used for more limited refinements. Dr. Desai selects the approach based on your anatomy and goals.' },
+    { q: 'When will I see my final results?', a: 'Most refinement is visible at 3 months. Subtle settling continues for up to a year — especially at the tip.' },
+  ],
+  'revision-rhinoplasty': [
+    { q: 'How is revision rhinoplasty different from a primary?', a: 'Scar tissue, weakened cartilage, and altered anatomy from prior surgery make revision among the most technically demanding procedures in plastic surgery. It typically requires cartilage grafting from the rib or ear.' },
+    { q: 'How long should I wait before considering a revision?', a: 'At least 12 months from your prior surgery. Tissues need time to fully heal and final shape to settle before re-evaluation.' },
+    { q: 'What is the success rate of revision rhinoplasty?', a: 'When performed by a specialist, satisfaction rates are high — but expectations should be calibrated. The goal is meaningful improvement, not perfection.' },
+  ],
+  facelift: [
+    { q: 'How long do facelift results last?', a: 'Typically 8–12 years. The face continues to age, but you will always look younger than you would have without the procedure.' },
+    { q: 'Will I look "pulled"?', a: 'Dr. Desai\'s deep-plane and SMAS techniques reposition the underlying tissue, avoiding the windswept look of older skin-only facelifts.' },
+    { q: 'When can I be in public again?', a: 'Most patients feel comfortable in public at 10–14 days. Camouflage makeup helps bridge weeks 2–3 if needed.' },
+    { q: 'Can a facelift be combined with other procedures?', a: 'Yes. Eyelid surgery, brow lift, fat transfer, and skin resurfacing are commonly combined for comprehensive facial rejuvenation.' },
+  ],
+  'eyelid-surgery': [
+    { q: 'Is blepharoplasty covered by insurance?', a: 'Upper-lid surgery may be covered when excess skin impairs vision (documented with a visual-field test). Lower-lid and purely cosmetic work is not typically covered.' },
+    { q: 'Will I have visible scars?', a: 'Upper-lid incisions hide in the natural crease. Lower-lid work is often performed through the inside of the eyelid (transconjunctival), leaving no visible scar.' },
+    { q: 'How long does the procedure take?', a: 'Most blepharoplasty procedures take 1–2 hours under local anesthesia with sedation.' },
+  ],
+  'breast-augmentation': [
+    { q: 'Silicone or saline?', a: 'Most patients today choose silicone for its more natural feel. Saline remains an option and offers the advantage of smaller incisions and easier detection of rupture.' },
+    { q: 'How do I choose the right implant size?', a: 'Dimensional analysis at consultation — your chest measurements, tissue quality, and goals — guides selection. Implant sizers are used during consultation to preview results.' },
+    { q: 'How long do breast implants last?', a: 'Modern implants are not lifetime devices, but many last 15–20+ years without issue. Replacement is recommended only when problems arise or you wish to change size/type.' },
+    { q: 'When can I exercise again?', a: 'Light walking within days, light cardio at 2–3 weeks, and full exercise including upper-body work at 4–6 weeks.' },
+  ],
+  bbl: [
+    { q: 'Is the BBL safe?', a: 'When performed by a board-certified plastic surgeon using subcutaneous-only injection — the technique Dr. Desai has published on — safety has improved substantially. Dr. Desai never injects fat into muscle.' },
+    { q: 'How long do BBL results last?', a: 'The fat that survives the first 3 months is generally permanent — though weight changes will affect volume just like elsewhere in the body.' },
+    { q: 'Why can\'t I sit on my buttocks after?', a: 'Pressure can compromise survival of the transferred fat for the first 2 weeks. A BBL pillow allows sitting on the thighs while protecting the result.' },
+  ],
+  'tummy-tuck': [
+    { q: 'Will a tummy tuck remove my stretch marks?', a: 'Stretch marks on the skin that is excised — usually below the navel — are removed. Stretch marks above may be lowered into a less prominent position.' },
+    { q: 'How big will the scar be?', a: 'The incision spans hip to hip but is placed low enough to be hidden by underwear or swimwear. Scars fade significantly over 12–18 months.' },
+    { q: 'Can I get pregnant after a tummy tuck?', a: 'Yes, but pregnancy will undo the abdominal muscle repair. We recommend completing your family before surgery for best long-term results.' },
+    { q: 'What is a "mini" tummy tuck?', a: 'A mini addresses only the lower abdomen below the navel — appropriate for patients with limited skin laxity. A full tummy tuck is needed when laxity extends above the navel or muscle repair is required.' },
+  ],
+};
+
+// Attach FAQs to procedures by slug
+procedures.forEach((p) => { if (faqs[p.slug]) p.faqs = faqs[p.slug]; });
+
+// Body locations for MedicalProcedure JSON-LD
+const bodyMap: Record<string, string> = {
+  Face: 'Face', Nose: 'Nose', Breast: 'Chest', Body: 'Torso', 'Non-Surgical': 'Face',
+};
+procedures.forEach((p) => { p.bodyLocation = bodyMap[p.category]; });
+
+export function relatedProcedures(slug: string, limit = 3): Procedure[] {
+  const current = procedures.find((p) => p.slug === slug);
+  if (!current) return [];
+  const sameCat = procedures.filter((p) => p.slug !== slug && p.category === current.category);
+  if (sameCat.length >= limit) return sameCat.slice(0, limit);
+  // Fallback: fill remaining slots with procedures from adjacent categories
+  const nearby = procedures.filter(
+    (p) => p.slug !== slug && p.category !== current.category,
+  );
+  return [...sameCat, ...nearby].slice(0, limit);
+}

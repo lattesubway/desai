@@ -1,8 +1,11 @@
 ---
 import '../styles/global.css';
+import { ViewTransitions } from 'astro:transitions';
 import Head from '../components/Head.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import StickyMobileCTA from '../components/StickyMobileCTA.astro';
+import SearchPalette from '../components/SearchPalette.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -14,22 +17,30 @@ const { title, description, image } = Astro.props;
 <html lang="en">
   <head>
     <Head title={title} description={description} image={image} />
+    <ViewTransitions />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav />
     <main id="main"><slot /></main>
     <Footer />
+    <StickyMobileCTA />
+    <SearchPalette />
     <script>
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      // Re-init reveal observer on every page swap (View Transitions reuses the document).
+      const initReveal = () => {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => io.observe(el));
+      };
+      initReveal();
+      document.addEventListener('astro:after-swap', initReveal);
     </script>
   </body>
 </html>
