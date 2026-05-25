@@ -1,0 +1,67 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import type { Procedure } from '../data/procedures';
+interface Props { procedure: Procedure; }
+const { procedure } = Astro.props;
+---
+<BaseLayout title={procedure.title} description={procedure.blurb}>
+  <section class="procedure-hero">
+    <div class="container">
+      <p class="eyebrow reveal">{procedure.category}</p>
+      <h1 class="reveal">{procedure.title}</h1>
+      <p class="lead reveal">{procedure.blurb}</p>
+      {(procedure.duration || procedure.recovery) && (
+        <div class="meta reveal">
+          {procedure.duration && <div><span class="meta-label">Duration</span><span class="meta-value">{procedure.duration}</span></div>}
+          {procedure.recovery && <div><span class="meta-label">Recovery</span><span class="meta-value">{procedure.recovery}</span></div>}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="dark-section section">
+    <div class="container content-grid">
+      <div class="reveal">
+        <p class="eyebrow on-dark">Overview</p>
+        <h2>An approach defined by precision.</h2>
+        <p class="lead">{procedure.overview || `Every ${procedure.title.toLowerCase()} at Desai Plastic Surgery begins with an in-depth conversation about your goals, your anatomy, and your lifestyle. Dr. Desai's training across Harvard, Brown, Tufts, and the Beverly Hills Institute of Plastic Surgery informs a singularly methodical approach.`}</p>
+      </div>
+      <div class="content-list reveal">
+        <div>
+          <h3>Candidacy</h3>
+          <p>{procedure.candidacy || 'Ideal candidates are in good general health, have realistic expectations, and seek refinement rather than reinvention.'}</p>
+        </div>
+        <div>
+          <h3>The Procedure</h3>
+          <p>{procedure.technique || 'Performed under appropriate anesthesia in an accredited facility, with techniques tailored to your individual anatomy.'}</p>
+        </div>
+        <div>
+          <h3>Recovery</h3>
+          <p>{procedure.recoveryDetail || `Most patients return to social activities within ${procedure.recovery || 'one to two weeks'}. A detailed recovery roadmap is provided at your consultation.`}</p>
+        </div>
+        <div>
+          <h3>Results</h3>
+          <p>{procedure.results || "Outcomes are natural, proportionate, and built to age gracefully — the hallmark of Dr. Desai's aesthetic."}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .procedure-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(72px, 10vw, 120px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .procedure-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
+  .procedure-hero .lead { max-width: 60ch; }
+  .meta { display: flex; gap: 48px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light); }
+  .meta div { display: flex; flex-direction: column; gap: 6px; }
+  .meta-label { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-dark); }
+  .meta-value { font-family: var(--font-display); font-size: 1.4rem; }
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 8vw, 96px); align-items: start; }
+  .content-list { display: flex; flex-direction: column; gap: 36px; }
+  .content-list h3 { color: var(--accent-soft); margin-bottom: 8px; }
+  .content-list p { color: var(--muted-light); }
+  @media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,31 @@
+---
+import type { Procedure } from '../data/procedures';
+interface Props { procedure: Procedure; index?: number; }
+const { procedure, index = 0 } = Astro.props;
+---
+<a href={`/procedures/${procedure.slug}`} class="p-card reveal" style={`transition-delay:${(index%6)*60}ms`}>
+  <div class="p-card-top">
+    <span class="p-num">{String(index+1).padStart(2,'0')}</span>
+    <span class="p-cat">{procedure.category}</span>
+  </div>
+  <h3>{procedure.title}</h3>
+  <p>{procedure.blurb}</p>
+  <span class="p-link">Learn More <span class="arrow">→</span></span>
+</a>
+
+<style>
+  .p-card { display: flex; flex-direction: column; gap: 14px; padding: 36px 32px; background: var(--bg); border: 1px solid var(--border-light); transition: all 0.5s var(--ease); min-height: 280px; }
+  .p-card:hover { background: var(--ink); color: var(--text-light); border-color: var(--ink); transform: translateY(-2px); }
+  .p-card-top { display: flex; justify-content: space-between; align-items: center; }
+  .p-num { font-family: var(--font-display); font-style: italic; color: var(--accent); font-size: 1.2rem; }
+  .p-cat { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted-dark); }
+  .p-card:hover .p-cat { color: var(--accent-soft); }
+  .p-card h3 { font-size: 1.6rem; }
+  .p-card:hover h3 { color: var(--text-light); }
+  .p-card p { color: var(--muted-dark); font-size: 0.95rem; flex-grow: 1; }
+  .p-card:hover p { color: var(--muted-light); }
+  .p-link { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); display: inline-flex; gap: 8px; align-items: center; margin-top: auto; }
+  .p-card:hover .p-link { color: var(--accent-soft); }
+  .p-card:hover .arrow { transform: translateX(4px); }
+  .arrow { transition: transform 0.4s var(--ease); }
+</style>

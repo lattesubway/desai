@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import { testimonials } from '../data/testimonials';
+
+const extended = [
+  ...testimonials,
+  { quote: "A consultation that felt like a conversation. Twenty minutes in, I knew I'd found the right surgeon.", author: 'Patient · Tummy Tuck' },
+  { quote: 'Six months later and I still get compliments — and no one knows why.', author: 'Patient · Eyelid Surgery' },
+  { quote: 'I've been in and out of consultations for years. Dr. Desai was the first to tell me what NOT to change.', author: 'Patient · Rhinoplasty Consult' },
+  { quote: 'The whole office runs like a fine restaurant. Attentive, calm, never rushed.', author: 'Patient · Liposuction' },
+];
+---
+<BaseLayout title="Reviews" description="Patient testimonials and reviews of Dr. Urmen Desai's Beverly Hills plastic surgery practice.">
+  <section class="r-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Patient Voices</p>
+      <h1 class="reveal">Reviews & testimonials.</h1>
+      <p class="lead reveal">The words that mean the most come from the patients who entrust us with their care.</p>
+    </div>
+  </section>
+
+  <section class="r-grid section">
+    <div class="container">
+      <div class="grid">
+        {extended.map((t, i) => (
+          <figure class="r-card reveal" style={`transition-delay:${(i%4)*70}ms`}>
+            <span class="quote">"</span>
+            <blockquote>{t.quote}</blockquote>
+            <figcaption>— {t.author}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="r-platforms reveal">
+        <p class="eyebrow center">Also Read</p>
+        <div class="platform-row">
+          <a href="https://www.google.com/search?q=Dr+Urmen+Desai+Beverly+Hills+reviews" target="_blank" rel="noopener">Google Reviews</a>
+          <span>·</span>
+          <a href="https://www.realself.com/find/California/Beverly-Hills/Plastic-Surgeon/Urmen-Desai" target="_blank" rel="noopener">RealSelf</a>
+          <span>·</span>
+          <a href="https://www.yelp.com/search?find_desc=Dr+Urmen+Desai+Plastic+Surgery&find_loc=Beverly+Hills+CA" target="_blank" rel="noopener">Yelp</a>
+          <span>·</span>
+          <a href="https://www.healthgrades.com/physician/dr-urmen-desai" target="_blank" rel="noopener">Healthgrades</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .r-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .r-hero h1 { margin: 16px 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .r-card { padding: 48px; background: var(--bg-warm); border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 18px; }
+  .quote { font-family: var(--font-display); font-size: 3.5rem; color: var(--accent); line-height: 1; }
+  blockquote { font-family: var(--font-display); font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.5; font-style: italic; }
+  figcaption { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); }
+  .r-platforms { margin-top: 72px; text-align: center; }
+  .platform-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 20px; }
+  .platform-row a { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink); border-bottom: 1px solid transparent; transition: border-color 0.3s ease; }
+  .platform-row a:hover { border-color: var(--accent); }
+  .platform-row span { color: var(--muted-dark); }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } .r-card { padding: 32px 28px; } }
+</style>

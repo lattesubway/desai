@@ -1,0 +1,20 @@
+---
+interface Props {
+  categories: string[];
+  attribute?: string;
+  label?: string;
+}
+const { categories, attribute = 'data-cat', label = 'Filter items' } = Astro.props;
+---
+<div class="filter-bar" role="tablist" aria-label={label}>
+  {categories.map((c, i) => (
+    <button class:list={['filter-btn', i === 0 && 'active']} data-filter={c} aria-selected={i === 0 ? 'true' : 'false'}>{c}</button>
+  ))}
+</div>
+
+<style>
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 24px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+  .filter-btn { padding: 10px 22px; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; color: var(--muted-dark); transition: all 0.3s ease; border-radius: 999px; }
+  .filter-btn:hover { color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: var(--text-light); }
+</style>

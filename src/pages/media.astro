@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import FilterBar from '../components/FilterBar.astro';
+
+const features = [
+  { outlet: 'CNN', title: 'Miami Cannibal Attack Victim Recovering', date: 'May 2013', type: 'Television', href: 'http://www.cnn.com/video/data/2.0/video/us/2013/05/22/wsvn-pkg-cannibal-attack-update.wsvn.html' },
+  { outlet: 'ABC News', title: 'Miami Face-Chewing Victim Has Adjusted Well, Say Doctors', date: 'May 2013', type: 'Television', href: 'http://abcnews.go.com/US/miami-face-chewing-victim-grateful-support-year-attack/story?id=19227502' },
+  { outlet: 'NBC News', title: 'Face-Chewing Victim Recovering, Strumming Guitar', date: 'May 2013', type: 'Television', href: 'http://www.nbcnews.com/id/51952891/' },
+  { outlet: 'ABC Primetime', title: 'Fixing Plastic Surgery Mistakes', date: 'November 2010', type: 'Television', href: 'http://abcnews.go.com/Nightline/video/fixing-plastic-surgery-mistakes-12240765' },
+  { outlet: 'Fox News', title: 'Looking Younger with Stem Cell Facelifts', date: 'November 2010', type: 'Television', href: 'http://video.foxnews.com/v/4409445/looking-younger-with-stem-cell-facelifts' },
+  { outlet: 'Good Morning America', title: 'Cosmetic Procedures Gone Wrong', date: 'October 2010', type: 'Television', href: 'http://abcnews.go.com/GMA/video/cosmetic-procedures-wrong-celebrities-regret-plastic-surgery-11811278' },
+  { outlet: 'CBS Miami', title: 'Survivor of Cannibalistic Attack Thanks Community, Doctors', date: 'May 2013', type: 'Television' },
+  { outlet: 'NBC Miami', title: 'Two Injured When Car Crashed Into Bus Stop', date: 'November 2013', type: 'Television' },
+  { outlet: 'The Guardian (UK)', title: 'Miami Face-Eater Victim Recovering Well', date: 'May 2013', type: 'Newspaper' },
+  { outlet: 'NY Daily News', title: 'Update: Victim of Miami Cannibal a Year Later', date: 'May 2013', type: 'Newspaper' },
+  { outlet: 'Chicago Sun-Times', title: 'Face-Chewing Victim Recovering, Strumming Guitar', date: 'May 2013', type: 'Newspaper' },
+  { outlet: 'The Aesthetic Guide', title: 'Advances in Autologous Treatments: The Future is Now', date: 'Jan/Feb 2011', type: 'Magazine' },
+];
+
+const types = ['All', 'Television', 'Newspaper', 'Magazine'];
+---
+<BaseLayout title="Media & Press" description="Dr. Urmen Desai's appearances on CNN, ABC News, NBC, Fox News, Good Morning America, and more.">
+  <section class="m-hero">
+    <div class="container">
+      <p class="eyebrow reveal">In The News</p>
+      <h1 class="reveal">A surgical voice on national television.</h1>
+      <p class="lead reveal">Dr. Desai has been called on to comment on some of the most high-profile reconstructive cases in recent memory, from the Miami face-mauling to LeBron James's broken nose. Below, a selection of features.</p>
+    </div>
+  </section>
+
+  <section class="m-filter section-tight">
+    <div class="container">
+      <FilterBar categories={types} label="Filter media" />
+    </div>
+  </section>
+
+  <section class="m-list section">
+    <div class="container">
+      <ul class="m-grid" id="m-grid">
+        {features.map(f => (
+          <li class="m-item reveal" data-type={f.type}>
+            <div class="m-card">
+              <div class="m-meta">
+                <span class="m-type">{f.type}</span>
+                <span class="m-date">{f.date}</span>
+              </div>
+              <h3 class="m-outlet">{f.outlet}</h3>
+              <p class="m-title">{f.title}</p>
+              {f.href ? <a href={f.href} target="_blank" rel="noopener" class="m-link">Watch / Read <span class="arrow">→</span></a> : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .m-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .m-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
+  .m-hero .lead { max-width: 60ch; }
+
+  .m-grid { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .m-item.hidden { display: none; }
+  .m-card { padding: 36px 32px; background: var(--bg); border: 1px solid var(--border-light); height: 100%; display: flex; flex-direction: column; gap: 12px; transition: all 0.4s var(--ease); }
+  .m-card:hover { background: var(--ink); color: var(--text-light); border-color: var(--ink); }
+  .m-meta { display: flex; justify-content: space-between; }
+  .m-type, .m-date { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); }
+  .m-card:hover .m-type, .m-card:hover .m-date { color: var(--accent-soft); }
+  .m-outlet { font-size: 1.4rem; margin-top: 4px; }
+  .m-title { color: var(--muted-dark); font-size: 0.95rem; flex-grow: 1; }
+  .m-card:hover .m-title { color: var(--muted-light); }
+  .m-link { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); display: inline-flex; gap: 8px; align-items: center; margin-top: auto; }
+  .m-card:hover .m-link { color: var(--accent-soft); }
+  @media (max-width: 900px) { .m-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .m-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.m-item');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const f = b.getAttribute('data-filter');
+    items.forEach(i => i.classList.toggle('hidden', f !== 'All' && i.getAttribute('data-type') !== f));
+  }));
+</script>

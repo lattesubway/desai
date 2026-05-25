@@ -1,0 +1,43 @@
+---
+import { SITE } from '../consts';
+---
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow reveal">Beverly Hills · Est. Excellence</p>
+      <h1 class="reveal">A quieter <em>kind of</em> beautiful.</h1>
+      <p class="lead reveal">{SITE.doctor} is a Harvard-educated, double-board-certified, double-fellowship-trained plastic surgeon offering refined facial, breast, and body surgery in the heart of Beverly Hills.</p>
+      <div class="hero-actions reveal">
+        <a href="/consultation" class="btn btn-primary">Schedule a Consultation <span class="arrow">→</span></a>
+        <a href="/about" class="btn btn-ghost">Meet Dr. Desai</a>
+      </div>
+      <div class="hero-marks reveal">
+        <span>Harvard MPH</span><span>·</span>
+        <span>Tufts MD</span><span>·</span>
+        <span>FACS</span><span>·</span>
+        <span>Double-Board Certified</span>
+      </div>
+    </div>
+    <div class="hero-art reveal">
+      <div class="art-portrait">
+        <img src="/assets/logo.png" alt="" class="hero-logo-bg" aria-hidden="true" width="500" height="500" />
+        <img src="/assets/dr-desai-portrait.png" alt="Dr. Urmen Desai, MD, MPH, FACS" class="hero-photo" width="440" height="550" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding: clamp(80px, 12vw, 140px) 0 clamp(64px, 10vw, 120px); background: linear-gradient(180deg, var(--bg-warm) 0%, var(--bg) 60%); }
+  .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+  .hero-copy h1 { margin: 18px 0 28px; max-width: 14ch; }
+  .hero-copy h1 em { color: var(--accent-deep); font-style: italic; }
+  .hero-copy .lead { max-width: 56ch; }
+  .hero-actions { display: flex; gap: 16px; margin-top: 36px; flex-wrap: wrap; }
+  .hero-marks { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border-light); color: var(--muted-dark); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .hero-art { display: grid; place-items: end center; }
+  .art-portrait { position: relative; width: 100%; max-width: 440px; }
+  .hero-logo-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 110%; max-width: 500px; height: auto; opacity: 0.07; z-index: 0; pointer-events: none; }
+  .hero-photo { position: relative; z-index: 1; width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 24px 48px rgba(0,0,0,0.12)); }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { order: -1; max-width: 320px; margin: 0 auto; } }
+</style>

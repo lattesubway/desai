@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+<BaseLayout title="Schedule a Consultation" description="Schedule a virtual or in-person consultation with Dr. Urmen Desai at his Beverly Hills practice.">
+  <section class="c-hero">
+    <div class="container c-hero-inner">
+      <p class="eyebrow reveal">Complimentary Consultation</p>
+      <h1 class="reveal">Begin with a conversation.</h1>
+      <p class="lead reveal">Select a time that works for you. Dr. Desai's team will confirm your virtual or in-person consultation within one business day.</p>
+    </div>
+  </section>
+
+  <section class="c-cal section">
+    <div class="container">
+      <div class="cal-embed reveal" id="cal-embed">
+        <iframe
+          src="https://cal.com/desaiplasticsurgery/30min?embed=true&theme=light"
+          title="Schedule a consultation with Dr. Desai"
+          width="100%"
+          height="700"
+          frameborder="0"
+          loading="lazy"
+          allow="payment"
+          style="border:none; min-height:700px;"
+        ></iframe>
+      </div>
+      <p class="cal-alt reveal">
+        Prefer to call? Reach us directly at <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .c-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 64px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .c-hero-inner { max-width: 760px; }
+  .c-hero h1 { margin: 16px 0 24px; }
+  .c-cal { padding-bottom: clamp(96px, 12vw, 140px); }
+  .cal-embed { max-width: 920px; margin: 0 auto; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-light); background: var(--bg); }
+  .cal-embed iframe { display: block; width: 100%; }
+  .cal-alt { text-align: center; margin-top: 32px; color: var(--muted-dark); font-size: 0.95rem; }
+  .cal-alt a { color: var(--ink); border-bottom: 1px solid var(--accent); }
+</style>

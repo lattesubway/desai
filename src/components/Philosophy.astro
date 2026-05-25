@@ -1,0 +1,22 @@
+---
+---
+<section class="philosophy dark-section section">
+  <div class="container philosophy-grid">
+    <div class="reveal">
+      <p class="eyebrow on-dark">Philosophy</p>
+      <h2>The art is in <em>what you don't see</em>.</h2>
+    </div>
+    <div class="philosophy-body reveal">
+      <p class="lead">Twenty years of training — across Harvard, Brown, Tufts, and the Beverly Hills Institute of Plastic Surgery — informs an approach that prizes proportion over alteration. The most successful surgery is the one that goes unnoticed.</p>
+      <p class="lead">Dr. Desai's published research on craniofacial reconstruction, his international cleft-lip mission work, and his extensive media-recognized expertise in revision surgery have all shaped a singular surgical eye: one trained equally on art and anatomy.</p>
+      <a href="/about" class="btn btn-ghost">The Full Story <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(40px, 8vw, 96px); align-items: start; }
+  .philosophy h2 em { color: var(--accent-soft); font-style: italic; }
+  .philosophy-body { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+  @media (max-width: 800px) { .philosophy-grid { grid-template-columns: 1fr; } }
+</style>

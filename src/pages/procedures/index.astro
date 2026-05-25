@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProcedureCard from '../../components/ProcedureCard.astro';
+import CTASection from '../../components/CTASection.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import { procedures, categories } from '../../data/procedures';
+---
+<BaseLayout title="Procedures" description="Explore the full range of surgical and non-surgical procedures offered by Dr. Urmen Desai in Beverly Hills.">
+  <section class="proc-hero">
+    <div class="container">
+      <p class="eyebrow reveal">All Procedures</p>
+      <h1 class="reveal">A complete library of refinement.</h1>
+      <p class="lead reveal">From rhinoplasty to mommy makeover, every procedure is built around the same principle: results that look like you — only more rested, more proportionate, more yourself.</p>
+    </div>
+  </section>
+
+  <section class="proc-filter section-tight">
+    <div class="container">
+      <FilterBar categories={['All', ...categories]} label="Filter procedures" />
+    </div>
+  </section>
+
+  <section class="proc-list section">
+    <div class="container">
+      <div class="proc-grid" id="proc-grid">
+        {procedures.map((p, i) => (
+          <div class="proc-item" data-cat={p.category}>
+            <ProcedureCard procedure={p} index={i} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .proc-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .proc-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
+  .proc-hero .lead { max-width: 60ch; }
+
+  .proc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .proc-item.hidden { display: none; }
+  @media (max-width: 900px) { .proc-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .proc-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.proc-item');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+    b.classList.add('active'); b.setAttribute('aria-selected','true');
+    const f = b.getAttribute('data-filter');
+    items.forEach(i => {
+      const cat = i.getAttribute('data-cat');
+      i.classList.toggle('hidden', f !== 'all' && cat !== f);
+    });
+  }));
+</script>

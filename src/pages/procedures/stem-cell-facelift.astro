@@ -1,0 +1,6 @@
+---
+import ProcedureLayout from '../../layouts/ProcedureLayout.astro';
+import { procedures } from '../../data/procedures';
+const procedure = procedures.find(p => p.slug === 'stem-cell-facelift')!;
+---
+<ProcedureLayout procedure={procedure} />

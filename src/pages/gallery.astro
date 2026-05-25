@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import FilterBar from '../components/FilterBar.astro';
+
+const gallery = [
+  { cat: 'Nose', title: 'Primary Rhinoplasty', age: '20s' },
+  { cat: 'Nose', title: 'Revision Rhinoplasty', age: '30s' },
+  { cat: 'Face', title: 'Facelift & Neck Lift', age: '50s' },
+  { cat: 'Face', title: 'Upper & Lower Blepharoplasty', age: '40s' },
+  { cat: 'Breast', title: 'Breast Augmentation', age: '30s' },
+  { cat: 'Breast', title: 'Mastopexy with Augmentation', age: '40s' },
+  { cat: 'Body', title: 'Tummy Tuck & Liposuction', age: '30s' },
+  { cat: 'Body', title: 'Mommy Makeover', age: '30s' },
+  { cat: 'Face', title: 'Stem Cell Facelift', age: '50s' },
+  { cat: 'Body', title: 'Brazilian Butt Lift', age: '20s' },
+  { cat: 'Nose', title: 'Ethnic Rhinoplasty', age: '20s' },
+  { cat: 'Breast', title: 'Breast Reduction', age: '30s' },
+];
+const cats = ['All', 'Face', 'Nose', 'Breast', 'Body'];
+---
+<BaseLayout title="Gallery" description="Before and after results from Dr. Urmen Desai's Beverly Hills plastic surgery practice.">
+  <section class="g-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Before & After</p>
+      <h1 class="reveal">Real patients. Real results.</h1>
+      <p class="lead reveal">A curated selection from Dr. Desai's private gallery. Models pictured may not be actual patients of this practice.</p>
+    </div>
+  </section>
+
+  <section class="g-filter section-tight">
+    <div class="container">
+      <FilterBar categories={cats} label="Filter gallery" />
+    </div>
+  </section>
+
+  <section class="g-list section">
+    <div class="container">
+      <div class="g-grid">
+        {gallery.map((item, i) => (
+          <button class="g-item reveal" data-cat={item.cat} data-title={item.title} data-age={item.age} style={`transition-delay:${(i%6)*60}ms`}>
+            <div class="g-thumb">
+              <div class="g-half g-before">Before</div>
+              <div class="g-half g-after">After</div>
+            </div>
+            <div class="g-meta">
+              <span class="g-cat">{item.cat}</span>
+              <h3>{item.title}</h3>
+              <span class="g-age">Patient, {item.age}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery detail view">
+    <button class="lb-close" aria-label="Close">×</button>
+    <div class="lb-content">
+      <div class="lb-stage">
+        <div class="lb-half lb-before">Before</div>
+        <div class="lb-half lb-after">After</div>
+      </div>
+      <div class="lb-info">
+        <span class="lb-cat"></span>
+        <h3 class="lb-title"></h3>
+        <span class="lb-age"></span>
+      </div>
+    </div>
+  </div>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .g-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .g-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
+
+  .g-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .g-item { cursor: pointer; background: transparent; text-align: left; display: flex; flex-direction: column; gap: 16px; padding: 0; }
+  .g-item.hidden { display: none; }
+  .g-thumb { aspect-ratio: 1/1; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+  .g-half { display: grid; place-items: center; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-light); transition: transform 0.5s var(--ease); }
+  .g-before { background: linear-gradient(135deg, var(--aubergine), var(--aubergine-deep)); }
+  .g-after { background: linear-gradient(135deg, var(--rose-soft), var(--rose)); }
+  .g-item:hover .g-half { transform: scale(1.04); }
+  .g-meta { padding: 0 4px; }
+  .g-cat { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-deep); }
+  .g-meta h3 { font-size: 1.3rem; margin: 6px 0 4px; }
+  .g-age { font-size: 0.85rem; color: var(--muted-dark); }
+  @media (max-width: 900px) { .g-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .g-grid { grid-template-columns: 1fr; } }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(15,15,15,0.94); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .lightbox[aria-hidden="false"] { display: flex; }
+  .lb-close { position: absolute; top: 24px; right: 24px; color: var(--text-light); font-size: 2rem; cursor: pointer; background: transparent; border: none; line-height: 1; }
+  .lb-content { max-width: 1000px; width: 100%; color: var(--text-light); }
+  .lb-stage { aspect-ratio: 16/9; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 24px; }
+  .lb-half { display: grid; place-items: center; font-family: var(--font-display); font-size: 2rem; }
+  .lb-before { background: linear-gradient(135deg, var(--aubergine), var(--aubergine-deep)); }
+  .lb-after { background: linear-gradient(135deg, var(--rose-soft), var(--rose)); }
+  .lb-info { text-align: center; }
+  .lb-cat { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-soft); }
+  .lb-title { font-size: 2rem; margin: 12px 0 8px; }
+  .lb-age { color: var(--muted-light); }
+</style>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.g-item');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const f = b.getAttribute('data-filter');
+    items.forEach(i => i.classList.toggle('hidden', f !== 'All' && i.getAttribute('data-cat') !== f));
+  }));
+
+  const lb = document.getElementById('lightbox');
+  const lbCat = lb?.querySelector('.lb-cat');
+  const lbTitle = lb?.querySelector('.lb-title');
+  const lbAge = lb?.querySelector('.lb-age');
+  let previousFocus = null;
+  const closeLb = () => { lb.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; if (previousFocus) previousFocus.focus(); };
+  items.forEach(i => i.addEventListener('click', () => {
+    if (!lb) return;
+    previousFocus = document.activeElement;
+    lbCat.textContent = i.getAttribute('data-cat');
+    lbTitle.textContent = i.getAttribute('data-title');
+    lbAge.textContent = 'Patient, ' + i.getAttribute('data-age');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('.lb-close')?.focus();
+  }));
+  lb?.querySelector('.lb-close')?.addEventListener('click', closeLb);
+  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lb?.getAttribute('aria-hidden') === 'false') closeLb();
+    if (e.key === 'Tab' && lb?.getAttribute('aria-hidden') === 'false') {
+      const focusable = lb.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+</script>

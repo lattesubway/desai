@@ -1,0 +1,31 @@
+---
+import { testimonials } from '../data/testimonials';
+---
+<section class="testimonials section dark-section">
+  <div class="container">
+    <div class="t-head reveal">
+      <p class="eyebrow on-dark">In Their Words</p>
+      <h2>What patients say.</h2>
+    </div>
+    <div class="t-grid">
+      {testimonials.map((t, i) => (
+        <figure class="t-card reveal" style={`transition-delay:${i*100}ms`}>
+          <span class="quote-mark">"</span>
+          <blockquote>{t.quote}</blockquote>
+          <figcaption>— {t.author}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .t-head { text-align: center; margin-bottom: clamp(48px, 6vw, 72px); }
+  .t-head h2 { margin-top: 16px; }
+  .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border-dark); border: 1px solid var(--border-dark); }
+  .t-card { background: var(--ink); padding: 48px; display: flex; flex-direction: column; gap: 20px; position: relative; }
+  .quote-mark { font-family: var(--font-display); font-size: 4rem; color: var(--accent); line-height: 1; }
+  blockquote { font-family: var(--font-display); font-size: clamp(1.25rem, 1.8vw, 1.6rem); line-height: 1.5; font-style: italic; color: var(--text-light); }
+  figcaption { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-soft); }
+  @media (max-width: 700px) { .t-grid { grid-template-columns: 1fr; } .t-card { padding: 36px 28px; } }
+</style>
