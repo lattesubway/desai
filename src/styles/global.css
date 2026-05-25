@@ -1,81 +1,81 @@
-/* ───────────────────────── Maison — Prada-inspired monochrome ───────────────────────── */
+/* ───────────────────────── Maison — pink/purple monochrome ───────────────────────── */
 :root {
-  /* Surfaces — pure monochrome */
-  --paper:       #ffffff;
-  --paper-warm:  #fafaf8;
-  --paper-deep:  #f3f1ec;
-  --vellum:      #ffffff;
+  /* Surfaces — blush/mauve paper instead of pure white */
+  --paper:       #f7eef1;
+  --paper-warm:  #f1e3e9;
+  --paper-deep:  #e8d3dd;
+  --vellum:      #fcf6f8;
 
-  /* Ink */
-  --ink:              #0a0a0a;
-  --ink-soft:         #1a1a1a;
-  --aubergine:        #0a0a0a;
-  --aubergine-deep:   #000000;
-  --aubergine-soft:   #1a1a1a;
-  --plum-ink:         #0a0a0a;
+  /* Ink — deep aubergine standing in for "black" */
+  --ink:              #2a1432;
+  --ink-soft:         #3a1f3d;
+  --aubergine:        #2a1432;
+  --aubergine-deep:   #160a1c;
+  --aubergine-soft:   #3a1f3d;
+  --plum-ink:         #2a1432;
 
-  /* Muted greys (the only accent system) */
-  --grey-900:    #0a0a0a;
-  --grey-700:    #2a2a2a;
-  --grey-500:    #6b6b6b;
-  --grey-400:    #9a9a9a;
-  --grey-300:    #cfcfcf;
-  --grey-200:    #e6e4df;
-  --grey-100:    #f3f1ec;
+  /* Warm purple-grey ramp */
+  --grey-900:    #2a1432;
+  --grey-700:    #4a3050;
+  --grey-500:    #7a6582;
+  --grey-400:    #a58faa;
+  --grey-300:    #c9b8cc;
+  --grey-200:    #ddccd6;
+  --grey-100:    #ecdee3;
 
   --muted:       var(--grey-500);
 
-  /* "Accent" tokens kept for component compat, all desaturated */
-  --rose:        var(--grey-900);
-  --rose-soft:   var(--grey-300);
-  --rose-light:  var(--grey-200);
-  --mauve:       var(--grey-700);
-  --mauve-deep:  var(--grey-900);
-  --gold:        var(--grey-900);
+  /* Pink/purple accents */
+  --rose:        #d49bb1;
+  --rose-soft:   #ecc8d2;
+  --rose-light:  #f6e1e7;
+  --mauve:       #b08bb4;
+  --mauve-deep:  #6e4f7a;
+  --gold:        #c9a7b4; /* rose-gold */
 
-  --line:        var(--grey-200);
-  --line-soft:   var(--grey-100);
-  --line-strong: var(--grey-300);
+  --line:        #e0d2dc;
+  --line-soft:   #ecdee3;
+  --line-strong: #c2adb9;
 
   /* Semantic tokens */
   --bg:           var(--paper);
   --bg-warm:      var(--paper-warm);
   --bg-deep:      var(--paper-deep);
   --bg-vellum:    var(--vellum);
-  --accent:       var(--grey-900);
-  --accent-deep:  var(--grey-900);
-  --accent-soft:  var(--grey-300);
+  --accent:       var(--mauve-deep);
+  --accent-deep:  var(--mauve-deep);
+  --accent-soft:  var(--rose-soft);
   --text-dark:    var(--ink);
   --text-light:   var(--paper);
   --muted-dark:   var(--grey-500);
-  --muted-light:  var(--grey-300);
+  --muted-light:  var(--rose-soft);
   --border-light: var(--line);
-  --border-dark:  rgba(255,255,255,0.18);
+  --border-dark:  rgba(247,238,241,0.18);
 
   /* Legacy aliases (kept so existing components don't break) */
-  --champagne: var(--grey-900);
-  --champagne-deep: var(--grey-700);
-  --champagne-soft: var(--grey-300);
+  --champagne: var(--rose);
+  --champagne-deep: var(--mauve-deep);
+  --champagne-soft: var(--rose-soft);
   --champagne-warm: var(--paper-warm);
   --obsidian: var(--ink);
   --obsidian-soft: var(--aubergine-deep);
   --charcoal: var(--ink);
   --ivory: var(--paper);
   --ivory-warm: var(--paper-warm);
-  --ivory-deep: var(--paper-warm);
-  --blush: var(--grey-200);
+  --ivory-deep: var(--paper-deep);
+  --blush: var(--rose-light);
 
   /* Typography — sharp Bodoni-leaning Fraunces + Inter for utility */
   --font-display: 'Fraunces', 'Bodoni Moda', 'Didot', 'Times New Roman', ui-serif, serif;
   --font-body:    'Inter', 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-mono:    ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
 
-  /* Layout — wider, edge-to-edge feel */
+  /* Layout */
   --container: 1480px;
   --gutter: clamp(20px, 3.2vw, 48px);
   --section-y: clamp(5rem, 10vw, 9rem);
 
-  /* Motion — slow, restrained */
+  /* Motion */
   --ease:     cubic-bezier(.2,.7,.2,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
   --radius:   0;
@@ -354,14 +354,14 @@ h1 em, h2 em, h3 em, em, .accent {
 .gilt { color: var(--ink); font-weight: 600; }
 
 .nav-scrim {
-  background: rgba(255,255,255,.92);
+  background: rgba(247,238,241,.86);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-bottom: 1px solid var(--line);
 }
 
 .hero-overlay {
-  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 100%);
+  background: linear-gradient(180deg, rgba(247,238,241,0) 0%, rgba(247,238,241,0.85) 100%);
 }
 
 /* ───────────────────────── Scrollbar ───────────────────────── */
