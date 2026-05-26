@@ -251,22 +251,49 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
   .hero-title .ht-sep { margin: 0 0.4em; opacity: 0.5; }
 
   .hero-figure {
+    position: relative;
     margin: 0;
     width: 100%;
     max-width: clamp(360px, 38vw, 560px);
     pointer-events: none;
+    isolation: isolate;
+  }
+  /* Large faded monogram watermark sitting behind the portrait */
+  .hero-figure::before {
+    content: '';
+    position: absolute;
+    inset: -18% -14%;
+    background-color: var(--mauve);
+    -webkit-mask: url('/assets/logo-mark.svg') no-repeat center / contain;
+            mask: url('/assets/logo-mark.svg') no-repeat center / contain;
+    opacity: 0.14;
+    z-index: 0;
+    animation: monogramDrift 22s ease-in-out infinite alternate;
+  }
+  :root[data-theme="light"] .hero-figure::before {
+    background-color: var(--mauve-deep);
+    opacity: 0.10;
+  }
+  @keyframes monogramDrift {
+    0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+    100% { transform: translate3d(8px, -10px, 0) rotate(1.5deg); }
+  }
+  .hero-figure img {
+    position: relative;
+    z-index: 1;
+    width: 100%; height: auto; display: block;
+    object-fit: contain;
     filter: drop-shadow(0 60px 80px rgba(29,14,37,0.5));
     -webkit-mask-image:
       radial-gradient(125% 100% at 50% 60%, #000 65%, transparent 100%);
             mask-image:
       radial-gradient(125% 100% at 50% 60%, #000 65%, transparent 100%);
   }
-  .hero-figure img {
-    width: 100%; height: auto; display: block;
-    object-fit: contain;
-  }
-  :root[data-theme="light"] .hero-figure {
+  :root[data-theme="light"] .hero-figure img {
     filter: drop-shadow(0 40px 60px rgba(29,14,37,0.18));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-figure::before { animation: none; }
   }
 
   /* Responsive */
