@@ -1,0 +1,92 @@
+---
+---
+<time
+  class="local-clock"
+  data-clock
+  aria-label="Current local time in Beverly Hills"
+  title="Beverly Hills, California"
+>
+  <span class="clock-dot" aria-hidden="true"></span>
+  <span class="clock-time" data-clock-time>--:--&nbsp;PT</span>
+  <span class="clock-place">Beverly&nbsp;Hills</span>
+</time>
+
+<script is:inline>
+  (() => {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZoneName: 'short',
+    });
+    let timer = null;
+    const tick = () => {
+      const t = fmt.format(new Date()).replace(',', '');
+      document.querySelectorAll('[data-clock-time]').forEach((el) => {
+        el.textContent = t;
+      });
+    };
+    const start = () => {
+      tick();
+      if (timer) clearInterval(timer);
+      timer = setInterval(tick, 1000 * 15); // every 15s — enough for minute precision
+    };
+    start();
+    document.addEventListener('astro:after-swap', start);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tick();
+    });
+  })();
+</script>
+
+<style is:global>
+  .local-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 4px;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .local-clock .clock-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #46d49a;
+    box-shadow: 0 0 0 3px color-mix(in oklab, #46d49a 22%, transparent),
+                0 0 10px color-mix(in oklab, #46d49a 70%, transparent);
+    animation: clock-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes clock-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+  }
+  .local-clock .clock-time {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .local-clock .clock-place {
+    color: var(--grey-500);
+    padding-left: 8px;
+    border-left: 1px solid var(--line);
+    margin-left: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .local-clock .clock-dot { animation: none; }
+  }
+  /* Collapse the city label on narrower screens; keep time */
+  @media (max-width: 1180px) {
+    .local-clock .clock-place { display: none; }
+  }
+  @media (max-width: 980px) {
+    .local-clock { display: none; } /* mobile menu takes over */
+  }
+</style>

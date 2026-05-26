@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../consts';
 import ThemeToggle from './ThemeToggle.astro';
+import LocalClock from './LocalClock.astro';
 import { Icon } from 'astro-icon/components';
 ---
 <header class="site-header">
@@ -17,6 +18,7 @@ import { Icon } from 'astro-icon/components';
       <a href="/contact">Contact</a>
     </nav>
     <div class="nav-cta">
+      <LocalClock />
       <button type="button" class="search-trigger" data-search-trigger aria-label="Open search (⌘K)">
         <Icon name="lucide:search" size={16} aria-hidden="true" />
         <kbd>⌘K</kbd>
@@ -62,8 +64,14 @@ import { Icon } from 'astro-icon/components';
   .nav-links a:hover { opacity: 0.55; }
   .nav-links a::after { content: ''; position: absolute; bottom: -8px; left: 0; right: 0; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease); }
   .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-cta { display: flex; align-items: center; gap: 24px; }
-  .nav-phone { font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.24em; color: var(--ink); font-weight: 500; text-transform: uppercase; }
+  .nav-cta { display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; }
+  .nav-phone {
+    font-family: var(--font-body); font-size: 0.68rem;
+    letter-spacing: 0.22em; color: var(--ink); font-weight: 500;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  @media (max-width: 1280px) { .nav-links { gap: 28px; } .nav-cta { gap: 16px; } }
+  @media (max-width: 1180px) { .nav-phone { display: none; } }
   .nav-btn { padding: 0 0 4px 0 !important; font-size: 0.68rem !important; letter-spacing: 0.28em !important; }
   .menu-toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; cursor: pointer; }
   .menu-toggle span { display: block; width: 22px; height: 1px; background: var(--ink); transition: all 0.3s ease; }
