@@ -19,10 +19,19 @@ const items = [
   <div class="sp-inner">
     <div class="sp-input-wrap">
       <Icon name="lucide:search" size={18} aria-hidden="true" />
-      <input id="sp-input" type="search" placeholder="Search procedures, pages…" autocomplete="off" />
+      <input id="sp-input" type="search" placeholder="Search procedures, pages, content…" autocomplete="off" />
       <button type="button" class="sp-close" id="sp-close" aria-label="Close">Esc</button>
     </div>
-    <ul class="sp-list" id="sp-list" role="listbox" aria-label="Search results"></ul>
+    <div class="sp-body" id="sp-body">
+      <section class="sp-section" id="sp-jump">
+        <header class="sp-section-h">Jump to</header>
+        <ul class="sp-list" id="sp-list" role="listbox" aria-label="Page navigation"></ul>
+      </section>
+      <section class="sp-section" id="sp-deep" hidden>
+        <header class="sp-section-h">From the site</header>
+        <ul class="sp-results" id="sp-results" role="listbox" aria-label="Full-text search results"></ul>
+      </section>
+    </div>
     <footer class="sp-foot">
       <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
       <span><kbd>↵</kbd> select</span>
@@ -37,36 +46,119 @@ const items = [
       const dialog = document.getElementById('sp-dialog');
       const input = document.getElementById('sp-input');
       const list = document.getElementById('sp-list');
+      const results = document.getElementById('sp-results');
+      const deepSection = document.getElementById('sp-deep');
       const close = document.getElementById('sp-close');
-      if (!dialog || !input || !list || !close) return;
-      if (dialog.dataset.bound) return; // idempotent across view-transitions
+      if (!dialog || !input || !list || !results || !deepSection || !close) return;
+      if (dialog.dataset.bound) return;
       dialog.dataset.bound = '1';
 
-      let active = 0;
-      let current = items;
+      let active = 0;        // active index over the *combined* flat list
+      let jumpItems = items; // current page-jump matches
+      let deepItems = [];    // current pagefind matches
+      let pagefind = null;
+      let pagefindFailed = false;
 
-      const render = (q = '') => {
+      // Lazy-load pagefind on first input
+      const loadPagefind = async () => {
+        if (pagefind || pagefindFailed) return;
+        try {
+          pagefind = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
+          await pagefind.options({ baseUrl: '/' });
+        } catch (e) {
+          pagefindFailed = true; // dev mode, or pagefind not built
+        }
+      };
+
+      const flat = () => [
+        ...jumpItems.map((i) => ({ ...i, _kind: 'jump' })),
+        ...deepItems.map((i) => ({ ...i, _kind: 'deep' })),
+      ];
+
+      const renderJump = () => {
+        if (active >= flat().length) active = 0;
+        list.innerHTML = jumpItems.length
+          ? jumpItems.map((i, idx) => `
+            <li role="option" data-idx="${idx}" data-kind="jump" aria-selected="${idx === active}">
+              <span class="lbl">${escapeHtml(i.label)}</span>
+              <span class="kind">${escapeHtml(i.kind)}</span>
+            </li>`).join('')
+          : (input.value ? '' : '<li class="empty">Type to search.</li>');
+      };
+
+      const renderDeep = () => {
+        if (!deepItems.length) {
+          deepSection.hidden = true;
+          results.innerHTML = '';
+          return;
+        }
+        deepSection.hidden = false;
+        const offset = jumpItems.length;
+        results.innerHTML = deepItems.map((r, i) => {
+          const idx = offset + i;
+          return `
+            <li role="option" data-idx="${i}" data-kind="deep" aria-selected="${idx === active}">
+              <div class="r-row">
+                <span class="r-title">${r.meta_title || r.title || r.url}</span>
+                <span class="r-excerpt">${r.excerpt}</span>
+              </div>
+            </li>`;
+        }).join('');
+      };
+
+      const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+      const filterJump = (q) => {
         const t = q.trim().toLowerCase();
-        current = !t ? items : items.filter((i) =>
+        return !t ? items : items.filter((i) =>
           i.label.toLowerCase().includes(t) || i.kind.toLowerCase().includes(t)
         );
-        if (active >= current.length) active = 0;
-        list.innerHTML = current.length
-          ? current.map((i, idx) => `
-            <li role="option" data-idx="${idx}" aria-selected="${idx === active}">
-              <span class="lbl">${i.label}</span>
-              <span class="kind">${i.kind}</span>
-            </li>`).join('')
-          : '<li class="empty">No matches.</li>';
+      };
+
+      let deepReq = 0;
+      const searchDeep = async (q) => {
+        const reqId = ++deepReq;
+        if (!q.trim() || q.trim().length < 2) { deepItems = []; renderDeep(); return; }
+        await loadPagefind();
+        if (!pagefind) return;
+        const r = await pagefind.debouncedSearch(q, { limit: 5 });
+        if (!r || reqId !== deepReq) return; // stale
+        const top = await Promise.all(r.results.slice(0, 5).map((x) => x.data()));
+        deepItems = top.map((d) => ({
+          title: d.meta?.title || d.url,
+          meta_title: d.meta?.title,
+          excerpt: d.excerpt,
+          url: d.url,
+        }));
+        renderDeep();
+      };
+
+      const onInput = () => {
+        active = 0;
+        jumpItems = filterJump(input.value);
+        renderJump();
+        searchDeep(input.value);
       };
 
       const open = () => {
         if (dialog.open) return;
-        active = 0; input.value = ''; render();
+        active = 0;
+        input.value = '';
+        jumpItems = items;
+        deepItems = [];
+        renderJump();
+        renderDeep();
         dialog.showModal();
         setTimeout(() => input.focus(), 10);
       };
       const shut = () => { if (dialog.open) dialog.close(); };
+
+      const go = (item) => {
+        if (!item) return;
+        shut();
+        location.href = item.href || item.url;
+      };
 
       document.querySelectorAll('[data-search-trigger]').forEach((el) => {
         if (el.dataset.bound) return;
@@ -75,23 +167,51 @@ const items = [
       });
       close.addEventListener('click', shut);
       dialog.addEventListener('click', (e) => { if (e.target === dialog) shut(); });
-      input.addEventListener('input', () => { active = 0; render(input.value); });
-      list.addEventListener('click', (e) => {
+      input.addEventListener('input', onInput);
+
+      const click = (e) => {
         const li = e.target.closest('li[data-idx]');
         if (!li) return;
-        const item = current[+li.dataset.idx];
-        if (item) { shut(); location.href = item.href; }
-      });
+        const idx = +li.dataset.idx;
+        const kind = li.dataset.kind;
+        const item = kind === 'jump' ? jumpItems[idx] : deepItems[idx];
+        go(item);
+      };
+      list.addEventListener('click', click);
+      results.addEventListener('click', click);
+
+      const updateSelection = () => {
+        const combined = flat();
+        list.querySelectorAll('li[data-kind="jump"]').forEach((el, i) =>
+          el.setAttribute('aria-selected', String(i === active)));
+        results.querySelectorAll('li[data-kind="deep"]').forEach((el, i) =>
+          el.setAttribute('aria-selected', String((jumpItems.length + i) === active)));
+        const sel = document.querySelector('.sp [aria-selected="true"]');
+        sel?.scrollIntoView({ block: 'nearest' });
+      };
+
       input.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, current.length - 1); render(input.value); list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' }); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); render(input.value); list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' }); }
-        else if (e.key === 'Enter') { e.preventDefault(); const item = current[active]; if (item) { shut(); location.href = item.href; } }
+        const combined = flat();
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          active = Math.min(active + 1, combined.length - 1);
+          updateSelection();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          active = Math.max(active - 1, 0);
+          updateSelection();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          go(combined[active]);
+        }
       });
       document.addEventListener('keydown', (e) => {
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dialog.open ? shut() : open(); }
         else if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { e.preventDefault(); open(); }
         else if (e.key === 'Escape' && dialog.open) shut();
       });
+
+      renderJump();
     };
     init();
     document.addEventListener('astro:after-swap', init);
@@ -115,12 +235,27 @@ const items = [
   .sp-input-wrap input::placeholder { color: var(--grey-500); }
   .sp-close { font: 500 10px/1 ui-monospace, monospace; padding: 4px 8px; background: transparent; border: 1px solid var(--line); color: var(--grey-500); border-radius: 0; cursor: pointer; }
 
-  .sp-list { list-style: none; padding: 8px; margin: 0; max-height: 360px; overflow-y: auto; }
-  .sp-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 0; cursor: pointer; color: var(--ink); font-size: 0.92rem; }
-  .sp-list li[aria-selected="true"] { background: var(--paper-deep); }
-  .sp-list .kind { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-family: var(--font-display); }
-  .sp-list .empty { padding: 24px 14px; color: var(--muted); text-align: center; cursor: default; justify-content: center; }
+  .sp-body { max-height: 60vh; overflow-y: auto; }
+  .sp-section { padding: 6px 0; }
+  .sp-section + .sp-section { border-top: 1px solid var(--line); }
+  .sp-section-h {
+    padding: 12px 20px 6px; font-family: var(--font-body);
+    font-size: 0.6rem; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--grey-500); font-weight: 600;
+  }
+
+  .sp-list, .sp-results { list-style: none; padding: 4px 8px 8px; margin: 0; }
+  .sp-list li, .sp-results li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 0; cursor: pointer; color: var(--ink); font-size: 0.92rem; }
+  .sp-list li[aria-selected="true"], .sp-results li[aria-selected="true"] { background: var(--paper-deep); }
+  .sp-list .kind { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-500); font-family: var(--font-body); font-weight: 500; }
+  .sp-list .empty { padding: 24px 14px; color: var(--grey-500); text-align: center; cursor: default; justify-content: center; }
   .sp-list .empty:hover { background: transparent; }
+
+  .sp-results li { align-items: flex-start; }
+  .r-row { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+  .r-title { font-family: var(--font-display); font-weight: 380; letter-spacing: -0.012em; font-size: 1rem; color: var(--ink); }
+  .r-excerpt { font-size: 0.82rem; color: var(--grey-500); line-height: 1.5; }
+  .r-excerpt mark { background: transparent; color: var(--ink); font-weight: 500; }
 
   .sp-foot { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--line); color: var(--grey-500); font-size: 11px; font-family: var(--font-body); }
   .sp-foot kbd { margin-right: 4px; background: transparent; border: 1px solid var(--line); padding: 2px 6px; border-radius: 0; font: 500 10px/1 ui-monospace, monospace; color: var(--grey-500); }
