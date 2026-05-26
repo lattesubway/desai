@@ -1,0 +1,306 @@
+---
+import { SITE } from '../consts';
+import { Icon } from 'astro-icon/components';
+import SocialIcons from './SocialIcons.astro';
+import { procedures, categories } from '../data/procedures';
+
+const pages = [
+  { label: 'About',     href: '/about/' },
+  { label: 'Procedures',href: '/procedures/' },
+  { label: 'Gallery',   href: '/gallery/' },
+  { label: 'Media',     href: '/media/' },
+  { label: 'Reviews',   href: '/reviews/' },
+  { label: 'Contact',   href: '/contact/' },
+];
+
+const byCat: Record<string, typeof procedures> = {};
+for (const c of categories) byCat[c] = [];
+for (const p of procedures) byCat[p.category]?.push(p);
+---
+<button class="menu-trigger" data-menu-open aria-label="Open menu" aria-expanded="false" aria-controls="menu-overlay" type="button">
+  <span class="mt-bars" aria-hidden="true"><span></span><span></span></span>
+  <span class="mt-label">Menu</span>
+</button>
+
+<dialog class="menu-overlay" id="menu-overlay" aria-label="Site navigation">
+  <div class="mo-grid">
+
+    <header class="mo-head">
+      <a href="/" class="mo-brand" aria-label="Desai Plastic Surgery — Home" data-menu-close>
+        <img src="/assets/logo.png" alt="" class="mo-logo" />
+        <span class="mo-brand-name">Desai Plastic Surgery</span>
+      </a>
+      <button class="mo-close" data-menu-close aria-label="Close menu" type="button">
+        <Icon name="lucide:x" size={20} aria-hidden="true" />
+        <span class="mo-close-label">Close</span>
+      </button>
+    </header>
+
+    <nav class="mo-primary" aria-label="Primary">
+      <ol>
+        {pages.map((p, i) => (
+          <li style={`--i:${i}`}>
+            <a href={p.href} data-menu-close>
+              <span class="mo-num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="mo-label">{p.label}</span>
+            </a>
+          </li>
+        ))}
+        <li style={`--i:${pages.length}`}>
+          <a href="/consultation/" class="mo-cta" data-menu-close>
+            <span class="mo-num">→</span>
+            <span class="mo-label"><em>Schedule a Consultation</em></span>
+          </a>
+        </li>
+      </ol>
+    </nav>
+
+    <aside class="mo-secondary">
+      <section class="mo-section">
+        <h3 class="mo-eyebrow">Procedures</h3>
+        <div class="mo-proc-grid">
+          {categories.map((cat) => (
+            <div class="mo-proc-col">
+              <p class="mo-cat">{cat}</p>
+              <ul>
+                {byCat[cat].map((p) => (
+                  <li><a href={`/procedures/${p.slug}/`} data-menu-close>{p.title.replace(/\s*\([^)]+\)\s*/g, '').trim()}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mo-section mo-contact-row">
+        <div>
+          <h3 class="mo-eyebrow">Visit</h3>
+          <address>
+            {SITE.address.street}<br/>
+            {SITE.address.city}, {SITE.address.state} {SITE.address.zip}<br/>
+            <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="mo-eyebrow">Follow</h3>
+          <SocialIcons className="mo-socials" />
+        </div>
+        <div>
+          <h3 class="mo-eyebrow">Hours</h3>
+          <p class="mo-hours">Monday — Friday<br/>9:00 — 18:00 Pacific</p>
+        </div>
+      </section>
+    </aside>
+  </div>
+</dialog>
+
+<script is:inline>
+  (() => {
+    const init = () => {
+      const dialog = document.getElementById('menu-overlay');
+      if (!dialog || dialog.dataset.bound) return;
+      dialog.dataset.bound = '1';
+
+      const openers = document.querySelectorAll('[data-menu-open]');
+      const closers = dialog.querySelectorAll('[data-menu-close]');
+      const open = () => {
+        if (dialog.open) return;
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+        openers.forEach((o) => o.setAttribute('aria-expanded', 'true'));
+        // pause Lenis while menu is open
+        (window).__lenis?.stop();
+      };
+      const close = () => {
+        if (!dialog.open) return;
+        dialog.close();
+        document.body.style.overflow = '';
+        openers.forEach((o) => o.setAttribute('aria-expanded', 'false'));
+        (window).__lenis?.start();
+      };
+      openers.forEach((o) => o.addEventListener('click', open));
+      closers.forEach((c) => c.addEventListener('click', (e) => {
+        // anchor-with-href: let the navigation happen
+        const isLink = c.tagName === 'A';
+        if (!isLink) e.preventDefault();
+        close();
+      }));
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+      dialog.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+    };
+    init();
+    document.addEventListener('astro:after-swap', init);
+  })();
+</script>
+
+<style is:global>
+  /* ── Trigger button ─────────────────────────────────────── */
+  .menu-trigger {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 0 4px; height: 32px;
+    background: transparent; border: 0; cursor: pointer;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.66rem; letter-spacing: 0.28em;
+    text-transform: uppercase; font-weight: 500;
+    transition: opacity .3s var(--ease);
+  }
+  .menu-trigger:hover { opacity: 0.55; }
+  .menu-trigger .mt-bars {
+    width: 22px; height: 14px; position: relative; display: inline-block;
+  }
+  .menu-trigger .mt-bars span {
+    position: absolute; left: 0; right: 0; height: 1px; background: currentColor;
+    transition: transform .35s var(--ease);
+  }
+  .menu-trigger .mt-bars span:nth-child(1) { top: 4px; }
+  .menu-trigger .mt-bars span:nth-child(2) { top: 10px; }
+
+  /* ── Overlay dialog ─────────────────────────────────────── */
+  .menu-overlay {
+    border: 0; padding: 0; margin: 0; max-width: none; max-height: none;
+    width: 100vw; height: 100vh;
+    background: var(--paper); color: var(--ink);
+    overflow: auto;
+  }
+  .menu-overlay::backdrop { background: var(--paper); }
+  .menu-overlay[open] {
+    animation: moOpen .55s var(--ease-out);
+  }
+  @keyframes moOpen {
+    from { opacity: 0; transform: translateY(-12px); }
+  }
+
+  .mo-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "head head"
+      "primary secondary";
+    min-height: 100%;
+    gap: 0;
+  }
+
+  /* Head row */
+  .mo-head {
+    grid-area: head;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(20px, 4vw, 56px);
+    border-bottom: 1px solid var(--line);
+  }
+  .mo-brand { display: inline-flex; align-items: center; gap: 14px; color: var(--ink); }
+  .mo-logo { height: 36px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
+  :root[data-theme="light"] .mo-logo { filter: grayscale(1) brightness(0); }
+  .mo-brand-name {
+    font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.32em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .mo-close {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; border: 0; cursor: pointer; color: var(--ink);
+    font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.28em;
+    text-transform: uppercase; font-weight: 500;
+    transition: opacity .3s var(--ease);
+  }
+  .mo-close:hover { opacity: 0.55; }
+
+  /* Primary: huge stacked nav */
+  .mo-primary {
+    grid-area: primary;
+    padding: clamp(36px, 6vw, 80px) clamp(20px, 4vw, 56px);
+    border-right: 1px solid var(--line);
+    display: flex; align-items: center;
+  }
+  .mo-primary ol { list-style: none; padding: 0; margin: 0; counter-reset: nav; width: 100%; }
+  .mo-primary li {
+    border-top: 1px solid var(--line);
+    opacity: 0; transform: translateY(12px);
+    animation: moStagger .55s var(--ease-out) forwards;
+    animation-delay: calc(var(--i) * 60ms + 120ms);
+  }
+  .mo-primary li:last-child { border-bottom: 1px solid var(--line); }
+  @keyframes moStagger { to { opacity: 1; transform: none; } }
+
+  .mo-primary a {
+    display: flex; align-items: baseline; gap: 24px;
+    padding: clamp(14px, 1.6vw, 24px) 0;
+    color: var(--ink);
+    transition: opacity .35s var(--ease), padding-left .55s var(--ease-out);
+    text-decoration: none;
+  }
+  .mo-primary a:hover { padding-left: 18px; opacity: 1; }
+  .mo-num {
+    font-family: var(--font-body); font-size: 0.7rem; letter-spacing: 0.28em;
+    color: var(--grey-500); font-weight: 500;
+    min-width: 28px;
+  }
+  .mo-primary .mo-label {
+    font-family: var(--font-body);
+    font-size: clamp(2rem, 4.6vw, 4.2rem);
+    font-weight: 280;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .mo-primary .mo-label em {
+    font-style: italic; font-weight: 320;
+    color: var(--mauve-deep);
+  }
+  .mo-primary .mo-cta .mo-label em { color: var(--mauve-deep); }
+
+  /* Secondary panel: procedures + meta */
+  .mo-secondary {
+    grid-area: secondary;
+    padding: clamp(36px, 6vw, 80px) clamp(20px, 4vw, 56px);
+    display: flex; flex-direction: column; gap: clamp(40px, 5vw, 64px);
+  }
+  .mo-section { display: flex; flex-direction: column; gap: 18px; }
+  .mo-eyebrow {
+    font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--mauve-deep); font-weight: 600;
+    margin: 0; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .mo-proc-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 36px;
+  }
+  .mo-cat {
+    font-family: var(--font-body); font-size: 0.58rem; letter-spacing: 0.32em;
+    text-transform: uppercase; color: var(--grey-500); font-weight: 600;
+    margin: 0 0 10px;
+  }
+  .mo-proc-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+  .mo-proc-col a {
+    font-family: var(--font-body); font-size: 0.92rem; font-weight: 400;
+    color: var(--ink); letter-spacing: -0.005em;
+    transition: opacity .3s var(--ease);
+  }
+  .mo-proc-col a:hover { opacity: 0.55; }
+
+  .mo-contact-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    border-top: 1px solid var(--line); padding-top: clamp(28px, 3vw, 40px);
+  }
+  .mo-contact-row address {
+    font-style: normal; font-size: 0.9rem; color: var(--ink); line-height: 1.7;
+    letter-spacing: -0.005em;
+  }
+  .mo-contact-row address a { color: var(--ink); border-bottom: 1px solid var(--line); }
+  .mo-hours { font-size: 0.9rem; color: var(--ink); line-height: 1.7; letter-spacing: -0.005em; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .mo-grid { grid-template-columns: 1fr; grid-template-areas: "head" "primary" "secondary"; }
+    .mo-primary { border-right: 0; border-bottom: 1px solid var(--line); }
+    .mo-proc-grid { grid-template-columns: repeat(2, 1fr); }
+    .mo-contact-row { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (max-width: 560px) {
+    .mo-proc-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-overlay[open] { animation: none; }
+    .mo-primary li { opacity: 1; transform: none; animation: none; }
+  }
+</style>
