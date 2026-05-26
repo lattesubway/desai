@@ -14,6 +14,7 @@ export default defineConfig({
         lucide: [
           'search', 'x', 'phone', 'sun', 'moon', 'chevron-down',
           'arrow-right', 'arrow-up', 'menu',
+          'instagram', 'facebook', 'youtube', 'linkedin', 'mail',
         ],
       },
     }),

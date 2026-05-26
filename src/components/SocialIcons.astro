@@ -1,0 +1,39 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SITE } from '../consts';
+
+interface Props { size?: number; className?: string; }
+const { size = 16, className = '' } = Astro.props;
+
+const links = [
+  { href: SITE.social.instagram, name: 'Instagram', icon: 'lucide:instagram' },
+  { href: SITE.social.facebook,  name: 'Facebook',  icon: 'lucide:facebook' },
+  { href: SITE.social.youtube,   name: 'YouTube',   icon: 'lucide:youtube' },
+  { href: SITE.social.linkedin,  name: 'LinkedIn',  icon: 'lucide:linkedin' },
+];
+---
+<ul class={`socials ${className}`} aria-label="Follow Desai Plastic Surgery">
+  {links.map((l) => (
+    <li>
+      <a href={l.href} target="_blank" rel="noopener noreferrer" aria-label={l.name} title={l.name}>
+        <Icon name={l.icon} size={size} aria-hidden="true" />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style is:global>
+  .socials {
+    display: inline-flex; align-items: center; gap: 12px;
+    list-style: none; padding: 0; margin: 0;
+  }
+  .socials li { display: inline-flex; }
+  .socials a {
+    display: inline-grid; place-items: center;
+    width: 28px; height: 28px;
+    color: var(--ink);
+    transition: opacity 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .socials a:hover { opacity: 0.55; }
+  @media (max-width: 1280px) { .socials { gap: 8px; } .socials a { width: 24px; height: 24px; } }
+</style>
