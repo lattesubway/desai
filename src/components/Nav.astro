@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../consts';
 import ThemeToggle from './ThemeToggle.astro';
+import { Icon } from 'astro-icon/components';
 ---
 <header class="site-header">
   <div class="container nav-inner">
@@ -17,7 +18,7 @@ import ThemeToggle from './ThemeToggle.astro';
     </nav>
     <div class="nav-cta">
       <button type="button" class="search-trigger" data-search-trigger aria-label="Open search (⌘K)">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <Icon name="lucide:search" size={16} aria-hidden="true" />
         <kbd>⌘K</kbd>
       </button>
       <ThemeToggle />
