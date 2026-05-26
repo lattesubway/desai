@@ -12,7 +12,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.109",
     "@playform/inline": "^0.1.4",
-    "astro": "^4.16.0",
+    "astro": "^6.3.8",
     "astro-compress": "^2.4.1",
     "astro-icon": "^1.1.5",
     "gsap": "^3.15.0",
