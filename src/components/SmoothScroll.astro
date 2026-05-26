@@ -19,6 +19,8 @@
       touchMultiplier: 1.2,
       lerp: 0.085,
     });
+    (window as any).__lenis = lenis;
+    window.dispatchEvent(new CustomEvent('lenis:ready', { detail: lenis }));
 
     const raf = (time: number) => {
       lenis?.raf(time);

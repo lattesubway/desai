@@ -1,0 +1,91 @@
+---
+---
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let bound = false;
+
+  // Sync ScrollTrigger to Lenis once Lenis is ready
+  const syncLenis = () => {
+    const lenis = (window as any).__lenis;
+    if (!lenis) return;
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time: number) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  };
+
+  const cleanup = () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    gsap.set('[data-parallax]', { clearProps: 'all' });
+  };
+
+  const install = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    cleanup();
+
+    // Selectors that get a gentle parallax: subtle translateY tied to scroll
+    // progress while the element is in view, with a faint scale-in. Tuned
+    // small on purpose — luxury sites whisper.
+    const targets = document.querySelectorAll<HTMLElement>('[data-parallax]');
+    targets.forEach((el) => {
+      const intensity = parseFloat(el.dataset.parallax || '60'); // pixels of drift
+      gsap.fromTo(
+        el,
+        { yPercent: 0, scale: 1.04 },
+        {
+          yPercent: -(intensity / el.offsetHeight) * 100,
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.6,
+          },
+        }
+      );
+    });
+
+    // Display headlines: a gentle scroll-progress-tied rise as they enter
+    // (replaces the IO reveal for the few that opt in via .reveal-scroll)
+    document.querySelectorAll<HTMLElement>('.reveal-scroll').forEach((el) => {
+      gsap.fromTo(
+        el,
+        { yPercent: 20, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            end: 'top 55%',
+            scrub: 0.4,
+          },
+        }
+      );
+    });
+
+    ScrollTrigger.refresh();
+  };
+
+  const init = () => {
+    if (!bound) {
+      bound = true;
+      if ((window as any).__lenis) syncLenis();
+      else window.addEventListener('lenis:ready', syncLenis, { once: true });
+    }
+    install();
+  };
+
+  // Wait for fonts to settle so heights are stable when triggers compute
+  if (document.fonts?.ready) document.fonts.ready.then(init);
+  else init();
+
+  document.addEventListener('astro:after-swap', () => {
+    requestAnimationFrame(install);
+  });
+</script>
