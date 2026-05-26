@@ -1,0 +1,50 @@
+---
+---
+<script>
+  import Lenis from 'lenis';
+
+  let lenis: any = null;
+
+  const init = () => {
+    if (lenis) { lenis.destroy(); lenis = null; }
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.2,
+      lerp: 0.085,
+    });
+
+    const raf = (time: number) => {
+      lenis?.raf(time);
+      if (lenis) requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    // Stop Lenis while the search palette / lightbox dialogs are open
+    const onDialogToggle = () => {
+      const anyOpen = document.querySelector('dialog[open]');
+      if (anyOpen) lenis?.stop(); else lenis?.start();
+    };
+    document.addEventListener('astro:after-swap', onDialogToggle);
+    new MutationObserver(onDialogToggle).observe(document.documentElement, {
+      subtree: true, attributes: true, attributeFilter: ['open'],
+    });
+  };
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+</script>
+
+<style is:global>
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: clip; }
+  .lenis.lenis-smooth iframe { pointer-events: none; }
+</style>
