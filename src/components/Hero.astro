@@ -1,11 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE } from '../consts';
+import drDesaiPortrait from '../assets/dr-desai-portrait.png';
 ---
 <section class="hero">
   <!--
     Drop a video at /public/assets/hero-loop.mp4 (and optionally .webm)
-    and it will override the animated gradient backdrop automatically.
-    Recommended: 1920x1080, <8s loop, h.264 or VP9, no audio, ≤4MB.
+    to override the animated gradient backdrop. 1920x1080, <8s loop,
+    h.264 or VP9, no audio, ≤4MB.
   -->
   <video
     class="hero-video"
@@ -28,6 +30,23 @@ import { SITE } from '../consts';
     <span class="m m3"></span>
     <span class="m m4"></span>
   </div>
+
+  <figure class="hero-figure" aria-hidden="true" data-parallax="60">
+    <Image
+      src={drDesaiPortrait}
+      alt=""
+      width={760}
+      height={950}
+      widths={[480, 760, 1040, 1400]}
+      sizes="(max-width: 720px) 90vw, 56vw"
+      format="avif"
+      fallbackFormat="webp"
+      quality={86}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </figure>
+
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-grain" aria-hidden="true"></div>
 
@@ -70,11 +89,8 @@ import { SITE } from '../consts';
   }
   .hero::after {
     content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 1px;
-    background: var(--ink);
-    z-index: 3;
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 1px; background: var(--ink); z-index: 4;
   }
 
   /* ── Backdrop layers ────────────────────────────────────── */
@@ -92,7 +108,7 @@ import { SITE } from '../consts';
     position: absolute; inset: -10%; z-index: 0;
     pointer-events: none;
     filter: blur(70px) saturate(150%);
-    opacity: 0.55;
+    opacity: 0.5;
   }
   .hero-mesh .m {
     position: absolute; display: block; border-radius: 50%;
@@ -104,51 +120,73 @@ import { SITE } from '../consts';
   .hero-mesh .m2 { width: 44vw; height: 44vw; right: -6%; top: 10%;  background: #d49bb1; animation-delay: -10s; }
   .hero-mesh .m3 { width: 42vw; height: 42vw; left: 18%;  bottom: -10%; background: #c89cca; animation-delay: -16s; }
   .hero-mesh .m4 { width: 36vw; height: 36vw; right: 14%; bottom: -4%;  background: #d6a98b; animation-delay: -22s; }
-  :root[data-theme="light"] .hero-mesh { mix-blend-mode: multiply; opacity: 0.35; }
+  :root[data-theme="light"] .hero-mesh { opacity: 0.32; }
   :root[data-theme="light"] .hero-mesh .m { mix-blend-mode: multiply; }
-
   @keyframes meshDrift {
     0%   { transform: translate3d(0, 0, 0) scale(1); }
     50%  { transform: translate3d(4vw, 3vw, 0) scale(1.08); }
     100% { transform: translate3d(-3vw, 2vw, 0) scale(0.94); }
   }
 
-  /* Soft veil so the text always reads on top of the backdrop */
+  /* ── Dr. Desai cutout — ambient, not framed ─────────────── */
+  .hero-figure {
+    position: absolute;
+    z-index: 1;
+    right: -8%;
+    bottom: -3%;
+    width: clamp(380px, 56vw, 820px);
+    margin: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 60px 80px rgba(29,14,37,0.45));
+    /* mask the edges so he integrates with the backdrop instead of looking pasted in */
+    -webkit-mask-image:
+      radial-gradient(120% 100% at 50% 60%, #000 60%, transparent 100%);
+            mask-image:
+      radial-gradient(120% 100% at 50% 60%, #000 60%, transparent 100%);
+  }
+  .hero-figure img {
+    width: 100%; height: auto; display: block;
+    object-fit: contain;
+  }
+  :root[data-theme="light"] .hero-figure {
+    filter: drop-shadow(0 40px 60px rgba(29,14,37,0.18));
+  }
+
+  /* ── Veil: keeps headline contrast over portrait + mesh ─── */
   .hero-veil {
-    position: absolute; inset: 0; z-index: 1;
+    position: absolute; inset: 0; z-index: 2;
     background:
-      radial-gradient(60% 70% at 50% 55%, color-mix(in oklab, var(--paper) 30%, transparent), transparent 75%),
-      linear-gradient(180deg, color-mix(in oklab, var(--paper) 35%, transparent), transparent 30%, color-mix(in oklab, var(--paper) 60%, transparent));
+      radial-gradient(45% 60% at 30% 50%, color-mix(in oklab, var(--paper) 70%, transparent), transparent 75%),
+      linear-gradient(180deg, color-mix(in oklab, var(--paper) 30%, transparent), transparent 30%);
     pointer-events: none;
   }
-  /* fine grain — same SVG noise pattern as the body, slightly stronger here */
   .hero-grain {
-    position: absolute; inset: 0; z-index: 2;
+    position: absolute; inset: 0; z-index: 3;
     pointer-events: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.4   0 0 0 0 0.25   0 0 0 0 0.3   0 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
     opacity: 0.08;
     mix-blend-mode: overlay;
   }
 
-  /* ── Content stack ──────────────────────────────────────── */
+  /* ── Content stack: aligned left so the portrait doesn't crowd it ── */
   .hero-stack {
-    position: relative; z-index: 3;
+    position: relative; z-index: 4;
     display: flex; flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     gap: clamp(22px, 2.6vw, 36px);
+    max-width: min(720px, 60%);
   }
 
   .hero-display {
     font-family: var(--font-display);
     margin: 0;
-    font-size: clamp(3.5rem, 13vw, 12rem);
+    font-size: clamp(3.2rem, 11vw, 10rem);
     font-weight: 220;
     letter-spacing: -0.05em;
     line-height: 0.92;
     color: var(--ink);
     text-wrap: balance;
-    max-width: 16ch;
     display: flex; flex-direction: column;
     gap: clamp(2px, 0.6vw, 12px);
   }
@@ -164,43 +202,50 @@ import { SITE } from '../consts';
     font-family: var(--font-body);
     text-transform: uppercase;
     margin: 0;
-    display: flex; align-items: baseline; gap: 0.6rem;
+    display: inline-flex; align-items: baseline; gap: 0.6rem;
     color: var(--ink);
     letter-spacing: 0.22em;
     font-size: clamp(0.74rem, 1vw, 0.86rem);
     font-weight: 500;
-    flex-wrap: wrap; justify-content: center;
+    flex-wrap: wrap;
   }
   .hero-name .hn-major { color: var(--ink); }
   .hero-name .hn-minor { color: var(--grey-500); letter-spacing: 0.28em; }
-  .hero-name::before,
   .hero-name::after {
     content: '';
     display: inline-block; width: 32px; height: 1px;
     background: var(--line-strong);
     align-self: center;
     margin: 0 4px;
+    order: -1; /* lead with rule */
   }
 
   .hero-lede {
-    max-width: 56ch;
+    max-width: 52ch;
     font-size: clamp(0.98rem, 1.15vw, 1.12rem);
     color: var(--grey-700);
     line-height: 1.7;
     letter-spacing: -0.005em;
-    margin: 0 auto;
   }
 
-  .hero-actions {
-    display: flex; gap: 56px; justify-content: center; flex-wrap: wrap;
-    margin-top: clamp(8px, 1.4vw, 18px);
-  }
+  .hero-actions { display: flex; gap: 48px; flex-wrap: wrap; margin-top: 4px; }
 
-  @media (max-width: 720px) {
+  /* Responsive: stack the portrait BELOW the text on small screens */
+  @media (max-width: 900px) {
     .hero { padding-top: clamp(96px, 18vw, 140px); min-height: auto; }
+    .hero-stack { max-width: 100%; align-items: flex-start; }
+    .hero-figure {
+      position: relative;
+      right: auto; bottom: auto;
+      width: min(90vw, 460px);
+      margin: clamp(32px, 6vw, 48px) auto 0;
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
+    .hero-name::after { display: none; }
+  }
+  @media (max-width: 720px) {
     .hero-actions { gap: 28px; }
-    .hero-name { font-size: 0.72rem; }
-    .hero-name::before, .hero-name::after { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-mesh .m { animation: none; }
