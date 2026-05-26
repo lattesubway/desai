@@ -9,6 +9,7 @@ import { SITE } from '../consts';
 interface Props { procedure: Procedure; }
 const { procedure } = Astro.props;
 const related = relatedProcedures(procedure.slug, 3);
+const heroKey = procedure.category.toLowerCase().replace(/\s+/g, '').replace('non-surgical', 'nonsurgical');
 
 const medicalLd = {
   '@context': 'https://schema.org',
@@ -39,21 +40,36 @@ const medicalLd = {
 ---
 <BaseLayout title={procedure.title} description={procedure.blurb}>
   <section class="procedure-hero">
-    <div class="container">
-      <Breadcrumbs items={[
-        { label: 'Home', href: '/' },
-        { label: 'Procedures', href: '/procedures/' },
-        { label: procedure.title },
-      ]} />
-      <p class="eyebrow reveal">{procedure.category}</p>
-      <h1 class="reveal">{procedure.title}</h1>
-      <p class="lead reveal">{procedure.blurb}</p>
-      {(procedure.duration || procedure.recovery) && (
-        <div class="meta reveal">
-          {procedure.duration && <div><span class="meta-label">Duration</span><span class="meta-value">{procedure.duration}</span></div>}
-          {procedure.recovery && <div><span class="meta-label">Recovery</span><span class="meta-value">{procedure.recovery}</span></div>}
-        </div>
-      )}
+    <div class="container procedure-hero-grid">
+      <div class="procedure-hero-copy">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Procedures', href: '/procedures/' },
+          { label: procedure.title },
+        ]} />
+        <p class="eyebrow reveal">{procedure.category}</p>
+        <h1 class="reveal">{procedure.title}</h1>
+        <p class="lead reveal">{procedure.blurb}</p>
+        {(procedure.duration || procedure.recovery) && (
+          <div class="meta reveal">
+            {procedure.duration && <div><span class="meta-label">Duration</span><span class="meta-value">{procedure.duration}</span></div>}
+            {procedure.recovery && <div><span class="meta-label">Recovery</span><span class="meta-value">{procedure.recovery}</span></div>}
+          </div>
+        )}
+      </div>
+      <figure class="procedure-hero-art reveal">
+        <picture>
+          <source srcset={`/assets/procedures/hero-${heroKey}.avif`} type="image/avif" />
+          <img
+            src={`/assets/procedures/hero-${heroKey}.jpg`}
+            alt={`${procedure.category} editorial`}
+            width="1000"
+            height="450"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </picture>
+      </figure>
     </div>
   </section>
 
@@ -98,9 +114,14 @@ const medicalLd = {
 
 <style>
   .procedure-hero { padding: clamp(56px, 7vw, 80px) 0 clamp(80px, 12vw, 140px); background: var(--paper); }
-  .procedure-hero h1 { margin: 18px 0 28px; max-width: 18ch; font-size: clamp(3rem, 7.5vw, 6.25rem); font-weight: 320; letter-spacing: -0.035em; line-height: 0.96; }
-  .procedure-hero .lead { max-width: 58ch; }
+  .procedure-hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(40px, 5vw, 80px); align-items: end; }
+  .procedure-hero-copy h1 { margin: 18px 0 28px; max-width: 16ch; font-size: clamp(3rem, 7.5vw, 6.25rem); font-weight: 320; letter-spacing: -0.035em; line-height: 0.96; }
+  .procedure-hero h1 { font-size: clamp(3rem, 7.5vw, 6.25rem); }
+  .procedure-hero .lead { max-width: 50ch; }
   .procedure-hero .crumbs { margin-bottom: 56px; }
+  .procedure-hero-art { margin: 0; aspect-ratio: 10/9; overflow: hidden; border: 1px solid var(--line); }
+  .procedure-hero-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 900px) { .procedure-hero-grid { grid-template-columns: 1fr; } .procedure-hero-art { order: -1; aspect-ratio: 16/9; } }
   .meta { display: flex; gap: 64px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--line); }
   .meta div { display: flex; flex-direction: column; gap: 8px; }
   .meta-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-500); font-weight: 600; }
