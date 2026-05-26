@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { procedures } from '../data/procedures';
 const items = [
   { label: 'Home', href: '/', kind: 'Page' },
@@ -17,7 +18,7 @@ const items = [
 <dialog class="sp" id="sp-dialog" aria-label="Search the site">
   <div class="sp-inner">
     <div class="sp-input-wrap">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <Icon name="lucide:search" size={18} aria-hidden="true" />
       <input id="sp-input" type="search" placeholder="Search procedures, pages…" autocomplete="off" />
       <button type="button" class="sp-close" id="sp-close" aria-label="Close">Esc</button>
     </div>

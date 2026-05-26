@@ -1,9 +1,10 @@
 ---
 import { SITE } from '../consts';
+import { Icon } from 'astro-icon/components';
 ---
 <div class="sticky-cta" role="region" aria-label="Quick contact">
   <a href={`tel:${SITE.phoneRaw}`} class="sc-call" aria-label={`Call ${SITE.phone}`}>
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+    <Icon name="lucide:phone" size={18} aria-hidden="true" />
     <span>Call</span>
   </a>
   <a href="/consultation/" class="sc-book">Schedule Consultation</a>
@@ -12,12 +13,24 @@ import { SITE } from '../consts';
 <style>
   .sticky-cta { display: none; }
   @media (max-width: 860px) {
-    .sticky-cta { display: flex; gap: 0; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 0; background: var(--aubergine-deep); border-top: 1px solid var(--line); }
-    .sc-call, .sc-book { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 18px 16px; font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; border-radius: 0; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
-    .sc-call { background: transparent; color: var(--ink); border-right: 1px solid var(--line); flex: 1; }
-    .sc-call:hover { background: rgba(244,225,231,0.08); color: var(--ink); }
-    .sc-book { flex: 1.4; background: var(--rose); color: var(--aubergine-deep); }
-    .sc-book:hover { background: var(--ink); color: var(--aubergine-deep); }
+    .sticky-cta {
+      display: flex; gap: 0;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 0;
+      background: #1d0e25;
+      border-top: 1px solid rgba(244,225,231,0.16);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .sc-call, .sc-book {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 18px 16px;
+      font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.3em;
+      text-transform: uppercase; font-weight: 500; border-radius: 0;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    .sc-call { background: transparent; color: #f4e1e7; border-right: 1px solid rgba(244,225,231,0.16); flex: 1; }
+    .sc-call:hover { background: rgba(244,225,231,0.08); color: #f4e1e7; }
+    .sc-book { flex: 1.4; background: #e8b1c3; color: #1d0e25; }
+    .sc-book:hover { background: #f4e1e7; color: #1d0e25; }
     main { padding-bottom: 84px; }
   }
   @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }

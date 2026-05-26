@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<button class="theme-toggle" data-theme-toggle aria-label="Toggle light / dark theme" type="button">
+  <Icon name="lucide:moon" class="i-moon" size={16} aria-hidden="true" />
+  <Icon name="lucide:sun"  class="i-sun"  size={16} aria-hidden="true" />
+</button>
+
+<script is:inline>
+  (function () {
+    const apply = (mode) => {
+      document.documentElement.dataset.theme = mode;
+      try { localStorage.setItem('theme', mode); } catch (e) {}
+      // Theme color meta sync
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', mode === 'light' ? '#f7eef1' : '#1d0e25');
+    };
+    const init = () => {
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+          apply(next);
+        });
+      });
+    };
+    init();
+    document.addEventListener('astro:after-swap', init);
+  })();
+</script>
+
+<style is:global>
+  .theme-toggle {
+    display: inline-grid; place-items: center; width: 34px; height: 34px;
+    padding: 0; border: 1px solid transparent; background: transparent;
+    color: var(--ink); cursor: pointer; transition: opacity .35s var(--ease);
+    border-radius: 999px;
+  }
+  .theme-toggle:hover { opacity: 0.55; }
+  .theme-toggle .i-sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .i-sun  { display: block; }
+  :root[data-theme="light"] .theme-toggle .i-moon { display: none; }
+</style>

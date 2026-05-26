@@ -6,40 +6,28 @@ interface Props {
   image?: string;
   canonical?: string;
 }
-const { title, description, image = '/assets/logo.png', canonical } = Astro.props;
+const { title, description, image = '/og-default.png', canonical } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} · ${SITE.doctor}`;
 const desc = description || `${SITE.doctor} — ${SITE.tagline}. Beverly Hills plastic surgery practice specializing in face, nose, breast and body procedures.`;
 const url = canonical || new URL(Astro.url.pathname, SITE.url).toString();
----
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="generator" content={Astro.generator} />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Inter:wght@300..700&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'" />
-<title>{fullTitle}</title>
-<meta name="description" content={desc} />
-<link rel="canonical" href={url} />
-<meta property="og:type" content="website" />
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={desc} />
-<meta property="og:image" content={new URL(image, SITE.url).toString()} />
-<meta property="og:url" content={url} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={fullTitle} />
-<meta name="twitter:description" content={desc} />
-<meta name="twitter:image" content={new URL(image, SITE.url).toString()} />
-<script type="application/ld+json" set:html={JSON.stringify({
+const ogImage = new URL(image, SITE.url).toString();
+
+const fontsHref = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Inter:wght@300..700&display=swap';
+
+const physician = {
   '@context': 'https://schema.org',
-  '@type': 'Physician',
+  '@type': ['Physician', 'MedicalBusiness', 'LocalBusiness'],
+  '@id': `${SITE.url}#physician`,
   name: SITE.doctor,
   alternateName: SITE.name,
   description: `${SITE.tagline}. Beverly Hills plastic surgery practice specializing in face, nose, breast and body procedures.`,
   url: SITE.url,
   telephone: SITE.phone,
+  faxNumber: SITE.fax,
+  email: SITE.email,
   image: new URL('/assets/logo.png', SITE.url).toString(),
+  logo: new URL('/assets/logo.png', SITE.url).toString(),
+  priceRange: '$$$$',
   medicalSpecialty: 'Plastic Surgery',
   address: {
     '@type': 'PostalAddress',
@@ -49,11 +37,107 @@ const url = canonical || new URL(Astro.url.pathname, SITE.url).toString();
     postalCode: SITE.address.zip,
     addressCountry: 'US',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 34.0696,
+    longitude: -118.4053,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+  ],
+  areaServed: [
+    { '@type': 'City', name: 'Beverly Hills' },
+    { '@type': 'City', name: 'Los Angeles' },
+    { '@type': 'AdministrativeArea', name: 'California' },
+  ],
   sameAs: Object.values(SITE.social),
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: 187,
+    bestRating: '5',
+    worstRating: '1',
+  },
   hasCredential: [
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'board certification', name: 'Double-Board Certified Plastic Surgeon' },
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'degree', name: 'MD — Tufts University School of Medicine' },
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'degree', name: 'MPH — Harvard T.H. Chan School of Public Health' },
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'fellowship', name: 'Fellow, American College of Surgeons (FACS)' },
   ],
-})} />
+};
+
+const webSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE.url}#website`,
+  url: SITE.url,
+  name: SITE.name,
+  publisher: { '@id': `${SITE.url}#physician` },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${SITE.url}/search?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#1d0e25" />
+<meta name="color-scheme" content="dark light" />
+<meta name="format-detection" content="telephone=yes" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/logo.png" />
+<link rel="manifest" href="/manifest.webmanifest" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href={fontsHref} />
+<link rel="stylesheet" href={fontsHref} media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href={fontsHref} /></noscript>
+
+<title>{fullTitle}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={url} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={desc} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="A quieter kind of beautiful — Desai Plastic Surgery, Beverly Hills" />
+<meta property="og:url" content={url} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content="A quieter kind of beautiful — Desai Plastic Surgery, Beverly Hills" />
+
+<meta name="geo.region" content="US-CA" />
+<meta name="geo.placename" content={SITE.address.city} />
+<meta name="geo.position" content="34.0696;-118.4053" />
+<meta name="ICBM" content="34.0696, -118.4053" />
+
+<script type="application/ld+json" set:html={JSON.stringify(physician)} />
+<script type="application/ld+json" set:html={JSON.stringify(webSite)} />
+
+<!-- Theme preference: read sync to avoid flash -->
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var mode = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.dataset.theme = mode;
+    } catch (e) {}
+  })();
+</script>
