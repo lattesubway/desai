@@ -6,8 +6,7 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
 <section class="hero">
   <!--
     Drop a video at /public/assets/hero-loop.mp4 (and optionally .webm)
-    to override the animated gradient backdrop. 1920x1080, <8s loop,
-    h.264 or VP9, no audio, ≤4MB.
+    to override the animated gradient backdrop.
   -->
   <video
     class="hero-video"
@@ -30,49 +29,53 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     <span class="m m3"></span>
     <span class="m m4"></span>
   </div>
-
-  <figure class="hero-figure" aria-hidden="true" data-parallax="60">
-    <Image
-      src={drDesaiPortrait}
-      alt=""
-      width={760}
-      height={950}
-      widths={[480, 760, 1040, 1400]}
-      sizes="(max-width: 720px) 90vw, 56vw"
-      format="avif"
-      fallbackFormat="webp"
-      quality={86}
-      loading="eager"
-      fetchpriority="high"
-    />
-  </figure>
-
-  <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-grain" aria-hidden="true"></div>
 
-  <div class="container hero-stack">
-    <p class="eyebrow reveal">Beverly Hills — Est. Excellence</p>
+  <div class="container hero-grid">
+    <p class="eyebrow hero-eyebrow reveal">Beverly Hills — Est. Excellence</p>
 
-    <h1 class="hero-display reveal">
-      <span class="line">A quieter</span>
-      <span class="line"><em>kind&nbsp;of</em></span>
-      <span class="line">beautiful.</span>
-    </h1>
+    <div class="hero-copy">
+      <h1 class="hero-display reveal">
+        <span class="line">A quieter</span>
+        <span class="line"><em>kind&nbsp;of</em></span>
+        <span class="line">beautiful.</span>
+      </h1>
 
-    <p class="hero-name reveal">
-      <span class="hn-major">Dr. Urmen Desai,</span>
-      <span class="hn-minor">MD&nbsp;MPH&nbsp;FACS&nbsp;FICS</span>
-    </p>
+      <p class="hero-lede reveal">
+        Harvard-educated, double-board-certified, double-fellowship-trained plastic
+        surgery in the heart of Beverly Hills — practiced as restraint, refinement,
+        and proportion.
+      </p>
 
-    <p class="hero-lede reveal">
-      Harvard-educated, double-board-certified, double-fellowship-trained plastic surgery
-      in the heart of Beverly Hills — practiced as restraint, refinement, and proportion.
-    </p>
-
-    <div class="hero-actions reveal">
-      <a href="/consultation" class="btn btn-primary">Schedule a Consultation <span class="arrow">→</span></a>
-      <a href="/about" class="btn btn-ghost">Meet Dr. Desai <span class="arrow">→</span></a>
+      <div class="hero-actions reveal">
+        <a href="/consultation" class="btn btn-primary">Schedule a Consultation <span class="arrow">→</span></a>
+        <a href="/about" class="btn btn-ghost">Meet Dr. Desai <span class="arrow">→</span></a>
+      </div>
     </div>
+
+    <aside class="hero-figure-col" aria-label="Dr. Urmen Desai">
+      <header class="hero-title reveal">
+        <p class="ht-major">Dr. Urmen Desai,</p>
+        <p class="ht-minor">MD&nbsp;MPH&nbsp;FACS&nbsp;FICS</p>
+        <span class="ht-rule" aria-hidden="true"></span>
+        <p class="ht-sub">Desai Plastic Surgery <span class="ht-sep">·</span> Beverly Hills</p>
+      </header>
+      <figure class="hero-figure reveal" data-parallax="60">
+        <Image
+          src={drDesaiPortrait}
+          alt=""
+          width={760}
+          height={950}
+          widths={[480, 760, 1040, 1400]}
+          sizes="(max-width: 900px) 80vw, 44vw"
+          format="avif"
+          fallbackFormat="webp"
+          quality={86}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    </aside>
   </div>
 </section>
 
@@ -81,7 +84,7 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: clamp(120px, 16vw, 220px) 0 clamp(96px, 14vw, 200px);
+    padding: clamp(96px, 12vw, 160px) 0 clamp(72px, 10vw, 140px);
     background: var(--paper);
     min-height: 100vh;
     display: grid;
@@ -128,63 +131,49 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     100% { transform: translate3d(-3vw, 2vw, 0) scale(0.94); }
   }
 
-  /* ── Dr. Desai cutout — ambient, not framed ─────────────── */
-  .hero-figure {
-    position: absolute;
-    z-index: 1;
-    right: -8%;
-    bottom: -3%;
-    width: clamp(380px, 56vw, 820px);
-    margin: 0;
-    pointer-events: none;
-    filter: drop-shadow(0 60px 80px rgba(29,14,37,0.45));
-    /* mask the edges so he integrates with the backdrop instead of looking pasted in */
-    -webkit-mask-image:
-      radial-gradient(120% 100% at 50% 60%, #000 60%, transparent 100%);
-            mask-image:
-      radial-gradient(120% 100% at 50% 60%, #000 60%, transparent 100%);
-  }
-  .hero-figure img {
-    width: 100%; height: auto; display: block;
-    object-fit: contain;
-  }
-  :root[data-theme="light"] .hero-figure {
-    filter: drop-shadow(0 40px 60px rgba(29,14,37,0.18));
-  }
-
-  /* ── Veil: keeps headline contrast over portrait + mesh ─── */
-  .hero-veil {
-    position: absolute; inset: 0; z-index: 2;
-    background:
-      radial-gradient(45% 60% at 30% 50%, color-mix(in oklab, var(--paper) 70%, transparent), transparent 75%),
-      linear-gradient(180deg, color-mix(in oklab, var(--paper) 30%, transparent), transparent 30%);
-    pointer-events: none;
-  }
   .hero-grain {
-    position: absolute; inset: 0; z-index: 3;
+    position: absolute; inset: 0; z-index: 2;
     pointer-events: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.4   0 0 0 0 0.25   0 0 0 0 0.3   0 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
     opacity: 0.08;
     mix-blend-mode: overlay;
   }
 
-  /* ── Content stack: aligned left so the portrait doesn't crowd it ── */
-  .hero-stack {
-    position: relative; z-index: 4;
+  /* ── Two-column symmetric grid ──────────────────────────── */
+  .hero-grid {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "eyebrow eyebrow"
+      "copy figure";
+    column-gap: clamp(40px, 5vw, 96px);
+    row-gap: clamp(24px, 3vw, 40px);
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    grid-area: eyebrow;
+    justify-self: start;
+  }
+
+  .hero-copy {
+    grid-area: copy;
     display: flex; flex-direction: column;
+    gap: clamp(20px, 2.4vw, 32px);
     align-items: flex-start;
     text-align: left;
-    gap: clamp(22px, 2.6vw, 36px);
-    max-width: min(720px, 60%);
   }
 
   .hero-display {
     font-family: var(--font-display);
     margin: 0;
-    font-size: clamp(3.2rem, 11vw, 10rem);
+    font-size: clamp(2.8rem, 7.8vw, 7.4rem);
     font-weight: 220;
     letter-spacing: -0.05em;
-    line-height: 0.92;
+    line-height: 0.94;
     color: var(--ink);
     text-wrap: balance;
     display: flex; flex-direction: column;
@@ -198,51 +187,98 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     letter-spacing: -0.055em;
   }
 
-  .hero-name {
-    font-family: var(--font-body);
-    text-transform: uppercase;
-    margin: 0;
-    display: inline-flex; align-items: baseline; gap: 0.6rem;
-    color: var(--ink);
-    letter-spacing: 0.22em;
-    font-size: clamp(0.74rem, 1vw, 0.86rem);
-    font-weight: 500;
-    flex-wrap: wrap;
-  }
-  .hero-name .hn-major { color: var(--ink); }
-  .hero-name .hn-minor { color: var(--grey-500); letter-spacing: 0.28em; }
-  .hero-name::after {
-    content: '';
-    display: inline-block; width: 32px; height: 1px;
-    background: var(--line-strong);
-    align-self: center;
-    margin: 0 4px;
-    order: -1; /* lead with rule */
-  }
-
   .hero-lede {
-    max-width: 52ch;
+    max-width: 46ch;
     font-size: clamp(0.98rem, 1.15vw, 1.12rem);
     color: var(--grey-700);
     line-height: 1.7;
     letter-spacing: -0.005em;
+    margin: 0;
   }
 
   .hero-actions { display: flex; gap: 48px; flex-wrap: wrap; margin-top: 4px; }
 
-  /* Responsive: stack the portrait BELOW the text on small screens */
+  /* ── Right column: title + portrait ─────────────────────── */
+  .hero-figure-col {
+    grid-area: figure;
+    display: flex; flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(16px, 2vw, 28px);
+  }
+
+  .hero-title {
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: clamp(4px, 0.4vw, 8px);
+    color: var(--ink);
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .hero-title .ht-major {
+    margin: 0;
+    font-size: clamp(0.95rem, 1.45vw, 1.18rem);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+  .hero-title .ht-minor {
+    margin: 0;
+    font-size: clamp(0.78rem, 1.05vw, 0.92rem);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    color: var(--grey-700);
+  }
+  .hero-title .ht-rule {
+    display: block;
+    width: 56px; height: 1px;
+    background: var(--ink);
+    opacity: 0.45;
+    margin: clamp(10px, 1vw, 14px) 0 clamp(6px, 0.6vw, 10px);
+  }
+  .hero-title .ht-sub {
+    margin: 0;
+    font-size: clamp(0.66rem, 0.85vw, 0.78rem);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    color: var(--grey-500);
+  }
+  .hero-title .ht-sep { margin: 0 0.4em; opacity: 0.5; }
+
+  .hero-figure {
+    margin: 0;
+    width: 100%;
+    max-width: clamp(360px, 38vw, 560px);
+    pointer-events: none;
+    filter: drop-shadow(0 60px 80px rgba(29,14,37,0.5));
+    -webkit-mask-image:
+      radial-gradient(125% 100% at 50% 60%, #000 65%, transparent 100%);
+            mask-image:
+      radial-gradient(125% 100% at 50% 60%, #000 65%, transparent 100%);
+  }
+  .hero-figure img {
+    width: 100%; height: auto; display: block;
+    object-fit: contain;
+  }
+  :root[data-theme="light"] .hero-figure {
+    filter: drop-shadow(0 40px 60px rgba(29,14,37,0.18));
+  }
+
+  /* Responsive */
   @media (max-width: 900px) {
-    .hero { padding-top: clamp(96px, 18vw, 140px); min-height: auto; }
-    .hero-stack { max-width: 100%; align-items: flex-start; }
-    .hero-figure {
-      position: relative;
-      right: auto; bottom: auto;
-      width: min(90vw, 460px);
-      margin: clamp(32px, 6vw, 48px) auto 0;
-      -webkit-mask-image: none;
-              mask-image: none;
+    .hero { padding-top: clamp(96px, 16vw, 140px); min-height: auto; }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "eyebrow"
+        "copy"
+        "figure";
+      column-gap: 0;
+      row-gap: clamp(28px, 5vw, 44px);
     }
-    .hero-name::after { display: none; }
+    .hero-copy { align-items: flex-start; }
+    .hero-figure { max-width: min(86vw, 460px); }
+    .hero-figure-col { width: 100%; }
   }
   @media (max-width: 720px) {
     .hero-actions { gap: 28px; }
