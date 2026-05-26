@@ -144,12 +144,12 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     position: relative;
     z-index: 3;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.05fr 1fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
       "eyebrow eyebrow"
       "copy figure";
-    column-gap: clamp(40px, 5vw, 96px);
+    column-gap: clamp(12px, 1.8vw, 32px);
     row-gap: clamp(24px, 3vw, 40px);
     align-items: center;
   }
@@ -202,14 +202,19 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
   .hero-figure-col {
     grid-area: figure;
     display: flex; flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     gap: clamp(16px, 2vw, 28px);
+    /* Pull the figure column toward the headline */
+    margin-left: clamp(-32px, -2vw, -8px);
   }
+  .hero-title { align-items: flex-start; text-align: left; }
+  /* (the rule above intentionally overrides the older centered .hero-title block below) */
 
   .hero-title {
     display: flex; flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    text-align: left;
     gap: clamp(4px, 0.4vw, 8px);
     color: var(--ink);
     font-family: var(--font-body);
