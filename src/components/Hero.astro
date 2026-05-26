@@ -8,70 +8,178 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
     <div class="hero-copy">
       <p class="eyebrow reveal">Beverly Hills — Est. Excellence</p>
       <h1 class="reveal">A quieter <em>kind&nbsp;of</em><br/>beautiful.</h1>
-      <p class="lead reveal">{SITE.doctor} is a Harvard-educated, double-board-certified, double-fellowship-trained plastic surgeon offering refined facial, breast, and body surgery in the heart of Beverly Hills.</p>
+      <p class="lead reveal">Harvard-educated, double-board-certified, double-fellowship-trained plastic surgery in the heart of Beverly Hills — practiced as restraint, refinement, and proportion.</p>
       <div class="hero-actions reveal">
         <a href="/consultation" class="btn btn-primary">Schedule a Consultation <span class="arrow">→</span></a>
         <a href="/about" class="btn btn-ghost">Meet Dr. Desai <span class="arrow">→</span></a>
       </div>
-      <div class="hero-marks reveal">
-        <span>Harvard MPH</span>
-        <span>Tufts MD</span>
-        <span>FACS</span>
-        <span>Double-Board Certified</span>
-      </div>
     </div>
-    <div class="hero-art reveal">
-      <div class="art-portrait">
-        <Image
-          src={drDesaiPortrait}
-          alt="Dr. Urmen Desai, MD, MPH, FACS"
-          class="hero-photo"
-          width={460}
-          height={576}
-          widths={[320, 460, 640, 920]}
-          sizes="(max-width: 900px) 280px, 460px"
-          format="avif"
-          fallbackFormat="webp"
-          quality={82}
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-    </div>
+
+    <aside class="hero-art reveal" aria-label="Dr. Urmen Desai">
+      <article class="calling-card" data-parallax="40">
+        <header class="cc-head">
+          <h2 class="cc-name">
+            <span class="cc-major">Dr. Urmen Desai,</span>
+            <span class="cc-minor">MD&nbsp;MPH&nbsp;FACS&nbsp;FICS</span>
+          </h2>
+          <span class="cc-rule" aria-hidden="true"></span>
+          <p class="cc-sub">Desai Plastic Surgery <span class="cc-sep">·</span> Beverly Hills</p>
+        </header>
+        <figure class="cc-photo">
+          <Image
+            src={drDesaiPortrait}
+            alt={SITE.doctor}
+            width={520}
+            height={650}
+            widths={[360, 520, 740, 1040]}
+            sizes="(max-width: 900px) 320px, 520px"
+            format="avif"
+            fallbackFormat="webp"
+            quality={86}
+            loading="eager"
+            fetchpriority="high"
+          />
+        </figure>
+        <footer class="cc-foot">
+          <span class="cc-rule cc-rule-bottom" aria-hidden="true"></span>
+        </footer>
+      </article>
+    </aside>
   </div>
 </section>
 
 <style>
-  .hero { padding: clamp(96px, 14vw, 180px) 0 clamp(80px, 12vw, 140px); background: var(--paper); position: relative; }
-  .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ink); opacity: 1; }
-  .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(48px, 6vw, 120px); align-items: center; }
+  .hero {
+    padding: clamp(96px, 14vw, 180px) 0 clamp(80px, 12vw, 140px);
+    background: var(--paper);
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--ink);
+    opacity: 1;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 5vw, 96px);
+    align-items: center;
+  }
+
   .hero-copy h1 {
-    margin: 28px 0 36px;
+    margin: 28px 0 32px;
     max-width: 14ch;
-    font-size: clamp(3.4rem, 8.5vw, 7.5rem);
+    font-size: clamp(3.1rem, 7.5vw, 7rem);
     font-weight: 310;
     letter-spacing: -0.04em;
     line-height: 0.94;
   }
-  .hero-copy h1 em { font-style: italic; font-variation-settings: 'opsz' 144, 'SOFT' 0; font-weight: 320; color: var(--ink); }
-  .hero-copy .lead { max-width: 50ch; font-size: clamp(0.98rem, 1.1vw, 1.08rem); color: var(--grey-700); line-height: 1.7; }
-  .hero-actions { display: flex; gap: 48px; margin-top: 48px; flex-wrap: wrap; }
-  .hero-marks {
-    display: flex; flex-wrap: wrap; gap: 12px 32px;
-    margin-top: 80px; padding-top: 36px;
-    border-top: 1px solid var(--line);
-    color: var(--grey-700);
-    font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
-    font-weight: 500;
+  .hero-copy h1 em {
+    font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 0;
+    font-weight: 320;
+    color: var(--ink);
   }
-  .hero-art { display: grid; place-items: end center; }
-  .art-portrait {
-    position: relative; width: 100%; max-width: 460px;
+  .hero-copy .lead {
+    max-width: 48ch;
+    font-size: clamp(0.98rem, 1.1vw, 1.08rem);
+    color: var(--grey-700);
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 48px; margin-top: 48px; flex-wrap: wrap; }
+
+  /* ── Calling card ─────────────────────────────────────────── */
+  .hero-art { display: grid; place-items: center; }
+  .calling-card {
+    width: 100%;
+    max-width: 520px;
+    background: #fbf9f5;
+    color: #1d0e25;
+    padding: clamp(28px, 3vw, 40px) clamp(24px, 2.6vw, 36px) clamp(20px, 2vw, 28px);
+    border: 1px solid rgba(29,14,37,0.08);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 30px 80px -30px rgba(0,0,0,0.55),
+      0 8px 24px -12px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     isolation: isolate;
   }
-  .hero-photo { position: relative; z-index: 1; width: 100%; height: auto; object-fit: contain; filter: none; }
+
+  .cc-head { text-align: center; width: 100%; }
+  .cc-name {
+    font-family: var(--font-display);
+    color: #1d0e25;
+    font-weight: 320;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    font-feature-settings: 'kern', 'liga';
+    font-variation-settings: 'opsz' 144, 'SOFT' 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .cc-major {
+    font-size: clamp(1.4rem, 2.4vw, 1.95rem);
+    letter-spacing: 0.012em;
+    font-weight: 360;
+  }
+  .cc-minor {
+    font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+    letter-spacing: 0.08em;
+    color: #2a1432;
+    font-weight: 340;
+  }
+
+  .cc-rule {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: #1d0e25;
+    opacity: 0.85;
+    margin: clamp(16px, 1.8vw, 22px) 0 clamp(12px, 1.4vw, 18px);
+  }
+  .cc-rule-bottom { margin: clamp(8px, 1.2vw, 14px) 0 0; opacity: 0.85; }
+
+  .cc-sub {
+    font-family: var(--font-body);
+    font-size: clamp(0.7rem, 0.95vw, 0.84rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #1d0e25;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .cc-sub .cc-sep { margin: 0 0.45em; opacity: 0.6; }
+
+  .cc-photo {
+    margin: clamp(18px, 2.4vw, 32px) 0 0;
+    width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .cc-photo img {
+    width: 100%;
+    height: auto;
+    max-width: 380px;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 36px rgba(29,14,37,0.18));
+  }
+
+  .cc-foot { width: 100%; }
+
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; }
-    .hero-art { order: -1; max-width: 280px; margin: 0 auto; }
+    .hero-art { order: -1; max-width: 420px; margin: 0 auto; }
+    .hero-copy h1 { margin: 22px 0 24px; }
   }
 </style>

@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'Desai Plastic Surgery',
-  doctor: 'Dr. Urmen Desai, MD, MPH, FACS',
+  doctor: 'Dr. Urmen Desai, MD, MPH, FACS, FICS',
   tagline: 'Harvard Educated · Double-Board Certified · Double-Fellowship Trained',
   phone: '(310) 271-3333',
   phoneRaw: '+13102713333',

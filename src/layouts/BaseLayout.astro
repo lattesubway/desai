@@ -7,6 +7,7 @@ import Footer from '../components/Footer.astro';
 import StickyMobileCTA from '../components/StickyMobileCTA.astro';
 import SearchPalette from '../components/SearchPalette.astro';
 import SmoothScroll from '../components/SmoothScroll.astro';
+import ScrollEffects from '../components/ScrollEffects.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -28,6 +29,7 @@ const { title, description, image } = Astro.props;
     <StickyMobileCTA />
     <SearchPalette />
     <SmoothScroll />
+    <ScrollEffects />
     <script>
       // Re-init reveal observer on every page swap (View Transitions reuses the document).
       const initReveal = () => {
