@@ -122,15 +122,49 @@ const medicalLd = {
   .procedure-hero-art { margin: 0; aspect-ratio: 10/9; overflow: hidden; border: 1px solid var(--line); }
   .procedure-hero-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
   @media (max-width: 900px) { .procedure-hero-grid { grid-template-columns: 1fr; } .procedure-hero-art { order: -1; aspect-ratio: 16/9; } }
+
+  /* Extra breathing for the detailed content block on procedure pages */
+  .dark-section.section {
+    padding-bottom: clamp(72px, 9vw, 96px);
+  }
   .meta { display: flex; gap: 64px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--line); }
   .meta div { display: flex; flex-direction: column; gap: 8px; }
   .meta-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--grey-500); font-weight: 600; }
   .meta-value { font-family: var(--font-display); font-size: 1.55rem; font-variation-settings: 'opsz' 144, 'SOFT' 0; font-weight: 360; color: var(--ink); letter-spacing: -0.02em; }
   .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 8vw, 112px); align-items: start; }
-  .content-list { display: flex; flex-direction: column; gap: 40px; }
-  .content-list h3 { color: var(--paper); margin-bottom: 10px; font-size: 1.25rem; font-weight: 380; letter-spacing: -0.012em; }
-  .content-list p { color: var(--grey-300); }
-  @media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } }
+
+  /* Long-form readability improvements — targeted to procedure detail pages */
+  .content-grid .lead {
+    line-height: 1.68;
+    max-width: 58ch;
+  }
+
+  .content-list {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .content-list h3 {
+    color: var(--paper);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    font-weight: 380;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .content-list p {
+    color: var(--grey-300);
+    line-height: 1.68;
+    max-width: 52ch;
+    font-size: 0.96rem;
+  }
+
+  @media (max-width: 800px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .content-list p { max-width: none; }
+  }
 
   /* ── Print styles ──────────────────────────────────────────── */
   @media print {

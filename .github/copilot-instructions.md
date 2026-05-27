@@ -53,3 +53,10 @@ Always use CSS custom properties from `src/styles/global.css`:
 4. **All colors/fonts/spacing** must use design tokens — no hardcoded hex values
 5. **Responsive**: mobile-first, breakpoints at `560px` and `900px`
 6. **Images**: always include `width`, `height`, `loading="lazy"`, descriptive `alt`
+
+### Brand Voice (Required Reading)
+See `.github/brand-voice.md` for the single source of truth on tone.
+
+Core line: **"A quieter kind of beautiful."** — The art is in what you don’t see.
+
+Every headline, lede, procedure description, testimonial, and CTA must align with restraint, proportion, identity preservation, and quiet confidence. Avoid hype, transformation language, and sales copy. When in doubt, ask: "Does this sound like it could only come from Desai?"

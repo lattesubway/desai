@@ -12,26 +12,77 @@ import { Icon } from 'astro-icon/components';
 
 <style>
   .sticky-cta { display: none; }
+
   @media (max-width: 860px) {
     .sticky-cta {
-      display: flex; gap: 0;
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 0;
-      background: #1d0e25;
-      border-top: 1px solid rgba(244,225,231,0.16);
+      display: flex;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      background: color-mix(in oklab, var(--bg-deep) 94%, transparent);
+      border-top: 1px solid var(--border-dark);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
       padding-bottom: env(safe-area-inset-bottom);
     }
-    .sc-call, .sc-book {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 18px 16px;
-      font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.3em;
-      text-transform: uppercase; font-weight: 500; border-radius: 0;
+
+    .sc-call,
+    .sc-book {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px 18px; /* improved touch target */
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 0;
       transition: background 0.3s var(--ease), color 0.3s var(--ease);
+      border: none;
     }
-    .sc-call { background: transparent; color: #f4e1e7; border-right: 1px solid rgba(244,225,231,0.16); flex: 1; }
-    .sc-call:hover { background: rgba(244,225,231,0.08); color: #f4e1e7; }
-    .sc-book { flex: 1.4; background: #e8b1c3; color: #1d0e25; }
-    .sc-book:hover { background: #f4e1e7; color: #1d0e25; }
-    main { padding-bottom: 84px; }
+
+    .sc-call {
+      background: transparent;
+      color: var(--ink);
+      border-right: 1px solid var(--border-dark);
+      flex: 1;
+    }
+    .sc-call:hover {
+      background: rgba(244, 225, 231, 0.06);
+    }
+    .sc-call:focus-visible {
+      outline: 2px solid var(--rose);
+      outline-offset: -2px;
+    }
+
+    .sc-book {
+      flex: 1.35;
+      background: var(--rose);
+      color: var(--bg-deep);
+      font-weight: 600;
+    }
+    .sc-book:hover {
+      background: var(--rose-soft);
+      color: var(--bg-deep);
+    }
+    .sc-book:focus-visible {
+      outline: 2px solid var(--bg-deep);
+      outline-offset: -2px;
+    }
+
+    /* Push page content above the bar */
+    main {
+      padding-bottom: 92px;
+    }
   }
-  @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta {
+      transition: none;
+    }
+  }
 </style>

@@ -11,9 +11,76 @@ import CTASection from '../components/CTASection.astro';
 <BaseLayout title="Beverly Hills Plastic Surgeon" description="Dr. Urmen Desai, MD, MPH, FACS — Harvard-educated, double-board-certified plastic surgeon in Beverly Hills specializing in face, nose, breast, and body procedures.">
   <Hero />
   <PressStrip />
+  <section class="trust-bar">
+    <div class="container trust-inner">
+      <div class="trust-item">
+        <span class="trust-num">1,400+</span>
+        <span class="trust-label">Patient voices on RealSelf</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">5.0</span>
+        <span class="trust-label">Consistent patient rating</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">Double</span>
+        <span class="trust-label">Board-certified — Plastics &amp; ENT</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">Harvard</span>
+        <span class="trust-label">Educated, proportion-trained</span>
+      </div>
+    </div>
+  </section>
   <ServicesGrid />
   <Philosophy />
   <BeforeAfter />
   <Testimonials />
   <CTASection />
 </BaseLayout>
+
+<style>
+  .trust-bar {
+    background: var(--bg-deep);
+    border-top: 1px solid var(--border-dark);
+    border-bottom: 1px solid var(--border-dark);
+    padding: clamp(28px, 4vw, 42px) 0;
+    position: relative;
+  }
+  .trust-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    opacity: 0.35;
+  }
+  .trust-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(24px, 5vw, 48px);
+    text-align: center;
+  }
+  .trust-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .trust-num {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+    font-weight: 380;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .trust-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  @media (max-width: 720px) {
+    .trust-inner { grid-template-columns: repeat(2, 1fr); gap: 28px 18px; }
+  }
+</style>

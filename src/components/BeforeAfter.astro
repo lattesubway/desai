@@ -4,72 +4,224 @@
   <div class="container">
     <div class="ba-head reveal">
       <p class="eyebrow">Real Results</p>
-      <h2>Before & after.</h2>
-      <p class="lead">Drag the handle to compare. A small selection from our private gallery.</p>
+      <h2>Before &amp; after.</h2>
+      <p class="lead">Drag the handle to compare. Results that reveal themselves only when examined.</p>
     </div>
     <div class="ba-wrap reveal">
       <div class="ba-slider" id="ba-slider">
         <div class="ba-after" aria-label="After"></div>
         <div class="ba-before" id="ba-before" aria-label="Before"></div>
+
+        <!-- Refined handle -->
         <div class="ba-handle" id="ba-handle" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after comparison slider" tabindex="0">
           <div class="ba-handle-bar"></div>
-          <div class="ba-handle-knob"><span></span><span></span></div>
+          <div class="ba-handle-knob">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 4L11 9L6 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 4L17 9L12 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </div>
+
         <span class="ba-label ba-label-before">Before</span>
         <span class="ba-label ba-label-after">After</span>
       </div>
-      <p class="ba-caption">Rhinoplasty · Dr. Urmen Desai. Models pictured may not be actual patients.</p>
-      <a href="/gallery" class="btn btn-ghost">View Full Gallery <span class="arrow">→</span></a>
+
+      <div class="ba-meta">
+        <p class="ba-caption">Rhinoplasty · Dr. Urmen Desai</p>
+        <a href="/gallery" class="btn btn-ghost ba-gallery-link">View Full Gallery <span class="arrow">→</span></a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .ba-head { text-align: center; max-width: 600px; margin: 0 auto clamp(40px, 6vw, 64px); }
+  .ba-head { text-align: center; max-width: 620px; margin: 0 auto clamp(40px, 6vw, 64px); }
   .ba-head h2 { margin: 16px 0 16px; }
-  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  .ba-slider { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16/10; overflow: hidden; background: var(--bg-deep); user-select: none; cursor: ew-resize; }
-  .ba-after, .ba-before { position: absolute; inset: 0; background-size: cover; background-position: center; }
+
+  .ba-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .ba-slider {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: var(--bg-deep);
+    user-select: none;
+    cursor: ew-resize;
+    border: 1px solid var(--border-dark);
+    border-radius: 2px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .ba-after,
+  .ba-before {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
   .ba-after { background-image: url('/assets/after-nose.png'); }
-  .ba-before { background-image: url('/assets/before-nose.jpg'); clip-path: inset(0 50% 0 0); }
-  .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--bg); transform: translateX(-50%); cursor: ew-resize; }
-  .ba-handle-knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
-  .ba-handle-knob span { width: 8px; height: 8px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); display: inline-block; }
-  .ba-handle-knob span:first-child { transform: rotate(-135deg); margin-right: 4px; }
-  .ba-handle-knob span:last-child { transform: rotate(45deg); margin-left: 4px; }
-  .ba-handle-knob { display: flex; gap: 6px; }
-  .ba-label { position: absolute; top: 16px; padding: 6px 14px; background: rgba(15,15,15,0.6); color: var(--text-light); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; backdrop-filter: blur(8px); }
-  .ba-label-before { left: 16px; }
-  .ba-label-after { right: 16px; }
-  .ba-caption { font-size: 0.85rem; color: var(--muted-dark); letter-spacing: 0.05em; }
+  .ba-before {
+    background-image: url('/assets/before-nose.jpg');
+    clip-path: inset(0 50% 0 0);
+    transition: clip-path 0.05s linear;
+  }
+
+  /* Handle */
+  .ba-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: var(--ink);
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    z-index: 3;
+    transition: width 0.2s var(--ease);
+  }
+  .ba-slider:active .ba-handle { width: 4px; }
+
+  .ba-handle-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  .ba-handle:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 4px;
+  }
+  .ba-slider:active .ba-handle-knob {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.4);
+  }
+
+  .ba-handle-knob svg {
+    width: 18px;
+    height: 18px;
+    opacity: 0.9;
+  }
+
+  /* Labels */
+  .ba-label {
+    position: absolute;
+    top: 18px;
+    padding: 6px 13px;
+    background: rgba(20, 12, 28, 0.65);
+    color: var(--text-light);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ba-label-before { left: 18px; }
+  .ba-label-after { right: 18px; }
+
+  /* Meta row */
+  .ba-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .ba-caption {
+    font-size: 0.82rem;
+    color: var(--muted-dark);
+    letter-spacing: 0.04em;
+  }
+  .ba-gallery-link {
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+  }
 </style>
 
 <script>
   const slider = document.getElementById('ba-slider');
   const before = document.getElementById('ba-before');
   const handle = document.getElementById('ba-handle');
+
   if (slider && before && handle) {
-    const set = (x) => {
+    let dragging = false;
+
+    const setPosition = (clientX) => {
       const rect = slider.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(0, Math.min(100, pct));
+
       before.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
-      handle.style.left = pct + '%';
+      handle.style.left = `${pct}%`;
       handle.setAttribute('aria-valuenow', String(Math.round(pct)));
     };
-    let dragging = false;
-    const onDown = (e) => { dragging = true; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
-    const onMove = (e) => { if (!dragging) return; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
-    const onUp = () => { dragging = false; };
+
+    const onDown = (e) => {
+      dragging = true;
+      const x = e.touches?.[0]?.clientX ?? e.clientX;
+      setPosition(x);
+      slider.style.cursor = 'grabbing';
+    };
+
+    const onMove = (e) => {
+      if (!dragging) return;
+      const x = e.touches?.[0]?.clientX ?? e.clientX;
+      setPosition(x);
+    };
+
+    const onUp = () => {
+      dragging = false;
+      slider.style.cursor = 'ew-resize';
+    };
+
+    // Pointer events
     slider.addEventListener('mousedown', onDown);
     slider.addEventListener('touchstart', onDown, { passive: true });
+
     window.addEventListener('mousemove', onMove);
     window.addEventListener('touchmove', onMove, { passive: true });
+
     window.addEventListener('mouseup', onUp);
     window.addEventListener('touchend', onUp);
+    window.addEventListener('touchcancel', onUp);
+
+    // Keyboard support (arrow keys)
     handle.addEventListener('keydown', (e) => {
-      const cur = parseFloat(handle.style.left || '50');
-      if (e.key === 'ArrowLeft') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur - 2) / 100)); }
-      if (e.key === 'ArrowRight') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur + 2) / 100)); }
+      const current = parseFloat(handle.style.left || '50');
+      if (e.key === 'ArrowLeft') {
+        const rect = slider.getBoundingClientRect();
+        setPosition(rect.left + (rect.width * (current - 3) / 100));
+      }
+      if (e.key === 'ArrowRight') {
+        const rect = slider.getBoundingClientRect();
+        setPosition(rect.left + (rect.width * (current + 3) / 100));
+      }
     });
+
+    // Initialize at 50%
+    before.style.clipPath = `inset(0 50% 0 0)`;
+    handle.style.left = '50%';
   }
 </script>

@@ -189,9 +189,26 @@ p { max-width: 70ch; }
 .skip-link:focus { top: 0; }
 
 :focus-visible {
-  outline: 1px solid var(--ink);
+  outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 0;
+  box-shadow: 0 0 0 1px var(--bg);
+}
+
+/* Stronger, more accessible focus on dark sections */
+.dark-section :focus-visible,
+.dark :focus-visible {
+  outline-color: var(--paper);
+  box-shadow: 0 0 0 1px var(--bg-deep);
+}
+
+/* Form fields — proper focus treatment */
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 2px;
+  border-bottom-color: var(--rose);
 }
 
 /* ───────────────────────── Typography ───────────────────────── */
@@ -394,7 +411,6 @@ h1 em, h2 em, h3 em, em, .accent {
 .field input::placeholder, .field textarea::placeholder { color: var(--grey-400); opacity: 1; }
 .field input:hover, .field select:hover, .field textarea:hover { border-bottom-color: var(--ink); }
 .field input:focus, .field select:focus, .field textarea:focus {
-  outline: none;
   border-bottom-color: var(--ink);
 }
 .dark .field label, .dark-section .field label { color: var(--grey-300); }
@@ -428,3 +444,33 @@ h1 em, h2 em, h3 em, em, .accent {
 ::-webkit-scrollbar-track { background: var(--paper-deep); }
 ::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 0; }
 ::-webkit-scrollbar-thumb:hover { background: var(--rose); }
+
+/* ───────────────────────── Refined Section Rhythm (medium priority) ───────────────────────── */
+/* Very subtle hairlines between consecutive sections for better editorial breathing */
+.section + .section {
+  position: relative;
+}
+.section + .section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+  opacity: 0.35;
+}
+
+/* Slightly stronger on dark sections for definition */
+.dark-section + .section::before,
+.section + .dark-section::before {
+  background: linear-gradient(90deg, transparent, var(--border-dark), transparent);
+  opacity: 0.45;
+}
+
+/* Disable on very tight stacked sections (e.g. filter bars) */
+.section-tight + .section::before,
+.section + .section-tight::before {
+  display: none;
+}
