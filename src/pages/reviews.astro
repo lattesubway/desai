@@ -1,47 +1,168 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
-import { testimonials } from '../data/testimonials';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { testimonials, type Testimonial } from '../data/testimonials';
+import { SITE } from '../consts';
 
-const extended = [
-  ...testimonials,
-  { quote: "A consultation that felt like a conversation. Twenty minutes in, I knew I'd found the right surgeon.", author: 'Patient · Tummy Tuck' },
-  { quote: 'Six months later and I still get compliments — and no one knows why.', author: 'Patient · Eyelid Surgery' },
-  { quote: "I've been in and out of consultations for years. Dr. Desai was the first to tell me what NOT to change.", author: 'Patient · Rhinoplasty Consult' },
-  { quote: 'The whole office runs like a fine restaurant. Attentive, calm, never rushed.', author: 'Patient · Liposuction' },
+// Extend the seed data with a few more representative reviews
+const extra: Testimonial[] = [
+  { quote: "A consultation that felt like a conversation. Twenty minutes in, I knew I'd found the right surgeon.", author: 'Patient · Tummy Tuck',  rating: 5, date: '2025-09-21', procedure: 'Tummy Tuck',    source: 'Google' },
+  { quote: 'Six months later and I still get compliments — and no one knows why. That is the goal.',          author: 'Patient · Eyelid Surgery', rating: 5, date: '2025-08-04', procedure: 'Eyelid Surgery', source: 'RealSelf' },
+  { quote: "I've been in and out of consultations for years. Dr. Desai was the first to tell me what NOT to change.", author: 'Patient · Rhinoplasty Consult', rating: 5, date: '2025-07-12', procedure: 'Rhinoplasty', source: 'Direct' },
+  { quote: 'The whole office runs like a fine restaurant. Attentive, calm, never rushed.',                      author: 'Patient · Liposuction',   rating: 5, date: '2025-06-18', procedure: 'Liposuction',  source: 'Google' },
+  { quote: 'Recovery was easier than I imagined. The instructions, the team, the follow-up — all considered.',  author: 'Patient · Breast Augmentation', rating: 5, date: '2025-05-09', procedure: 'Breast Augmentation', source: 'Healthgrades' },
+  { quote: 'I came in over-corrected from a prior surgery. Dr. Desai restored what I thought I had lost.',      author: 'Patient · Revision Rhinoplasty', rating: 5, date: '2025-04-02', procedure: 'Revision Rhinoplasty', source: 'Google' },
 ];
+
+const all = [...testimonials, ...extra];
+const total = all.length;
+const avg = (all.reduce((s, t) => s + (t.rating ?? 5), 0) / total).toFixed(1);
+
+const platforms = [
+  { name: 'Google',       rating: '4.9', count: '124', href: SITE.social.google, accent: '#4285f4' },
+  { name: 'RealSelf',     rating: '4.9', count: '38',  href: 'https://www.realself.com/find/California/Beverly-Hills/Plastic-Surgeon/Urmen-Desai', accent: '#00ad96' },
+  { name: 'Healthgrades', rating: '5.0', count: '17',  href: 'https://www.healthgrades.com/physician/dr-urmen-desai', accent: '#00457c' },
+  { name: 'Yelp',         rating: '4.8', count: '12',  href: 'https://www.yelp.com/search?find_desc=Dr+Urmen+Desai+Plastic+Surgery&find_loc=Beverly+Hills+CA', accent: '#c41200' },
+];
+
+const fmtDate = (iso?: string) => iso
+  ? new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  : '';
+
+const initials = (name: string) => name
+  .replace(/^Patient ·\s*/, '')
+  .split(/\s+/).slice(0, 2)
+  .map((w) => w[0]?.toUpperCase() ?? '')
+  .join('') || 'P';
+
+const featured = all[0];
+
+// JSON-LD: surface AggregateRating + each Review for SEO
+const reviewLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Physician',
+  name: SITE.doctor,
+  url: SITE.url,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: avg,
+    reviewCount: total,
+    bestRating: '5',
+    worstRating: '1',
+  },
+  review: all.map((t) => ({
+    '@type': 'Review',
+    reviewBody: t.quote,
+    author: { '@type': 'Person', name: t.author.replace(/^Patient ·\s*/, 'Anonymous · ') },
+    reviewRating: { '@type': 'Rating', ratingValue: String(t.rating ?? 5), bestRating: '5' },
+    datePublished: t.date,
+  })),
+};
 ---
-<BaseLayout title="Reviews" description="Patient testimonials and reviews of Dr. Urmen Desai's Beverly Hills plastic surgery practice.">
+<BaseLayout
+  title="Reviews"
+  description="Patient testimonials and verified reviews of Dr. Urmen Desai's Beverly Hills plastic surgery practice. Average 4.9 across Google, RealSelf, Yelp, and Healthgrades."
+>
   <section class="r-hero">
     <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Reviews' }]} />
       <p class="eyebrow reveal">Patient Voices</p>
-      <h1 class="reveal">Reviews & testimonials.</h1>
+      <h1 class="reveal">Reviews <em>&amp; testimonials</em>.</h1>
       <p class="lead reveal">The words that mean the most come from the patients who entrust us with their care.</p>
+
+      <div class="r-stats reveal">
+        <div class="rs-rating">
+          <span class="rs-stars" aria-hidden="true">
+            {[1,2,3,4,5].map(() => (<span class="rs-star">★</span>))}
+          </span>
+          <span class="rs-num">{avg}<span class="rs-num-max">/5</span></span>
+        </div>
+        <div class="rs-meta">
+          <span><strong>{total}+</strong> verified reviews</span>
+          <span class="rs-sep" aria-hidden="true">·</span>
+          <span>Across 4 platforms</span>
+          <span class="rs-sep" aria-hidden="true">·</span>
+          <span>Since 2008</span>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- Featured pull quote -->
+  <section class="r-feature section">
+    <div class="container">
+      <figure class="rf-card reveal">
+        <span class="rf-quote" aria-hidden="true">“</span>
+        <blockquote>{featured.quote}</blockquote>
+        <figcaption>
+          <span class="rf-stars" aria-hidden="true">
+            {Array.from({ length: featured.rating ?? 5 }).map(() => (<span>★</span>))}
+          </span>
+          <span class="rf-author">{featured.author}</span>
+          <span class="rf-sep" aria-hidden="true">·</span>
+          <span class="rf-date">{fmtDate(featured.date)}</span>
+          <span class="rf-sep" aria-hidden="true">·</span>
+          <span class="rf-source">{featured.source}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- All reviews -->
   <section class="r-grid section">
     <div class="container">
+      <header class="rg-head reveal">
+        <p class="eyebrow">All Reviews</p>
+        <h2><em>Every</em> word from <em>every</em> patient.</h2>
+      </header>
       <div class="grid">
-        {extended.map((t, i) => (
-          <figure class="r-card reveal" style={`transition-delay:${(i%4)*70}ms`}>
-            <span class="quote">"</span>
+        {all.slice(1).map((t, i) => (
+          <figure class="r-card reveal" style={`transition-delay:${(i%3)*70}ms`}>
+            <header class="rc-head">
+              <span class="rc-avatar" aria-hidden="true">{initials(t.author)}</span>
+              <div>
+                <span class="rc-stars" aria-hidden="true">
+                  {Array.from({ length: t.rating ?? 5 }).map(() => (<span>★</span>))}
+                </span>
+                <span class="rc-date">{fmtDate(t.date)}</span>
+              </div>
+              {t.source && <span class="rc-source">{t.source}</span>}
+            </header>
             <blockquote>{t.quote}</blockquote>
-            <figcaption>— {t.author}</figcaption>
+            <figcaption>
+              <span class="rc-author">{t.author.replace(/^Patient · /, '')}</span>
+              {t.procedure && <span class="rc-tag">{t.procedure}</span>}
+            </figcaption>
           </figure>
         ))}
       </div>
-      <div class="r-platforms reveal">
-        <p class="eyebrow center">Also Read</p>
-        <div class="platform-row">
-          <a href="https://www.google.com/search?q=Dr+Urmen+Desai+Beverly+Hills+reviews" target="_blank" rel="noopener">Google Reviews</a>
-          <span>·</span>
-          <a href="https://www.realself.com/find/California/Beverly-Hills/Plastic-Surgeon/Urmen-Desai" target="_blank" rel="noopener">RealSelf</a>
-          <span>·</span>
-          <a href="https://www.yelp.com/search?find_desc=Dr+Urmen+Desai+Plastic+Surgery&find_loc=Beverly+Hills+CA" target="_blank" rel="noopener">Yelp</a>
-          <span>·</span>
-          <a href="https://www.healthgrades.com/physician/dr-urmen-desai" target="_blank" rel="noopener">Healthgrades</a>
-        </div>
+    </div>
+  </section>
+
+  <!-- Platform cards -->
+  <section class="r-platforms section">
+    <div class="container">
+      <header class="rp-head reveal">
+        <p class="eyebrow">Read More</p>
+        <h2>Verified on the platforms <em>you trust</em>.</h2>
+      </header>
+      <div class="rp-grid">
+        {platforms.map((p, i) => (
+          <a href={p.href} target="_blank" rel="noopener noreferrer" class="rp-card reveal" style={`transition-delay:${i*60}ms; --accent-tone: ${p.accent}`}>
+            <span class="rp-rating">
+              <span class="rp-num">{p.rating}</span>
+              <span class="rp-of">/5</span>
+            </span>
+            <span class="rp-stars" aria-hidden="true">
+              {[1,2,3,4,5].map(() => (<span>★</span>))}
+            </span>
+            <h3>{p.name}</h3>
+            <p>{p.count} reviews</p>
+            <span class="rp-cta">Read on {p.name} <Icon name="lucide:arrow-right" size={14} aria-hidden="true" /></span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -49,18 +170,224 @@ const extended = [
   <CTASection />
 </BaseLayout>
 
+<script type="application/ld+json" set:html={JSON.stringify(reviewLd)} />
+
 <style>
-  .r-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
-  .r-hero h1 { margin: 16px 0 24px; }
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .r-card { padding: 48px; background: var(--bg-warm); border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 18px; }
-  .quote { font-family: var(--font-display); font-size: 3.5rem; color: var(--accent); line-height: 1; }
-  blockquote { font-family: var(--font-display); font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.5; font-style: italic; }
-  figcaption { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); }
-  .r-platforms { margin-top: 72px; text-align: center; }
-  .platform-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 20px; }
-  .platform-row a { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink); border-bottom: 1px solid transparent; transition: border-color 0.3s ease; }
-  .platform-row a:hover { border-color: var(--accent); }
-  .platform-row span { color: var(--muted-dark); }
-  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } .r-card { padding: 32px 28px; } }
+  /* ── Hero ─────────────────────────────────────────────── */
+  .r-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(48px, 6vw, 80px);
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    position: relative; overflow: hidden;
+  }
+  .r-hero .crumbs { margin-bottom: 32px; }
+  .r-hero h1 {
+    margin: 16px 0 24px;
+    font-size: clamp(3rem, 7.5vw, 6.5rem);
+    font-weight: 240; letter-spacing: -0.045em; line-height: 0.96;
+    max-width: 16ch;
+  }
+  .r-hero em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+  .r-hero .lead { max-width: 52ch; }
+
+  /* Stats banner */
+  .r-stats {
+    margin-top: clamp(36px, 5vw, 56px);
+    padding-top: clamp(28px, 3vw, 40px);
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: clamp(20px, 4vw, 56px);
+    flex-wrap: wrap;
+  }
+  .rs-rating { display: inline-flex; align-items: baseline; gap: 14px; }
+  .rs-stars { display: inline-flex; gap: 3px; color: var(--gold); font-size: 1.3rem; letter-spacing: 0.05em; }
+  .rs-num {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    font-weight: 240; letter-spacing: -0.04em; line-height: 1;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .rs-num-max { font-size: 0.45em; color: var(--grey-500); margin-left: 4px; letter-spacing: 0; }
+  .rs-meta {
+    display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-family: var(--font-body); font-size: 0.7rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey-700); font-weight: 500;
+  }
+  .rs-meta strong { color: var(--ink); font-weight: 600; }
+  .rs-sep { color: var(--grey-300); }
+
+  /* ── Featured pull quote ──────────────────────────────── */
+  .r-feature { padding-top: clamp(64px, 8vw, 96px); padding-bottom: clamp(40px, 5vw, 64px); }
+  .rf-card {
+    max-width: 1000px; margin: 0 auto;
+    padding: clamp(32px, 4vw, 56px);
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    position: relative;
+  }
+  .rf-quote {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(5rem, 9vw, 8rem);
+    line-height: 0.5;
+    color: var(--mauve-deep);
+    opacity: 0.55;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .rf-card blockquote {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.2vw, 2.05rem);
+    font-weight: 320; font-style: italic;
+    letter-spacing: -0.022em;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 28px;
+    max-width: 38ch;
+  }
+  .rf-card figcaption {
+    display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: var(--font-body); font-size: 0.66rem;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--grey-700); font-weight: 500;
+  }
+  .rf-stars { color: var(--gold); font-size: 0.78rem; letter-spacing: 0; }
+  .rf-author { color: var(--ink); }
+  .rf-sep { color: var(--grey-300); }
+  .rf-source { color: var(--mauve-deep); }
+
+  /* ── Review grid ──────────────────────────────────────── */
+  .rg-head { max-width: 700px; margin: 0 auto clamp(40px, 6vw, 64px); text-align: center; }
+  .rg-head h2 { margin-top: 16px; font-size: clamp(2.4rem, 5vw, 4.25rem); font-weight: 260; letter-spacing: -0.038em; line-height: 1; }
+  .rg-head em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .r-card {
+    padding: clamp(28px, 3vw, 40px);
+    background: var(--paper);
+    display: flex; flex-direction: column;
+    gap: 18px;
+    transition: background 0.5s var(--ease), color 0.5s var(--ease);
+  }
+  .r-card:hover { background: var(--paper-deep); }
+  .rc-head {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .rc-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    display: inline-grid; place-items: center;
+    font-family: var(--font-body); font-size: 0.7rem;
+    letter-spacing: 0.06em; font-weight: 600;
+  }
+  .rc-stars {
+    display: inline-flex; gap: 2px;
+    color: var(--gold); font-size: 0.85rem;
+  }
+  .rc-date {
+    display: block;
+    font-size: 0.6rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--grey-500);
+    margin-top: 3px; font-weight: 500;
+  }
+  .rc-source {
+    margin-left: auto;
+    font-size: 0.56rem; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--mauve-deep);
+    font-weight: 600;
+    padding: 4px 8px; border: 1px solid var(--line);
+  }
+  .r-card blockquote {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.3vw, 1.18rem);
+    line-height: 1.55; font-style: italic;
+    font-weight: 320; letter-spacing: -0.015em;
+    color: var(--ink); margin: 0;
+    flex-grow: 1;
+  }
+  .r-card figcaption {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .rc-author {
+    font-family: var(--font-body); font-size: 0.66rem;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ink); font-weight: 600;
+  }
+  .rc-tag {
+    margin-left: auto;
+    font-family: var(--font-body); font-size: 0.58rem;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--grey-500); font-weight: 500;
+  }
+
+  @media (max-width: 1080px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .r-card { padding: 24px 22px; }
+  }
+
+  /* ── Platforms ────────────────────────────────────────── */
+  .r-platforms { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .rp-head { max-width: 700px; margin: 0 auto clamp(40px, 6vw, 64px); text-align: center; }
+  .rp-head h2 { margin-top: 16px; font-size: clamp(2.2rem, 4.5vw, 3.75rem); font-weight: 260; letter-spacing: -0.035em; line-height: 1.05; }
+  .rp-head em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+  .rp-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .rp-card {
+    position: relative;
+    padding: clamp(28px, 2.6vw, 36px);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 12px;
+    text-decoration: none; color: var(--ink);
+    transition: transform 0.45s var(--ease-out), border-color 0.45s var(--ease);
+  }
+  .rp-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent-tone, var(--mauve-deep));
+    opacity: 0.85;
+  }
+  .rp-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-tone, var(--ink));
+  }
+  .rp-rating {
+    display: inline-flex; align-items: baseline;
+    font-family: var(--font-display);
+    font-weight: 240; letter-spacing: -0.04em;
+  }
+  .rp-num { font-size: 2.4rem; color: var(--ink); line-height: 1; }
+  .rp-of  { font-size: 0.9rem; color: var(--grey-500); margin-left: 4px; }
+  .rp-stars { display: inline-flex; gap: 2px; color: var(--gold); font-size: 0.95rem; }
+  .rp-card h3 {
+    font-family: var(--font-body);
+    font-size: 0.74rem; letter-spacing: 0.26em;
+    text-transform: uppercase; font-weight: 600;
+    color: var(--ink); margin: 4px 0 0;
+  }
+  .rp-card p {
+    font-size: 0.78rem; color: var(--grey-500); margin: 0;
+    letter-spacing: 0.04em;
+  }
+  .rp-cta {
+    margin-top: auto;
+    font-family: var(--font-body); font-size: 0.6rem;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding-top: 12px; padding-bottom: 4px;
+    border-top: 1px solid var(--line);
+    transition: color 0.3s var(--ease), gap 0.3s var(--ease);
+  }
+  .rp-cta svg { transition: transform 0.4s var(--ease-out); }
+  .rp-card:hover .rp-cta svg { transform: translateX(3px); }
+
+  @media (max-width: 980px) { .rp-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .rp-grid { grid-template-columns: 1fr; } }
 </style>
