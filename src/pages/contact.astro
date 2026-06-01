@@ -153,11 +153,13 @@ import { SITE } from '../consts';
 </style>
 
 <script>
-  const form = document.getElementById('contactForm');
-  const status = document.getElementById('formStatus');
+  const form = document.getElementById('contactForm') as HTMLFormElement | null;
+  const status = document.getElementById('formStatus') as HTMLDivElement | null;
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = form.querySelector('[type="submit"]');
+    if (!form || !status) return;
+    const btn = form.querySelector<HTMLButtonElement>('[type="submit"]');
+    if (!btn) return;
     btn.disabled = true;
     btn.textContent = 'Sending…';
     status.hidden = true;

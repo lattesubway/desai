@@ -2,26 +2,35 @@
 import { Image } from 'astro:assets';
 import { SITE } from '../consts';
 import drDesaiPortrait from '../assets/dr-desai-portrait.png';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const pub = (p: string) => fileURLToPath(new URL(`../../public${p}`, import.meta.url));
+const hasLoopMp4  = existsSync(pub('/assets/hero-loop.mp4'));
+const hasLoopWebm = existsSync(pub('/assets/hero-loop.webm'));
+const hasLoop = hasLoopMp4 || hasLoopWebm;
 ---
 <section class="hero">
   <!--
     Drop a video at /public/assets/hero-loop.mp4 (and optionally .webm)
     to override the animated gradient backdrop.
   -->
-  <video
-    class="hero-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="metadata"
-    aria-hidden="true"
-    poster="/assets/og-default.png"
-    onloadeddata="this.classList.add('is-loaded')"
-  >
-    <source src="/assets/hero-loop.webm" type="video/webm" />
-    <source src="/assets/hero-loop.mp4"  type="video/mp4" />
-  </video>
+  {hasLoop && (
+    <video
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+      poster="/og-default.png"
+      onloadeddata="this.classList.add('is-loaded')"
+    >
+      {hasLoopWebm && <source src="/assets/hero-loop.webm" type="video/webm" />}
+      {hasLoopMp4  && <source src="/assets/hero-loop.mp4"  type="video/mp4"  />}
+    </video>
+  )}
 
   <div class="hero-mesh" aria-hidden="true">
     <span class="m m1"></span>
@@ -64,15 +73,11 @@ import drDesaiPortrait from '../assets/dr-desai-portrait.png';
         <Image
           src={drDesaiPortrait}
           alt=""
-          width={760}
-          height={950}
           widths={[480, 760, 1040, 1400]}
           sizes="(max-width: 900px) 80vw, 44vw"
           format="avif"
-          fallbackFormat="webp"
           quality={86}
           loading="eager"
-          fetchpriority="high"
         />
       </figure>
     </aside>

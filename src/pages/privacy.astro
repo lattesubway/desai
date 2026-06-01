@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+---
+<BaseLayout title="Privacy Policy" description="Privacy policy for Desai Plastic Surgery.">
+  <section class="legal-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Privacy' }]} />
+      <p class="eyebrow">Legal</p>
+      <h1>Privacy Policy</h1>
+      <p class="lead">Effective {new Date().getFullYear()}. We respect the privacy of every visitor and patient.</p>
+    </div>
+  </section>
+
+  <section class="legal-body section">
+    <div class="container">
+      <article class="legal-prose">
+        <h2>What we collect</h2>
+        <p>When you submit the consultation or contact form, we collect the information you provide (name, email, phone, message). When you visit the site, our hosting provider may log standard request data (IP, user agent, referrer) for security and analytics.</p>
+
+        <h2>How we use it</h2>
+        <p>Form submissions are used only to respond to your inquiry and schedule consultations. We do not sell, rent, or share personal information with third parties for marketing.</p>
+
+        <h2>HIPAA</h2>
+        <p>This website is informational. If you become a patient, separate HIPAA-compliant systems govern your protected health information; details are provided at intake.</p>
+
+        <h2>Cookies & analytics</h2>
+        <p>We use minimal first-party cookies for theme preference. If analytics are enabled, they are privacy-respecting (no cross-site tracking).</p>
+
+        <h2>Your rights</h2>
+        <p>Email <a href={`mailto:info@desaiplasticsurgery.com`}>info@desaiplasticsurgery.com</a> to request access, correction, or deletion of any information you've submitted.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-hero { padding: clamp(72px, 10vw, 120px) 0 clamp(48px, 6vw, 64px); background: var(--paper); border-bottom: 1px solid var(--line); }
+  .legal-hero .crumbs { margin-bottom: 32px; }
+  .legal-hero h1 { margin: 16px 0 20px; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 260; letter-spacing: -0.04em; }
+  .legal-prose { max-width: 64ch; margin: 0 auto; }
+  .legal-prose h2 { font-size: 1.4rem; font-weight: 360; letter-spacing: -0.02em; margin: 32px 0 12px; }
+  .legal-prose p { color: var(--grey-700); line-height: 1.7; }
+  .legal-prose a { color: var(--ink); border-bottom: 1px solid var(--mauve-deep); padding-bottom: 1px; }
+</style>
