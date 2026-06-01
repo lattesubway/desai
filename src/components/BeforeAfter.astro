@@ -1,75 +1,477 @@
 ---
+type Case = {
+  title: string;
+  blurb: string;
+  age: string;
+  category: string;
+  before: { jpg: string; avif?: string };
+  after:  { jpg: string; avif?: string };
+};
+
+const cases: Case[] = [
+  {
+    title: 'Primary Rhinoplasty',
+    blurb: 'Refined dorsal line; tip definition preserved without over-rotation.',
+    age: '20s',
+    category: 'Nose',
+    before: { jpg: '/assets/before-nose.jpg' },
+    after:  { jpg: '/assets/after-nose.png' },
+  },
+  {
+    title: 'Revision Rhinoplasty',
+    blurb: 'Structural rebuild with rib cartilage; restored airway and balance.',
+    age: '30s',
+    category: 'Nose',
+    before: { jpg: '/assets/gallery/rhinoplasty-revision-before.jpg', avif: '/assets/gallery/rhinoplasty-revision-before.avif' },
+    after:  { jpg: '/assets/gallery/rhinoplasty-revision-after.jpg',  avif: '/assets/gallery/rhinoplasty-revision-after.avif' },
+  },
+  {
+    title: 'Facelift & Neck Lift',
+    blurb: 'Deep-plane technique restores a jawline that quiets the years.',
+    age: '50s',
+    category: 'Face',
+    before: { jpg: '/assets/gallery/facelift-necklift-before.jpg', avif: '/assets/gallery/facelift-necklift-before.avif' },
+    after:  { jpg: '/assets/gallery/facelift-necklift-after.jpg',  avif: '/assets/gallery/facelift-necklift-after.avif' },
+  },
+  {
+    title: 'Eyelid Surgery',
+    blurb: 'Upper and lower blepharoplasty — brighter eyes, no hollowing.',
+    age: '40s',
+    category: 'Face',
+    before: { jpg: '/assets/gallery/blepharoplasty-before.jpg', avif: '/assets/gallery/blepharoplasty-before.avif' },
+    after:  { jpg: '/assets/gallery/blepharoplasty-after.jpg',  avif: '/assets/gallery/blepharoplasty-after.avif' },
+  },
+];
+const data = JSON.stringify(cases);
 ---
 <section class="ba-section section">
   <div class="container">
-    <div class="ba-head reveal">
+    <header class="ba-head reveal">
       <p class="eyebrow">Real Results</p>
-      <h2>Before & after.</h2>
-      <p class="lead">Drag the handle to compare. A small selection from our private gallery.</p>
-    </div>
+      <h2>Before <em>&amp; after</em>.</h2>
+      <p class="lead">Drag the handle to compare. Use the arrows or numbered keys to switch between cases.</p>
+    </header>
+
     <div class="ba-wrap reveal">
-      <div class="ba-slider" id="ba-slider">
-        <div class="ba-after" aria-label="After"></div>
-        <div class="ba-before" id="ba-before" aria-label="Before"></div>
-        <div class="ba-handle" id="ba-handle" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after comparison slider" tabindex="0">
-          <div class="ba-handle-bar"></div>
-          <div class="ba-handle-knob"><span></span><span></span></div>
+      <div
+        class="ba-slider"
+        id="ba-slider"
+        role="slider"
+        tabindex="0"
+        aria-label="Before and after comparison slider"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="50"
+      >
+        <!-- AFTER (full image, underneath) -->
+        <picture class="ba-after">
+          <source data-after-avif type="image/avif" />
+          <img id="ba-after-img" alt="After" loading="lazy" decoding="async" />
+        </picture>
+
+        <!-- BEFORE (clipped on top) -->
+        <div class="ba-before-clip" id="ba-before-clip">
+          <picture class="ba-before">
+            <source data-before-avif type="image/avif" />
+            <img id="ba-before-img" alt="Before" loading="lazy" decoding="async" />
+          </picture>
         </div>
+
+        <div class="ba-handle" id="ba-handle" aria-hidden="true">
+          <span class="ba-handle-bar"></span>
+          <span class="ba-handle-knob">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m9 18-6-6 6-6"/></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m15 6 6 6-6 6"/></svg>
+          </span>
+        </div>
+
         <span class="ba-label ba-label-before">Before</span>
         <span class="ba-label ba-label-after">After</span>
       </div>
-      <p class="ba-caption">Rhinoplasty · Dr. Urmen Desai. Models pictured may not be actual patients.</p>
-      <a href="/gallery" class="btn btn-ghost">View Full Gallery <span class="arrow">→</span></a>
+
+      <div class="ba-meta">
+        <div class="ba-case">
+          <span class="ba-case-cat" id="ba-cat">Nose</span>
+          <h3 id="ba-title">Primary Rhinoplasty</h3>
+          <p id="ba-blurb">Refined dorsal line; tip definition preserved without over-rotation.</p>
+          <p class="ba-patient"><span id="ba-age">Patient, 20s</span> · Dr. Urmen Desai</p>
+        </div>
+        <div class="ba-controls" role="group" aria-label="Cycle cases">
+          <button type="button" class="ba-nav" id="ba-prev" aria-label="Previous case">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <span class="ba-counter"><span id="ba-i">1</span> <span class="ba-of">/</span> <span id="ba-n">4</span></span>
+          <button type="button" class="ba-nav" id="ba-next" aria-label="Next case">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <ol class="ba-thumbs" id="ba-thumbs" role="tablist" aria-label="Select a case"></ol>
+
+      <p class="ba-caption">Models pictured may not be actual patients. Individual results vary.</p>
+      <a href="/gallery" class="btn btn-ghost">View full gallery <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
 
-<style>
-  .ba-head { text-align: center; max-width: 600px; margin: 0 auto clamp(40px, 6vw, 64px); }
-  .ba-head h2 { margin: 16px 0 16px; }
-  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  .ba-slider { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16/10; overflow: hidden; background: var(--bg-deep); user-select: none; cursor: ew-resize; }
-  .ba-after, .ba-before { position: absolute; inset: 0; background-size: cover; background-position: center; }
-  .ba-after { background-image: url('/assets/after-nose.png'); }
-  .ba-before { background-image: url('/assets/before-nose.jpg'); clip-path: inset(0 50% 0 0); }
-  .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--bg); transform: translateX(-50%); cursor: ew-resize; }
-  .ba-handle-knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
-  .ba-handle-knob span { width: 8px; height: 8px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); display: inline-block; }
-  .ba-handle-knob span:first-child { transform: rotate(-135deg); margin-right: 4px; }
-  .ba-handle-knob span:last-child { transform: rotate(45deg); margin-left: 4px; }
-  .ba-handle-knob { display: flex; gap: 6px; }
-  .ba-label { position: absolute; top: 16px; padding: 6px 14px; background: rgba(15,15,15,0.6); color: var(--text-light); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; backdrop-filter: blur(8px); }
-  .ba-label-before { left: 16px; }
-  .ba-label-after { right: 16px; }
-  .ba-caption { font-size: 0.85rem; color: var(--muted-dark); letter-spacing: 0.05em; }
-</style>
+<script is:inline define:vars={{ data }}>
+  (() => {
+    const init = () => {
+      const cases = JSON.parse(data);
+      const $ = (id) => document.getElementById(id);
 
-<script>
-  const slider = document.getElementById('ba-slider');
-  const before = document.getElementById('ba-before');
-  const handle = document.getElementById('ba-handle');
-  if (slider && before && handle) {
-    const set = (x) => {
-      const rect = slider.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
-      before.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
-      handle.style.left = pct + '%';
-      handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+      const slider = $('ba-slider');
+      const handle = $('ba-handle');
+      const beforeClip = $('ba-before-clip');
+      const beforeImg = $('ba-before-img');
+      const afterImg  = $('ba-after-img');
+      const beforeAvif = document.querySelector('[data-before-avif]');
+      const afterAvif  = document.querySelector('[data-after-avif]');
+      const titleEl = $('ba-title');
+      const blurbEl = $('ba-blurb');
+      const catEl   = $('ba-cat');
+      const ageEl   = $('ba-age');
+      const iEl     = $('ba-i');
+      const nEl     = $('ba-n');
+      const thumbs  = $('ba-thumbs');
+      const prevBtn = $('ba-prev');
+      const nextBtn = $('ba-next');
+
+      if (!slider || !handle || slider.dataset.bound) return;
+      slider.dataset.bound = '1';
+
+      let idx = 0;
+      let pos = 50; // 0-100, current handle position
+      let preloaded = new Set();
+
+      // ── Set handle / clip position
+      const setPos = (p) => {
+        pos = Math.max(0, Math.min(100, p));
+        beforeClip.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+        handle.style.left = pos + '%';
+        slider.setAttribute('aria-valuenow', String(Math.round(pos)));
+      };
+
+      // ── Pointer drag (single handler, works for mouse + touch + pen)
+      const xToPct = (clientX) => {
+        const r = slider.getBoundingClientRect();
+        return ((clientX - r.left) / r.width) * 100;
+      };
+      let dragging = false;
+      const onDown = (e) => {
+        e.preventDefault();
+        dragging = true;
+        slider.classList.add('is-dragging');
+        slider.setPointerCapture?.(e.pointerId);
+        setPos(xToPct(e.clientX));
+      };
+      const onMove = (e) => {
+        if (!dragging) return;
+        setPos(xToPct(e.clientX));
+      };
+      const onUp = (e) => {
+        dragging = false;
+        slider.classList.remove('is-dragging');
+        slider.releasePointerCapture?.(e.pointerId);
+      };
+      slider.addEventListener('pointerdown', onDown);
+      slider.addEventListener('pointermove', onMove);
+      slider.addEventListener('pointerup', onUp);
+      slider.addEventListener('pointercancel', onUp);
+
+      // ── Keyboard
+      slider.addEventListener('keydown', (e) => {
+        const step = e.shiftKey ? 10 : 2;
+        if      (e.key === 'ArrowLeft')  { e.preventDefault(); setPos(pos - step); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); setPos(pos + step); }
+        else if (e.key === 'Home')       { e.preventDefault(); setPos(0); }
+        else if (e.key === 'End')        { e.preventDefault(); setPos(100); }
+        else if (e.key === 'PageDown')   { e.preventDefault(); go(idx + 1); }
+        else if (e.key === 'PageUp')     { e.preventDefault(); go(idx - 1); }
+        else if (/^[1-9]$/.test(e.key))  {
+          const n = parseInt(e.key, 10) - 1;
+          if (n < cases.length) { e.preventDefault(); go(n); }
+        }
+      });
+
+      // ── Case switch
+      const preload = (c) => {
+        [c.before.jpg, c.after.jpg, c.before.avif, c.after.avif]
+          .filter(Boolean)
+          .forEach((src) => {
+            if (preloaded.has(src)) return;
+            preloaded.add(src);
+            const img = new Image();
+            img.src = src;
+          });
+      };
+
+      const go = (n, instant = false) => {
+        if (n < 0) n = cases.length - 1;
+        if (n >= cases.length) n = 0;
+        idx = n;
+        const c = cases[n];
+        slider.classList.add('is-swapping');
+        // wait for fade-out, then swap sources, fade-in
+        setTimeout(() => {
+          beforeImg.src = c.before.jpg;
+          afterImg.src  = c.after.jpg;
+          beforeAvif.srcset = c.before.avif || '';
+          afterAvif.srcset  = c.after.avif  || '';
+          beforeImg.alt = `${c.title} — before`;
+          afterImg.alt  = `${c.title} — after`;
+          titleEl.textContent = c.title;
+          blurbEl.textContent = c.blurb;
+          catEl.textContent = c.category;
+          ageEl.textContent = `Patient, ${c.age}`;
+          iEl.textContent   = String(n + 1);
+          // sync thumbnails
+          thumbs.querySelectorAll('button').forEach((b, i) => {
+            b.setAttribute('aria-selected', String(i === n));
+          });
+          // re-enable transitions
+          requestAnimationFrame(() => slider.classList.remove('is-swapping'));
+          // preload neighbours
+          preload(cases[(n + 1) % cases.length]);
+          preload(cases[(n - 1 + cases.length) % cases.length]);
+        }, instant ? 0 : 220);
+        // reset handle on case switch
+        setPos(50);
+      };
+
+      // ── Thumbnails
+      thumbs.innerHTML = cases.map((c, i) => `
+        <li role="presentation">
+          <button
+            type="button"
+            class="ba-thumb"
+            role="tab"
+            aria-selected="${i === 0}"
+            data-i="${i}"
+            title="${c.title}"
+            aria-label="${c.title} — Patient, ${c.age}"
+          >
+            <img src="${c.after.jpg}" alt="" loading="lazy" />
+            <span class="ba-thumb-cat">${c.category}</span>
+            <span class="ba-thumb-title">${c.title}</span>
+          </button>
+        </li>
+      `).join('');
+      thumbs.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-i]');
+        if (!btn) return;
+        go(parseInt(btn.dataset.i, 10));
+      });
+
+      nEl.textContent = String(cases.length);
+      prevBtn.addEventListener('click', () => go(idx - 1));
+      nextBtn.addEventListener('click', () => go(idx + 1));
+
+      // ── First load
+      go(0, true);
+      preload(cases[1]);
+
+      // ── Initial demo sweep on first viewport-enter
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced) {
+        const io = new IntersectionObserver((entries) => {
+          for (const ent of entries) {
+            if (!ent.isIntersecting) continue;
+            io.disconnect();
+            slider.classList.add('is-demoing');
+            const seq = [50, 12, 88, 50];
+            let i = 0;
+            const tick = () => {
+              setPos(seq[i++]);
+              if (i < seq.length) setTimeout(tick, 720);
+              else setTimeout(() => slider.classList.remove('is-demoing'), 720);
+            };
+            setTimeout(tick, 350);
+          }
+        }, { threshold: 0.4 });
+        io.observe(slider);
+      }
     };
-    let dragging = false;
-    const onDown = (e) => { dragging = true; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
-    const onMove = (e) => { if (!dragging) return; const x = (e.touches?.[0]?.clientX ?? e.clientX); set(x); };
-    const onUp = () => { dragging = false; };
-    slider.addEventListener('mousedown', onDown);
-    slider.addEventListener('touchstart', onDown, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('mouseup', onUp);
-    window.addEventListener('touchend', onUp);
-    handle.addEventListener('keydown', (e) => {
-      const cur = parseFloat(handle.style.left || '50');
-      if (e.key === 'ArrowLeft') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur - 2) / 100)); }
-      if (e.key === 'ArrowRight') { const rect = slider.getBoundingClientRect(); set(rect.left + (rect.width * (cur + 2) / 100)); }
-    });
-  }
+    init();
+    document.addEventListener('astro:after-swap', init);
+  })();
 </script>
+
+<style>
+  .ba-section { background: var(--paper); }
+  .ba-head { text-align: center; max-width: 640px; margin: 0 auto clamp(40px, 6vw, 64px); }
+  .ba-head h2 { margin: 16px 0 16px; }
+  .ba-head em { font-style: italic; color: var(--mauve-deep); }
+
+  .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 2.4vw, 32px); }
+
+  /* ── Slider ───────────────────────────────────────────── */
+  .ba-slider {
+    position: relative;
+    width: 100%; max-width: 1100px;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--paper-deep);
+    user-select: none;
+    cursor: ew-resize;
+    touch-action: none;
+    outline: none;
+    border: 1px solid var(--line);
+    transition: box-shadow .3s var(--ease);
+  }
+  .ba-slider:focus-visible {
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--mauve-deep);
+  }
+  .ba-slider.is-swapping picture img { opacity: 0; }
+  .ba-after, .ba-before-clip, .ba-before {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+  .ba-after img, .ba-before img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    display: block;
+    transition: opacity .25s var(--ease);
+  }
+  .ba-before-clip {
+    /* clip-path animates smoothly on case change (instant during drag) */
+    clip-path: inset(0 50% 0 0);
+    transition: clip-path 0s linear;
+  }
+  .ba-slider.is-demoing .ba-before-clip { transition: clip-path .6s var(--ease); }
+  .ba-slider.is-demoing .ba-handle      { transition: left .6s var(--ease); }
+
+  /* ── Handle ───────────────────────────────────────────── */
+  .ba-handle {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .ba-handle-bar {
+    position: absolute; inset: 0;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.18), 0 0 24px rgba(0,0,0,0.18);
+  }
+  .ba-handle-knob {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.32), 0 0 0 1px rgba(0,0,0,0.12);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .ba-slider:hover .ba-handle-knob    { transform: translate(-50%, -50%) scale(1.06); }
+  .ba-slider.is-dragging .ba-handle-knob { transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.18); }
+
+  /* ── Labels ───────────────────────────────────────────── */
+  .ba-label {
+    position: absolute; top: 16px;
+    padding: 6px 12px;
+    background: rgba(29,14,37,0.55);
+    color: #f4e1e7;
+    font-family: var(--font-body);
+    font-size: 0.62rem; letter-spacing: 0.3em;
+    text-transform: uppercase; font-weight: 500;
+    backdrop-filter: blur(8px);
+  }
+  .ba-label-before { left: 16px; }
+  .ba-label-after  { right: 16px; }
+
+  /* ── Meta row: case info + prev/next ──────────────────── */
+  .ba-meta {
+    width: 100%; max-width: 1100px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    border-top: 1px solid var(--line);
+    padding-top: clamp(20px, 2vw, 28px);
+  }
+  .ba-case-cat {
+    font-family: var(--font-body); font-size: 0.62rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--mauve-deep); font-weight: 600;
+  }
+  .ba-case h3 {
+    margin: 6px 0 6px;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-weight: 320; letter-spacing: -0.025em;
+  }
+  .ba-case p { margin: 0; color: var(--grey-700); max-width: 60ch; }
+  .ba-patient {
+    margin-top: 8px !important;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--grey-500);
+    font-weight: 500;
+  }
+  .ba-controls {
+    display: inline-flex; align-items: center; gap: 14px;
+    color: var(--ink);
+  }
+  .ba-nav {
+    width: 38px; height: 38px;
+    border: 1px solid var(--line-strong);
+    background: transparent; color: var(--ink);
+    display: inline-grid; place-items: center; cursor: pointer;
+    transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+  }
+  .ba-nav:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .ba-counter {
+    font-family: var(--font-body); font-size: 0.7rem;
+    letter-spacing: 0.24em; font-weight: 500;
+    text-transform: uppercase; color: var(--grey-500);
+    font-variant-numeric: tabular-nums;
+  }
+  .ba-counter .ba-of { opacity: 0.5; margin: 0 2px; }
+
+  /* ── Thumbnails ───────────────────────────────────────── */
+  .ba-thumbs {
+    list-style: none; padding: 0; margin: 4px 0 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    width: 100%; max-width: 1100px;
+  }
+  .ba-thumb {
+    position: relative;
+    width: 100%; aspect-ratio: 16 / 10;
+    border: 1px solid var(--line); background: transparent;
+    padding: 0; cursor: pointer; overflow: hidden;
+    transition: border-color .35s var(--ease), transform .35s var(--ease);
+  }
+  .ba-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: filter .35s var(--ease), opacity .35s var(--ease);
+    opacity: 0.62;
+  }
+  .ba-thumb-cat, .ba-thumb-title {
+    position: absolute; left: 10px; right: 10px;
+    color: #f4e1e7;
+    font-family: var(--font-body);
+    text-align: left; text-transform: uppercase;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.45);
+  }
+  .ba-thumb-cat   { top: 8px;  font-size: 0.54rem; letter-spacing: 0.3em; opacity: 0.85; }
+  .ba-thumb-title { bottom: 8px; font-size: 0.7rem; letter-spacing: 0.16em; }
+  .ba-thumb:hover img { opacity: 0.9; }
+  .ba-thumb[aria-selected="true"] { border-color: var(--ink); }
+  .ba-thumb[aria-selected="true"] img { opacity: 1; filter: none; }
+
+  .ba-caption { font-size: 0.78rem; color: var(--grey-500); letter-spacing: 0.04em; margin-top: 6px; }
+
+  @media (max-width: 720px) {
+    .ba-meta { grid-template-columns: 1fr; gap: 16px; }
+    .ba-handle-knob { width: 44px; height: 44px; }
+    .ba-label { font-size: 0.56rem; padding: 4px 9px; }
+    .ba-thumbs { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ba-slider.is-demoing .ba-before-clip,
+    .ba-slider.is-demoing .ba-handle { transition: none; }
+  }
+</style>
