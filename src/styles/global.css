@@ -248,8 +248,16 @@ h1 em, h2 em, h3 em, em, .accent {
   align-items: center;
   gap: 0.85rem;
 }
-.eyebrow::before { display: none; } /* drop the line, Prada-style */
+.eyebrow::before {
+  /* a small hairline mark to the left of every eyebrow */
+  content: '';
+  display: inline-block;
+  width: 18px; height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
 .eyebrow.on-dark { color: var(--paper); }
+.eyebrow.center::before { display: none; } /* press strip variant */
 
 .lead {
   font-family: var(--font-body);

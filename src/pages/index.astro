@@ -7,13 +7,25 @@ import BeforeAfter from '../components/BeforeAfter.astro';
 import PressStrip from '../components/PressStrip.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CTASection from '../components/CTASection.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 ---
 <BaseLayout title="Beverly Hills Plastic Surgeon" description="Dr. Urmen Desai, MD, MPH, FACS — Harvard-educated, double-board-certified plastic surgeon in Beverly Hills specializing in face, nose, breast, and body procedures.">
   <Hero />
+
   <PressStrip />
+
+  <SectionDivider ordinal="I" />
   <ServicesGrid />
+
+  <SectionDivider ordinal="II" />
   <Philosophy />
+
+  <SectionDivider ordinal="III" />
   <BeforeAfter />
+
+  <SectionDivider ordinal="IV" />
   <Testimonials />
+
+  <SectionDivider ordinal="V" />
   <CTASection />
 </BaseLayout>

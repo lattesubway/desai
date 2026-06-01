@@ -1,0 +1,52 @@
+---
+interface Props {
+  /** Roman numeral shown beside the mark, e.g. 'II' */
+  ordinal?: string;
+}
+const { ordinal } = Astro.props;
+---
+<div class="section-divider" role="presentation" aria-hidden="true">
+  <span class="sd-rule sd-rule-left"></span>
+  <span class="sd-mark">
+    <svg viewBox="0 0 64 64" width="34" height="34" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="0.8" opacity="0.45"/>
+      <text x="32" y="43" text-anchor="middle"
+            font-family="Georgia, 'Times New Roman', serif"
+            font-size="34" font-style="italic" fill="currentColor" opacity="0.85">D</text>
+    </svg>
+    {ordinal && <span class="sd-ordinal">{ordinal}</span>}
+  </span>
+  <span class="sd-rule sd-rule-right"></span>
+</div>
+
+<style>
+  .section-divider {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(20px, 3vw, 40px);
+    align-items: center;
+    padding: clamp(40px, 6vw, 80px) clamp(20px, 3.2vw, 48px);
+    width: min(1480px, 100% - 40px);
+    margin: 0 auto;
+    color: var(--ink);
+  }
+  .sd-rule {
+    height: 1px;
+    display: block; width: 100%;
+    opacity: 0.18;
+  }
+  .sd-rule-left  { background: linear-gradient(90deg,  transparent, currentColor); }
+  .sd-rule-right { background: linear-gradient(270deg, transparent, currentColor); }
+  .sd-mark {
+    display: inline-flex; align-items: center; gap: 12px;
+    opacity: 0.72;
+  }
+  .sd-mark svg { display: block; }
+  .sd-ordinal {
+    font-family: var(--font-body);
+    font-size: 0.6rem; letter-spacing: 0.34em;
+    text-transform: uppercase; font-weight: 500;
+    color: currentColor;
+    opacity: 0.65;
+  }
+</style>
