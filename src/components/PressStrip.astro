@@ -23,12 +23,28 @@ const outlets = [
 </section>
 
 <style>
-  .press { background: var(--bg-warm); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
-  .press-marquee { overflow: hidden; margin-top: 24px; mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent); }
-  .press-track { display: flex; gap: 64px; align-items: center; animation: scroll 40s linear infinite; width: max-content; }
+  .press { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .press-marquee {
+    overflow: hidden; margin-top: 28px;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+  .press-track {
+    display: flex; gap: clamp(48px, 6vw, 96px);
+    align-items: center;
+    animation: scroll 55s linear infinite;
+    width: max-content;
+  }
   .press-mark { display: flex; align-items: center; white-space: nowrap; }
-  .press-mark img { height: clamp(24px, 4vw, 40px); width: auto; object-fit: contain; opacity: 0.7; filter: grayscale(100%); transition: opacity 0.3s var(--ease), filter 0.3s var(--ease); }
+  .press-mark img {
+    height: clamp(22px, 3.6vw, 36px);
+    width: auto; object-fit: contain;
+    opacity: 0.55; filter: grayscale(100%) brightness(0.95);
+    transition: opacity .35s var(--ease), filter .35s var(--ease);
+  }
+  :global(:root[data-theme="dark"]) .press-mark img { filter: grayscale(100%) brightness(1.5) invert(0.85); opacity: 0.5; }
   .press-mark:hover img { opacity: 1; filter: grayscale(0%); }
+  :global(:root[data-theme="dark"]) .press-mark:hover img { filter: grayscale(0%) invert(0); opacity: 1; }
   @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .press-track { animation: none; justify-content: center; flex-wrap: wrap; } }
 </style>

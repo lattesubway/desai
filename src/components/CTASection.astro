@@ -2,10 +2,11 @@
 import { SITE } from '../consts';
 ---
 <section class="cta section">
+  <span class="cta-veil" aria-hidden="true"></span>
   <div class="container cta-inner reveal">
     <p class="eyebrow">Complimentary Consultation</p>
-    <h2>Begin the conversation.</h2>
-    <p class="lead">Schedule a virtual or in-person consultation with Dr. Desai. We answer every inquiry personally.</p>
+    <h2>Begin the <em>conversation</em>.</h2>
+    <p class="lead">Schedule a virtual or in-person consultation with Dr. Desai. We answer every inquiry personally — typically within one business day.</p>
     <div class="cta-actions">
       <a href="/consultation" class="btn btn-primary">Schedule Online <span class="arrow">→</span></a>
       <a href={`tel:${SITE.phoneRaw}`} class="btn btn-ghost">Call {SITE.phone}</a>
@@ -14,8 +15,29 @@ import { SITE } from '../consts';
 </section>
 
 <style>
-  .cta { background: var(--bg-warm); border-top: 1px solid var(--border-light); }
-  .cta-inner { text-align: center; max-width: 720px; margin: 0 auto; }
-  .cta-inner h2 { margin: 16px 0 20px; }
-  .cta-actions { display: flex; gap: 16px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+  .cta {
+    position: relative;
+    overflow: hidden;
+    background: var(--paper-deep);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  /* Soft radial mauve halo, subtler than the hero */
+  .cta-veil {
+    position: absolute; inset: 0;
+    background: radial-gradient(60% 90% at 50% 50%, color-mix(in oklab, var(--mauve-deep) 18%, transparent), transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cta-inner {
+    position: relative; z-index: 1;
+    text-align: center; max-width: 720px; margin: 0 auto;
+  }
+  .cta-inner h2 {
+    margin: 16px 0 20px;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-weight: 260; letter-spacing: -0.04em; line-height: 1;
+  }
+  .cta-inner em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+  .cta-actions { display: flex; gap: 56px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
 </style>

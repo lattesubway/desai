@@ -1,27 +1,34 @@
 ---
 const services = [
-  { title: 'Face', desc: 'Facelift, Eyelid Surgery, Brow Lift, Neck Lift, Stem Cell Facelift', href: '/procedures#face', img: '/assets/facial-surgery.png' },
-  { title: 'Nose', desc: 'Rhinoplasty, Revision Rhinoplasty, Ethnic Rhinoplasty', href: '/procedures#nose', img: '/assets/nose-surgery.png' },
-  { title: 'Breast', desc: 'Augmentation, Lift, Reduction, Revision', href: '/procedures#breast', img: '/assets/breast-surgery.png' },
-  { title: 'Body', desc: 'Liposuction, Tummy Tuck, Mommy Makeover, BBL', href: '/procedures#body', img: '/assets/body-surgery.png' },
+  { title: 'Face',   desc: 'Facelift, Eyelid Surgery, Brow Lift, Neck Lift, Stem Cell Facelift', href: '/procedures#face',   img: '/assets/facial-surgery.png' },
+  { title: 'Nose',   desc: 'Rhinoplasty, Revision Rhinoplasty, Ethnic Rhinoplasty',              href: '/procedures#nose',   img: '/assets/nose-surgery.png' },
+  { title: 'Breast', desc: 'Augmentation, Lift, Reduction, Revision',                            href: '/procedures#breast', img: '/assets/breast-surgery.png' },
+  { title: 'Body',   desc: 'Liposuction, Tummy Tuck, Mommy Makeover, BBL',                       href: '/procedures#body',   img: '/assets/body-surgery.png' },
 ];
 ---
 <section class="services section">
   <div class="container">
-    <div class="services-head reveal">
+    <header class="services-head reveal">
       <p class="eyebrow">Signature Procedures</p>
-      <h2>An education in proportion.</h2>
+      <h2>An education in <em>proportion</em>.</h2>
       <p class="lead">Dr. Desai's surgical philosophy is one of restraint — preserving identity while refining what already exists. Explore the procedures most requested at our Beverly Hills practice.</p>
-    </div>
+    </header>
+
     <div class="services-grid">
       {services.map((s, i) => (
         <a href={s.href} class="service-card reveal" style={`transition-delay:${i*80}ms`}>
+          <div class="service-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
+
           <div class="service-img">
-            <img src={s.img} alt={s.title} width="280" height="280" loading="lazy" />
+            <img src={s.img} alt="" width="280" height="280" loading="lazy" />
+            <span class="service-img-veil" aria-hidden="true"></span>
           </div>
-          <div class="service-num">0{i+1}</div>
-          <h3>{s.title}</h3>
-          <p>{s.desc}</p>
+
+          <div class="service-meta">
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+          </div>
+
           <span class="service-arrow">Explore <span class="arrow">→</span></span>
         </a>
       ))}
@@ -32,21 +39,102 @@ const services = [
 <style>
   .services-head { max-width: 720px; margin: 0 auto clamp(48px, 6vw, 72px); text-align: center; }
   .services-head h2 { margin: 16px 0 20px; }
-  .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); }
-  .service-card { background: var(--bg); padding: 48px 32px; display: flex; flex-direction: column; gap: 12px; transition: background 0.5s var(--ease), color 0.5s var(--ease); position: relative; min-height: 320px; overflow: hidden; }
-  .service-card:hover { background: var(--ink); color: var(--text-light); }
-  .service-card:hover h3 { color: var(--text-light); }
-  .service-img { width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--bg); border-radius: 4px; margin-bottom: 8px; }
-  .service-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-  .service-card:hover .service-img img { transform: scale(1.05); }
-  .service-num { font-family: var(--font-display); font-style: italic; color: var(--accent); font-size: 1.1rem; }
-  .service-card h3 { margin-bottom: 8px; transition: color 0.4s var(--ease); }
-  .service-card p { color: var(--muted-dark); font-size: 0.95rem; }
-  .service-card:hover p { color: var(--muted-light); }
-  .service-arrow { margin-top: auto; padding-top: 24px; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); display: inline-flex; align-items: center; gap: 8px; }
-  .service-card:hover .service-arrow { color: var(--accent-soft); }
-  .service-card:hover .arrow { transform: translateX(4px); }
-  .arrow { transition: transform 0.4s var(--ease); }
-  @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 520px) { .services-grid { grid-template-columns: 1fr; } }
+  .services-head em { font-style: italic; color: var(--mauve-deep); }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .service-card {
+    position: relative; isolation: isolate;
+    background: var(--paper); color: var(--ink);
+    padding: clamp(28px, 3vw, 44px);
+    display: flex; flex-direction: column;
+    gap: clamp(20px, 2vw, 28px);
+    min-height: 440px;
+    overflow: hidden;
+    transition: background 0.6s var(--ease), color 0.6s var(--ease);
+  }
+
+  .service-num {
+    font-family: var(--font-body);
+    font-size: 0.66rem; letter-spacing: 0.36em;
+    text-transform: uppercase; font-weight: 500;
+    color: var(--mauve-deep);
+    display: inline-flex; align-items: center; gap: 12px;
+    transition: color 0.5s var(--ease);
+  }
+  .service-num::after {
+    content: ''; display: inline-block; width: 24px; height: 1px;
+    background: currentColor; opacity: 0.55;
+  }
+  .service-card:hover .service-num { color: var(--rose); }
+
+  .service-img {
+    position: relative;
+    width: 100%; aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--paper-warm);
+    border-radius: 0;
+  }
+  .service-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.7s var(--ease-out), filter 0.6s var(--ease);
+    filter: grayscale(0.15);
+  }
+  .service-card:hover .service-img img {
+    transform: scale(1.04);
+    filter: grayscale(0);
+  }
+  .service-img-veil {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, transparent 55%, rgba(29,14,37,0.45));
+    opacity: 0.55;
+    transition: opacity 0.6s var(--ease);
+  }
+  .service-card:hover .service-img-veil { opacity: 0.85; }
+
+  .service-meta { display: flex; flex-direction: column; gap: 8px; }
+  .service-card h3 {
+    margin: 0;
+    font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+    font-weight: 280; letter-spacing: -0.03em;
+    color: var(--ink);
+    transition: color 0.5s var(--ease);
+  }
+  .service-card:hover h3 { color: var(--paper); }
+  .service-card p {
+    margin: 0; color: var(--grey-700);
+    font-size: 0.92rem; line-height: 1.6;
+    transition: color 0.5s var(--ease);
+  }
+  .service-card:hover { background: var(--ink); color: var(--paper); }
+  .service-card:hover p { color: var(--grey-300); }
+
+  .service-arrow {
+    margin-top: auto;
+    font-family: var(--font-body);
+    font-size: 0.62rem; letter-spacing: 0.32em;
+    text-transform: uppercase; font-weight: 500;
+    color: var(--ink);
+    display: inline-flex; align-items: center; gap: 10px;
+    padding-bottom: 4px;
+    position: relative; align-self: flex-start;
+    transition: color 0.5s var(--ease);
+  }
+  .service-arrow::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 1px; background: currentColor;
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .service-card:hover .service-arrow { color: var(--paper); }
+  .service-card:hover .arrow { transform: translateX(6px); }
+  .arrow { transition: transform 0.5s var(--ease-out); display: inline-block; }
+
+  @media (max-width: 1080px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .services-grid { grid-template-columns: 1fr; } }
 </style>

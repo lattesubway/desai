@@ -1,26 +1,33 @@
 ---
 import { SITE } from '../consts';
+import SocialIcons from './SocialIcons.astro';
 ---
 <footer class="site-footer">
   <div class="container">
+
+    <!-- Wordmark band -->
+    <div class="footer-wordmark" aria-hidden="true">
+      <span>D</span><span>E</span><span>S</span><span>A</span><span>I</span>
+    </div>
+
     <div class="footer-grid">
-      <div class="footer-brand">
+      <div class="footer-col footer-brand">
         <img src="/assets/logo.png" alt="Desai Plastic Surgery" class="footer-logo" width="200" height="48" loading="lazy" />
-        <p class="muted-on-dark">{SITE.tagline}</p>
-        <div class="social-links">
-          <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
-          <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
-          <a href={SITE.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
-          <a href={SITE.social.snapchat} target="_blank" rel="noopener noreferrer" aria-label="Snapchat">Snapchat</a>
-          <a href={SITE.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">LinkedIn</a>
-          <a href={SITE.social.google} target="_blank" rel="noopener noreferrer" aria-label="Google">Google</a>
-        </div>
+        <p class="footer-tag">{SITE.tagline}</p>
       </div>
-      <div>
+
+      <div class="footer-col">
         <h4>Practice</h4>
-        <ul><li><a href="/about">About Dr. Desai</a></li><li><a href="/procedures">Procedures</a></li><li><a href="/gallery">Gallery</a></li><li><a href="/media">Media</a></li><li><a href="/reviews">Reviews</a></li></ul>
+        <ul>
+          <li><a href="/about">About Dr. Desai</a></li>
+          <li><a href="/procedures">Procedures</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/media">Media</a></li>
+          <li><a href="/reviews">Reviews</a></li>
+        </ul>
       </div>
-      <div>
+
+      <div class="footer-col">
         <h4>Visit</h4>
         <address>
           {SITE.address.street}<br/>
@@ -28,15 +35,26 @@ import { SITE } from '../consts';
         </address>
         <p><a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a></p>
         <p class="fax">Fax {SITE.fax}</p>
+        <p class="fax">Mon–Fri · 9:00–18:00 PT</p>
       </div>
-      <div>
+
+      <div class="footer-col">
         <h4>Begin</h4>
         <p>Complimentary virtual or in-person consultation.</p>
         <a href="/consultation" class="btn btn-ghost">Schedule <span class="arrow">→</span></a>
+        <div class="footer-socials"><SocialIcons /></div>
       </div>
     </div>
+
     <div class="footer-base">
       <small>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</small>
+      <small class="footer-base-mid">
+        <a href="/privacy">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a href="/accessibility">Accessibility</a>
+        <span aria-hidden="true">·</span>
+        <a href="/sitemap.xml">Sitemap</a>
+      </small>
       <small>Models pictured may not be actual patients.</small>
     </div>
   </div>
@@ -52,23 +70,105 @@ import { SITE } from '../consts';
     color: var(--footer-fg);
     border-top: 1px solid var(--line);
     position: relative;
+    overflow: hidden;
   }
-  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid var(--footer-line); }
-  .footer-logo { height: 64px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
-  .muted-on-dark { color: var(--footer-fg-muted); margin-top: 12px; font-size: 0.95rem; }
-  .social-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; }
-  .social-links a { padding: 6px 0; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--footer-fg); font-weight: 500; transition: opacity 0.3s var(--ease); }
-  .social-links a:hover { opacity: 0.55; }
-  h4 { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--footer-fg); margin-bottom: 24px; font-weight: 500; }
-  ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  ul a, address a { color: var(--footer-fg); transition: opacity 0.3s var(--ease); }
+  .site-footer::before {
+    /* a soft mauve halo at the top-center to lift the band */
+    content: '';
+    position: absolute; left: 0; right: 0; top: -10%;
+    height: 60%;
+    background: radial-gradient(50% 80% at 50% 0%, color-mix(in oklab, #6e4f7a 35%, transparent), transparent 75%);
+    pointer-events: none;
+  }
+
+  /* ── Large wordmark band ─────────────────────────────── */
+  .footer-wordmark {
+    display: flex; justify-content: space-between;
+    width: 100%;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(80px, 16vw, 220px);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    color: var(--footer-fg);
+    opacity: 0.14;
+    user-select: none;
+    margin-bottom: clamp(40px, 5vw, 64px);
+    pointer-events: none;
+  }
+  .footer-wordmark span { display: inline-block; }
+
+  /* ── Grid ────────────────────────────────────────────── */
+  .footer-grid {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--footer-line);
+    position: relative;
+  }
+  .footer-col { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .footer-brand { gap: 16px; }
+  .footer-logo { height: 56px; width: auto; filter: grayscale(1) brightness(0) invert(1) brightness(0.95); }
+  .footer-tag {
+    color: var(--footer-fg-muted);
+    font-size: 0.84rem; line-height: 1.6;
+    max-width: 32ch;
+  }
+  h4 {
+    font-family: var(--font-body); font-size: 0.6rem;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--footer-fg); margin: 0 0 18px; font-weight: 500;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--footer-line);
+    width: 100%;
+  }
+  ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  ul a, address a {
+    color: var(--footer-fg);
+    font-size: 0.92rem; letter-spacing: -0.005em;
+    transition: opacity 0.3s var(--ease);
+  }
   ul a:hover, address a:hover { opacity: 0.6; }
-  ul a, address a { font-size: 0.9rem; letter-spacing: -0.005em; }
-  address { font-style: normal; line-height: 1.7; color: var(--footer-fg); margin-bottom: 12px; }
-  .fax { color: var(--footer-fg-muted); font-size: 0.9rem; margin-top: 4px; }
-  .footer-base { display: flex; justify-content: space-between; padding-top: 32px; color: var(--footer-fg-muted); flex-wrap: wrap; gap: 12px; }
+  address {
+    font-style: normal; line-height: 1.7;
+    color: var(--footer-fg); font-size: 0.92rem; margin-bottom: 8px;
+  }
+  .fax { color: var(--footer-fg-muted); font-size: 0.84rem; margin: 0; }
+
+  .footer-socials { margin-top: 14px; }
+
+  /* ── Base bar ────────────────────────────────────────── */
+  .footer-base {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    padding-top: 24px;
+    color: var(--footer-fg-muted);
+    font-size: 0.72rem; letter-spacing: 0.04em;
+    gap: 12px;
+    align-items: center;
+  }
+  .footer-base-mid {
+    display: inline-flex; gap: 10px; align-items: center;
+    justify-self: center;
+  }
+  .footer-base-mid a {
+    color: var(--footer-fg-muted);
+    transition: opacity 0.3s var(--ease);
+  }
+  .footer-base-mid a:hover { opacity: 0.7; }
+  .footer-base small:last-child { justify-self: end; text-align: right; }
+
   .site-footer .btn { color: var(--footer-fg); }
   .site-footer .btn::after { background: var(--footer-fg); }
-  @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+  @media (max-width: 900px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-base { grid-template-columns: 1fr; }
+    .footer-base-mid { justify-self: start; }
+    .footer-base small:last-child { justify-self: start; text-align: left; }
+  }
+  @media (max-width: 560px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+    .footer-wordmark { font-size: 18vw; }
+  }
 </style>

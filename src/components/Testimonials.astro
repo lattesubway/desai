@@ -3,16 +3,19 @@ import { testimonials } from '../data/testimonials';
 ---
 <section class="testimonials section dark-section">
   <div class="container">
-    <div class="t-head reveal">
+    <header class="t-head reveal">
       <p class="eyebrow on-dark">In Their Words</p>
-      <h2>What patients say.</h2>
-    </div>
+      <h2>What patients <em>say</em>.</h2>
+    </header>
     <div class="t-grid">
       {testimonials.map((t, i) => (
         <figure class="t-card reveal" style={`transition-delay:${i*100}ms`}>
-          <span class="quote-mark">"</span>
+          <span class="quote-mark" aria-hidden="true">“</span>
           <blockquote>{t.quote}</blockquote>
-          <figcaption>— {t.author}</figcaption>
+          <figcaption>
+            <span class="t-rule" aria-hidden="true"></span>
+            <span>{t.author}</span>
+          </figcaption>
         </figure>
       ))}
     </div>
@@ -20,12 +23,64 @@ import { testimonials } from '../data/testimonials';
 </section>
 
 <style>
-  .t-head { text-align: center; margin-bottom: clamp(48px, 6vw, 72px); }
-  .t-head h2 { margin-top: 16px; }
-  .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border-dark); border: 1px solid var(--border-dark); }
-  .t-card { background: var(--ink); padding: 48px; display: flex; flex-direction: column; gap: 20px; position: relative; }
-  .quote-mark { font-family: var(--font-display); font-size: 4rem; color: var(--accent); line-height: 1; }
-  blockquote { font-family: var(--font-display); font-size: clamp(1.25rem, 1.8vw, 1.6rem); line-height: 1.5; font-style: italic; color: var(--text-light); }
-  figcaption { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-soft); }
-  @media (max-width: 700px) { .t-grid { grid-template-columns: 1fr; } .t-card { padding: 36px 28px; } }
+  .t-head { text-align: center; margin-bottom: clamp(48px, 6vw, 80px); }
+  .t-head h2 {
+    margin-top: 16px;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-weight: 260; letter-spacing: -0.04em; line-height: 1;
+  }
+  .t-head em { font-style: italic; color: var(--accent-on-inverse); font-weight: 280; }
+
+  .t-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .t-card {
+    background: var(--ink);  /* inverts under .dark-section */
+    color: var(--paper);
+    padding: clamp(36px, 4vw, 56px);
+    display: flex; flex-direction: column;
+    gap: 18px;
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  .quote-mark {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(4rem, 7vw, 6.5rem);
+    line-height: 0.6;
+    color: var(--accent-on-inverse);
+    margin-top: -8px;
+    opacity: 0.7;
+  }
+  blockquote {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+    line-height: 1.45;
+    font-weight: 320;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin: 0;
+    max-width: 38ch;
+  }
+  figcaption {
+    margin-top: auto;
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: var(--font-body); font-size: 0.62rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    font-weight: 500;
+    color: var(--accent-on-inverse);
+    padding-top: 16px;
+  }
+  .t-rule {
+    display: inline-block; width: 28px; height: 1px;
+    background: currentColor; opacity: 0.6;
+  }
+  @media (max-width: 700px) {
+    .t-grid { grid-template-columns: 1fr; }
+    .t-card { padding: 32px 26px; }
+  }
 </style>
