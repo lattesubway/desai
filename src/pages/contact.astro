@@ -1,12 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SocialIcons from '../components/SocialIcons.astro';
 import { SITE } from '../consts';
 ---
 <BaseLayout title="Contact" description="Visit Dr. Urmen Desai's Beverly Hills office. Address, phone, and contact form.">
   <section class="x-hero">
     <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
       <p class="eyebrow reveal">Visit · Call · Write</p>
-      <h1 class="reveal">We answer every inquiry personally.</h1>
+      <h1 class="reveal">We answer every inquiry <em>personally</em>.</h1>
+      <p class="lead reveal">Reach the office directly — typically within one business day.</p>
     </div>
   </section>
 
@@ -35,14 +39,7 @@ import { SITE } from '../consts';
         </div>
         <div class="info-block">
           <p class="eyebrow">Follow</p>
-          <div class="social-btns">
-            <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
-            <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
-            <a href={SITE.social.youtube} target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
-            <a href={SITE.social.snapchat} target="_blank" rel="noopener noreferrer" class="social-btn">Snapchat</a>
-            <a href={SITE.social.linkedin} target="_blank" rel="noopener noreferrer" class="social-btn">LinkedIn</a>
-            <a href={SITE.social.google} target="_blank" rel="noopener noreferrer" class="social-btn">Google</a>
-          </div>
+          <SocialIcons size={20} />
         </div>
         <div class="info-block">
           <p class="eyebrow">Begin</p>
@@ -51,7 +48,7 @@ import { SITE } from '../consts';
       </div>
 
       <div class="x-form reveal">
-        <h2>Send a message</h2>
+        <h2 class="x-form-h">Send a <em>message</em>.</h2>
         <p class="lead">For all other inquiries, including media requests, please use the form below.</p>
         <form action="https://formspree.io/f/your-form-id" method="POST" class="form-stack" id="contactForm">
           <div class="field"><label for="ct_name">Full Name *</label><input type="text" name="name" id="ct_name" required /></div>
@@ -88,23 +85,61 @@ import { SITE } from '../consts';
 </BaseLayout>
 
 <style>
-  .x-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 64px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
-  .x-hero h1 { margin-top: 16px; max-width: 18ch; }
+  .x-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(56px, 7vw, 80px);
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .x-hero .crumbs { margin-bottom: 32px; }
+  .x-hero h1 {
+    margin: 16px 0 20px;
+    font-size: clamp(2.6rem, 6.5vw, 5.5rem);
+    font-weight: 240; letter-spacing: -0.045em; line-height: 0.98;
+    max-width: 18ch;
+  }
+  .x-hero h1 em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+  .x-hero .lead { max-width: 48ch; }
   .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
   .info-block { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--border-light); }
   .info-block:last-child { border-bottom: none; }
   .info-block .eyebrow { margin-bottom: 14px; }
-  address { font-style: normal; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.5; color: var(--ink); }
-  .big-link { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.4rem); color: var(--ink); display: inline-block; border-bottom: 1px solid var(--accent); }
-  .fax { color: var(--muted-dark); margin-top: 8px; font-size: 0.95rem; }
-  .hours { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .hours li { display: flex; justify-content: space-between; color: var(--muted-dark); }
-  .hours li span:first-child { color: var(--ink); }
-  .social-btns { display: flex; flex-wrap: wrap; gap: 8px; }
-  .social-btn { display: inline-flex; align-items: center; padding: 10px 16px; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--border-light); color: var(--ink); border-radius: 999px; transition: all 0.3s var(--ease); font-weight: 500; }
-  .social-btn:hover { background: var(--ink); color: var(--text-light); border-color: var(--ink); }
-  .x-form { background: var(--bg-warm); padding: clamp(40px, 5vw, 56px); border: 1px solid var(--border-light); }
-  .x-form h2 { margin-bottom: 16px; }
+  address {
+    font-style: normal; font-family: var(--font-display);
+    font-size: 1.55rem; line-height: 1.4;
+    font-weight: 280; letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .big-link {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 240; letter-spacing: -0.04em;
+    color: var(--ink); display: inline-block;
+    border-bottom: 1px solid var(--mauve-deep); padding-bottom: 4px;
+    transition: opacity 0.3s var(--ease);
+  }
+  .big-link:hover { opacity: 0.6; }
+  .fax {
+    color: var(--grey-500); margin-top: 12px;
+    font-size: 0.66rem; letter-spacing: 0.24em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .hours { list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0; margin: 0; }
+  .hours li {
+    display: flex; justify-content: space-between;
+    color: var(--grey-700); font-size: 0.92rem;
+  }
+  .hours li span:first-child { color: var(--ink); font-weight: 500; }
+  .x-form {
+    background: var(--paper-deep);
+    padding: clamp(36px, 4vw, 56px);
+    border: 1px solid var(--line);
+  }
+  .x-form-h {
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    font-weight: 260; letter-spacing: -0.038em; line-height: 1;
+    margin: 0 0 14px;
+  }
+  .x-form-h em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
   .x-form .lead { margin-bottom: 32px; }
   .form-stack { display: flex; flex-direction: column; gap: 28px; }
   .form-stack .btn { align-self: flex-start; margin-top: 8px; }

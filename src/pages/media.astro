@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
 import FilterBar from '../components/FilterBar.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const features = [
   { outlet: 'CNN', title: 'Miami Cannibal Attack Victim Recovering', date: 'May 2013', type: 'Television', href: 'http://www.cnn.com/video/data/2.0/video/us/2013/05/22/wsvn-pkg-cannibal-attack-update.wsvn.html' },
@@ -23,9 +24,10 @@ const types = ['All', 'Television', 'Newspaper', 'Magazine'];
 <BaseLayout title="Media & Press" description="Dr. Urmen Desai's appearances on CNN, ABC News, NBC, Fox News, Good Morning America, and more.">
   <section class="m-hero">
     <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Media' }]} />
       <p class="eyebrow reveal">In The News</p>
-      <h1 class="reveal">A surgical voice on national television.</h1>
-      <p class="lead reveal">Dr. Desai has been called on to comment on some of the most high-profile reconstructive cases in recent memory, from the Miami face-mauling to LeBron James's broken nose. Below, a selection of features.</p>
+      <h1 class="reveal">A surgical voice on <em>national television</em>.</h1>
+      <p class="lead reveal">Dr. Desai has been called on to comment on some of the most high-profile reconstructive cases in recent memory — from the Miami face-mauling to LeBron James's broken nose.</p>
     </div>
   </section>
 
@@ -59,22 +61,66 @@ const types = ['All', 'Television', 'Newspaper', 'Magazine'];
 </BaseLayout>
 
 <style>
-  .m-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
-  .m-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
+  .m-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(56px, 7vw, 80px);
+    background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  .m-hero :global(.crumbs) { margin-bottom: 32px; }
+  .m-hero h1 {
+    margin: 16px 0 24px;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 240; letter-spacing: -0.045em; line-height: 0.98;
+    max-width: 18ch;
+  }
+  .m-hero em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
   .m-hero .lead { max-width: 60ch; }
 
-  .m-grid { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .m-grid {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
   .m-item.hidden { display: none; }
-  .m-card { padding: 36px 32px; background: var(--bg); border: 1px solid var(--border-light); height: 100%; display: flex; flex-direction: column; gap: 12px; transition: all 0.4s var(--ease); }
-  .m-card:hover { background: var(--ink); color: var(--text-light); border-color: var(--ink); }
-  .m-meta { display: flex; justify-content: space-between; }
-  .m-type, .m-date { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); }
-  .m-card:hover .m-type, .m-card:hover .m-date { color: var(--accent-soft); }
-  .m-outlet { font-size: 1.4rem; margin-top: 4px; }
-  .m-title { color: var(--muted-dark); font-size: 0.95rem; flex-grow: 1; }
-  .m-card:hover .m-title { color: var(--muted-light); }
-  .m-link { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-deep); display: inline-flex; gap: 8px; align-items: center; margin-top: auto; }
-  .m-card:hover .m-link { color: var(--accent-soft); }
+  .m-card {
+    padding: clamp(28px, 3vw, 40px);
+    background: var(--paper);
+    height: 100%;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: background 0.5s var(--ease), color 0.5s var(--ease);
+  }
+  .m-card:hover { background: var(--ink); color: var(--paper); }
+  .m-meta { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--line); transition: border-color 0.5s var(--ease); }
+  .m-card:hover .m-meta { border-bottom-color: var(--border-dark); }
+  .m-type, .m-date {
+    font-family: var(--font-body);
+    font-size: 0.58rem; letter-spacing: 0.32em;
+    text-transform: uppercase; font-weight: 500;
+    color: var(--mauve-deep);
+    transition: color 0.5s var(--ease);
+  }
+  .m-card:hover .m-type, .m-card:hover .m-date { color: var(--accent-on-inverse); }
+  .m-outlet {
+    font-family: var(--font-display);
+    font-size: 1.45rem; margin: 4px 0 0;
+    font-weight: 320; letter-spacing: -0.025em;
+  }
+  .m-title { color: var(--grey-700); font-size: 0.92rem; flex-grow: 1; line-height: 1.5; transition: color 0.5s var(--ease); }
+  .m-card:hover .m-title { color: var(--grey-300); }
+  .m-link {
+    font-family: var(--font-body);
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink);
+    display: inline-flex; gap: 10px; align-items: center;
+    margin-top: auto;
+    padding: 12px 0 4px; border-top: 1px solid var(--line);
+    position: relative; align-self: flex-start;
+    transition: color 0.5s var(--ease), gap 0.4s var(--ease);
+  }
+  .m-card:hover .m-link { color: var(--paper); }
+  .m-card:hover .m-link .arrow { transform: translateX(4px); }
+  .m-link .arrow { transition: transform 0.4s var(--ease); display: inline-block; }
   @media (max-width: 900px) { .m-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .m-grid { grid-template-columns: 1fr; } }
 </style>

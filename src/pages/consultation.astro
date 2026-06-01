@@ -1,28 +1,55 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
 import { SITE } from '../consts';
+
+const promises = [
+  { i: 'lucide:phone',         t: 'Personal response',  d: 'Every inquiry is read and answered by our team — typically within one business day.' },
+  { i: 'lucide:youtube',       t: 'Virtual or in-person', d: 'Meet Dr. Desai from anywhere over video, or visit our Beverly Hills office.' },
+  { i: 'lucide:linkedin',      t: 'No obligation',     d: 'Consultations are complimentary. No deposit, no pressure.' },
+];
 ---
 <BaseLayout title="Schedule a Consultation" description="Schedule a virtual or in-person consultation with Dr. Urmen Desai at his Beverly Hills practice.">
   <section class="c-hero">
     <div class="container c-hero-inner">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Consultation' }]} />
       <p class="eyebrow reveal">Complimentary Consultation</p>
-      <h1 class="reveal">Begin with a conversation.</h1>
+      <h1 class="reveal">Begin with a <em>conversation</em>.</h1>
       <p class="lead reveal">Select a time that works for you. Dr. Desai's team will confirm your virtual or in-person consultation within one business day.</p>
+    </div>
+  </section>
+
+  <section class="c-promises section-tight">
+    <div class="container">
+      <ul class="cp-list">
+        {promises.map((p, i) => (
+          <li class="cp-item reveal" style={`transition-delay:${i*70}ms`}>
+            <span class="cp-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
   <section class="c-cal section">
     <div class="container">
+      <header class="c-cal-h reveal">
+        <p class="eyebrow">Choose a time</p>
+        <h2>Reserve your <em>private</em> consultation.</h2>
+      </header>
       <div class="cal-embed reveal" id="cal-embed">
         <iframe
           src="https://cal.com/desaiplasticsurgery/30min?embed=true&theme=light"
           title="Schedule a consultation with Dr. Desai"
           width="100%"
-          height="700"
+          height="720"
           frameborder="0"
           loading="lazy"
           allow="payment"
-          style="border:none; min-height:700px;"
+          style="border:none; min-height:720px;"
         ></iframe>
       </div>
       <p class="cal-alt reveal">
@@ -33,12 +60,74 @@ import { SITE } from '../consts';
 </BaseLayout>
 
 <style>
-  .c-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 64px); background: linear-gradient(180deg, var(--bg-warm), var(--bg)); }
+  .c-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(48px, 6vw, 64px);
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
   .c-hero-inner { max-width: 760px; }
-  .c-hero h1 { margin: 16px 0 24px; }
+  .c-hero :global(.crumbs) { margin-bottom: 32px; }
+  .c-hero h1 {
+    margin: 16px 0 24px;
+    font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+    font-weight: 240; letter-spacing: -0.045em; line-height: 0.98;
+    max-width: 16ch;
+  }
+  .c-hero em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+
+  /* Promises */
+  .c-promises { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cp-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cp-item {
+    background: var(--paper);
+    padding: clamp(28px, 3vw, 40px);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .cp-num {
+    font-family: var(--font-body); font-size: 0.62rem;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--mauve-deep); font-weight: 600;
+  }
+  .cp-item h3 {
+    margin: 0; font-size: 1.4rem;
+    font-weight: 320; letter-spacing: -0.025em;
+  }
+  .cp-item p { margin: 0; color: var(--grey-700); font-size: 0.95rem; line-height: 1.6; }
+  @media (max-width: 800px) { .cp-list { grid-template-columns: 1fr; } }
+
+  /* Calendar */
   .c-cal { padding-bottom: clamp(96px, 12vw, 140px); }
-  .cal-embed { max-width: 920px; margin: 0 auto; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-light); background: var(--bg); }
+  .c-cal-h {
+    max-width: 700px; margin: 0 auto clamp(40px, 5vw, 56px);
+    text-align: center;
+  }
+  .c-cal-h h2 {
+    margin: 16px 0 0;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 260; letter-spacing: -0.038em; line-height: 1.04;
+  }
+  .c-cal-h em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
+
+  .cal-embed {
+    max-width: 980px; margin: 0 auto;
+    overflow: hidden; border-radius: 0;
+    border: 1px solid var(--line); background: var(--paper);
+  }
   .cal-embed iframe { display: block; width: 100%; }
-  .cal-alt { text-align: center; margin-top: 32px; color: var(--muted-dark); font-size: 0.95rem; }
-  .cal-alt a { color: var(--ink); border-bottom: 1px solid var(--accent); }
+  .cal-alt {
+    text-align: center; margin-top: 32px;
+    color: var(--grey-500); font-size: 0.92rem;
+  }
+  .cal-alt a {
+    color: var(--ink);
+    border-bottom: 1px solid var(--mauve-deep);
+    padding-bottom: 2px;
+    transition: opacity 0.3s var(--ease);
+  }
+  .cal-alt a:hover { opacity: 0.6; }
 </style>

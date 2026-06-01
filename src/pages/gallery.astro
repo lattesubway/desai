@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
 import FilterBar from '../components/FilterBar.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const gallery = [
   { cat: 'Nose',   title: 'Primary Rhinoplasty',          age: '20s', slug: 'rhinoplasty-primary' },
@@ -24,8 +25,9 @@ const H = 900;
 <BaseLayout title="Gallery" description="Before and after results from Dr. Urmen Desai's Beverly Hills plastic surgery practice.">
   <section class="g-hero">
     <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Gallery' }]} />
       <p class="eyebrow reveal">Before & After</p>
-      <h1 class="reveal">Real patients. <em>Real results.</em></h1>
+      <h1 class="reveal">Real patients. <em>Real results</em>.</h1>
       <p class="lead reveal">A curated selection from Dr. Desai's private gallery. Open any case to compare before and after in detail. Models pictured may not be actual patients of this practice.</p>
     </div>
   </section>
@@ -160,9 +162,18 @@ const H = 900;
 </script>
 
 <style>
-  .g-hero { padding: clamp(96px, 14vw, 160px) 0 clamp(48px, 6vw, 80px); }
-  .g-hero h1 { margin: 16px 0 24px; max-width: 18ch; }
-  .g-hero em { font-style: italic; }
+  .g-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(56px, 7vw, 80px);
+    background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  .g-hero :global(.crumbs) { margin-bottom: 32px; }
+  .g-hero h1 {
+    margin: 16px 0 24px;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 240; letter-spacing: -0.045em; line-height: 0.98;
+    max-width: 16ch;
+  }
+  .g-hero em { font-style: italic; color: var(--mauve-deep); font-weight: 280; }
 
   .g-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
   .g-item { display: flex; flex-direction: column; gap: 18px; }
